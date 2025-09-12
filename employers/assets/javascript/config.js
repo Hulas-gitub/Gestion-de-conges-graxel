@@ -869,3 +869,8 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('profession').value = 'Développeur Full Stack';
     }
 });
+// Ouvrir
+document.getElementById('popup-nouvelle-demande').classList.add('show');
+
+// Fermer  
+document.getElementById('popup-nouvelle-demande').classList.remove('show');

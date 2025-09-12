@@ -994,4 +994,76 @@
                 border-radius: 4px;
             }
         }
-        
+        /* CORRECTION SCROLL MOBILE POPUP - AJOUT SEULEMENT */
+
+/* Permettre le scroll sur le container principal du popup */
+#popup-nouvelle-demande {
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+}
+
+/* Structure flexbox pour le popup mobile */
+#popup-nouvelle-demande .bg-white.dark\:bg-gray-800.rounded-2xl {
+    max-height: calc(100vh - 2rem) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+}
+
+/* Header reste fixe */
+#popup-nouvelle-demande .p-6.border-b {
+    flex-shrink: 0 !important;
+}
+
+/* Corps du popup devient scrollable */
+#popup-nouvelle-demande .p-6.space-y-4 {
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    flex-grow: 1 !important;
+    max-height: calc(100vh - 200px) !important;
+}
+
+/* Footer reste fixe */
+#popup-nouvelle-demande .p-6.border-t {
+    flex-shrink: 0 !important;
+}
+
+/* Scrollbar pour le contenu du popup */
+#popup-nouvelle-demande .p-6.space-y-4::-webkit-scrollbar {
+    width: 6px;
+}
+
+#popup-nouvelle-demande .p-6.space-y-4::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+#popup-nouvelle-demande .p-6.space-y-4::-webkit-scrollbar-thumb {
+    background: rgba(156, 163, 175, 0.5);
+    border-radius: 3px;
+}
+
+#popup-nouvelle-demande .p-6.space-y-4::-webkit-scrollbar-thumb:hover {
+    background: rgba(156, 163, 175, 0.8);
+}
+
+/* Responsive mobile */
+@media (max-width: 480px) {
+    #popup-nouvelle-demande {
+        align-items: flex-start !important;
+        padding-top: 1rem !important;
+        padding-left: 0.5rem !important;
+        padding-right: 0.5rem !important;
+    }
+    
+    #popup-nouvelle-demande .bg-white.dark\:bg-gray-800.rounded-2xl {
+        max-height: calc(100vh - 1rem) !important;
+    }
+    
+    #popup-nouvelle-demande .p-6 {
+        padding: 1rem !important;
+    }
+    
+    #popup-nouvelle-demande .p-6.space-y-4 {
+        max-height: calc(100vh - 140px) !important;
+    }
+}
