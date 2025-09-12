@@ -19,6 +19,48 @@
         <div class="loader-subtitle">Bienvenue ! Préparation de votre page dans quelque seconde...</div>
     </div>
 
+    <!-- Popup Mot de passe oublié -->
+    <div class="popup-overlay" id="forgotPasswordPopup">
+        <div class="popup-container">
+            <button class="popup-close" id="closePopup" aria-label="Fermer">
+                <i class="fas fa-times"></i>
+            </button>
+            
+            <div class="popup-header">
+                <i class="fas fa-key popup-icon"></i>
+                <h2 class="popup-title">Mot de passe oublié</h2>
+                <p class="popup-subtitle">Saisissez votre adresse email pour recevoir un lien de réinitialisation</p>
+            </div>
+            
+            <form id="forgotPasswordForm" class="popup-form">
+                <div class="form-group">
+                    <label for="resetEmail" class="form-label">
+                        <i class="fas fa-envelope"></i>
+                        Adresse email
+                    </label>
+                    <div class="input-wrapper">
+                        <input 
+                            type="email" 
+                            id="resetEmail" 
+                            class="form-input" 
+                            placeholder="votre.email@graxel.com"
+                            required
+                        >
+                        <i class="fas fa-user input-icon"></i>
+                    </div>
+                </div>
+                
+                <button type="submit" class="submit-btn popup-btn" id="resetSubmitBtn">
+                    <span class="btn-text">Envoyer le lien</span>
+                    <i class="fas fa-paper-plane submit-icon"></i>
+                    <div class="btn-loader" style="display: none;">
+                        <i class="fas fa-spinner fa-spin"></i>
+                    </div>
+                </button>
+            </form>
+        </div>
+    </div>
+
     <!-- Main Content -->
     <div class="main-content" id="mainContent">
         <div class="login-container">
@@ -71,34 +113,11 @@
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label class="form-label">
-                        <i class="fas fa-user-tag"></i>
-                      Selectionnez votre fonction pour acceder à l'application
-                    </label>
-                    <div class="role-group">
-                        <div class="role-option" data-role="admin">
-                            <input type="radio" id="admin" name="nom_role" value="admin" class="role-radio" required>
-                            <label for="admin" class="role-label">
-                                <i class="fas fa-crown role-icon"></i>
-                                Administrateur
-                            </label>
-                        </div>
-                        <div class="role-option" data-role="chef">
-                            <input type="radio" id="chef" name="nom_role" value="chef" class="role-radio" required>
-                            <label for="chef" class="role-label">
-                                <i class="fas fa-user-tie role-icon"></i>
-                                Chef de département
-                            </label>
-                        </div>
-                        <div class="role-option" data-role="employee">
-                            <input type="radio" id="employee" name="nom_role" value="employee" class="role-radio" required>
-                            <label for="employee" class="role-label">
-                                <i class="fas fa-user role-icon"></i>
-                                Employé
-                            </label>
-                        </div>
-                    </div>
+                <div class="forgot-password-container">
+                    <button type="button" id="forgotPasswordBtn" class="forgot-password-link">
+                        <i class="fas fa-question-circle"></i>
+                        Mot de passe oublié ?
+                    </button>
                 </div>
 
                 <button type="submit" class="submit-btn" id="submitBtn">
@@ -166,11 +185,11 @@
             }, 3000);
         });
 
-        // Gestion du thème (utilisation de variables JS au lieu de localStorage pour éviter les erreurs)
+        // Gestion du thème
         const themeToggle = document.getElementById('themeToggle');
         const body = document.body;
         
-        let currentTheme = 'dark'; // Variable par défaut
+        let currentTheme = 'dark';
         
         themeToggle.addEventListener('click', () => {
             if (currentTheme === 'light') {
@@ -199,40 +218,81 @@
             }
         });
 
-        // Gestion des rôles
-        const roleOptions = document.querySelectorAll('.role-option');
-        const roleRadios = document.querySelectorAll('.role-radio');
-        
-        roleOptions.forEach((option, index) => {
-            option.addEventListener('click', () => {
-                roleOptions.forEach(opt => opt.classList.remove('selected'));
-                option.classList.add('selected');
-                roleRadios[index].checked = true;
-            });
+        // Gestion du popup mot de passe oublié
+        const forgotPasswordBtn = document.getElementById('forgotPasswordBtn');
+        const forgotPasswordPopup = document.getElementById('forgotPasswordPopup');
+        const closePopup = document.getElementById('closePopup');
+        const forgotPasswordForm = document.getElementById('forgotPasswordForm');
+        const resetSubmitBtn = document.getElementById('resetSubmitBtn');
+
+        forgotPasswordBtn.addEventListener('click', () => {
+            forgotPasswordPopup.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
         });
 
-        roleRadios.forEach((radio, index) => {
-            radio.addEventListener('change', () => {
-                if (radio.checked) {
-                    roleOptions.forEach(opt => opt.classList.remove('selected'));
-                    roleOptions[index].classList.add('selected');
-                }
-            });
+        closePopup.addEventListener('click', () => {
+            forgotPasswordPopup.style.display = 'none';
+            document.body.style.overflow = 'auto';
         });
 
-        // Simulation de connexion avec Notyf
+        forgotPasswordPopup.addEventListener('click', (e) => {
+            if (e.target === forgotPasswordPopup) {
+                forgotPasswordPopup.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+        // Gestion du formulaire de réinitialisation
+        forgotPasswordForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const resetEmail = document.getElementById('resetEmail').value;
+            const btnText = resetSubmitBtn.querySelector('.btn-text');
+            const submitIcon = resetSubmitBtn.querySelector('.submit-icon');
+            const btnLoader = resetSubmitBtn.querySelector('.btn-loader');
+            
+            if (!resetEmail) {
+                notyf.error('Veuillez saisir votre adresse email');
+                return;
+            }
+            
+            if (!resetEmail.includes('@')) {
+                notyf.error('Veuillez utiliser une adresse email valide');
+                return;
+            }
+            
+            // Affichage du loader
+            resetSubmitBtn.disabled = true;
+            btnText.style.display = 'none';
+            submitIcon.style.display = 'none';
+            btnLoader.style.display = 'inline-block';
+            
+            // Simulation d'envoi d'email
+            setTimeout(() => {
+                notyf.success('Un lien de réinitialisation a été envoyé à votre adresse email');
+                
+                // Fermer le popup et rediriger
+                setTimeout(() => {
+                    forgotPasswordPopup.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                    window.location.href = './employers/nouveau mot de passe.html';
+                }, 1500);
+                
+            }, 1500);
+        });
+
+        // Connexion normale
         const loginForm = document.getElementById('loginForm');
         const submitBtn = document.getElementById('submitBtn');
-        const btnText = submitBtn.querySelector('.btn-text');
-        const submitIcon = submitBtn.querySelector('.submit-icon');
-        const btnLoader = submitBtn.querySelector('.btn-loader');
         
         loginForm.addEventListener('submit', (e) => {
             e.preventDefault();
             
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-            const selectedRole = document.querySelector('input[name="nom_role"]:checked');
+            const btnText = submitBtn.querySelector('.btn-text');
+            const submitIcon = submitBtn.querySelector('.submit-icon');
+            const btnLoader = submitBtn.querySelector('.btn-loader');
             
             // Validation des champs
             if (!email) {
@@ -245,49 +305,32 @@
                 return;
             }
             
-            if (!selectedRole) {
-                notyf.error('Veuillez sélectionner votre rôle');
-                return;
-            }
-            
-            // Validation de l'email
             if (!email.includes('@')) {
                 notyf.error('Veuillez utiliser une adresse email valide');
                 return;
             }
             
-            // Validation du mot de passe (minimum 6 caractères)
             if (password.length < 6) {
                 notyf.error('Le mot de passe doit contenir au moins 6 caractères');
                 return;
             }
             
-            // Affichage du loader sur le bouton
+            // Affichage du loader
             submitBtn.disabled = true;
             btnText.style.display = 'none';
             submitIcon.style.display = 'none';
             btnLoader.style.display = 'inline-block';
             
-            // Simulation d'un délai de connexion
+            // Simulation de connexion
             setTimeout(() => {
-                // Simulation d'authentification réussie
-                const roleNames = {
-                    'admin': 'Administrateur',
-                    'chef': 'Chef de département',
-                    'employee': 'Employé'
-                };
-                
                 const userName = email.split('@')[0].replace('.', ' ').replace(/\b\w/g, l => l.toUpperCase());
+                notyf.success(`Connexion réussie ! Bienvenue ${userName}`);
                 
-                // Notification de succès avec Notyf
-                notyf.success(`Connexion réussie ! Bienvenue ${userName} (${roleNames[selectedRole.value]})`);
-                
-                // Redirection après 2 secondes
                 setTimeout(() => {
                     window.location.href = './employers/tableau de bord.html';
                 }, 2000);
                 
-            }, 1500); // Délai de 1.5 secondes pour la simulation
+            }, 1500);
         });
 
         // Animations au focus
@@ -302,8 +345,8 @@
             });
         });
 
-        // Animation d'apparition progressive des éléments
-        const animateElements = document.querySelectorAll('.form-group, .submit-btn');
+        // Animation d'apparition progressive
+        const animateElements = document.querySelectorAll('.form-group, .forgot-password-container, .submit-btn');
         animateElements.forEach((el, index) => {
             el.style.opacity = '0';
             el.style.transform = 'translateY(20px)';
@@ -312,12 +355,130 @@
                 el.style.transition = 'all 0.6s ease';
                 el.style.opacity = '1';
                 el.style.transform = 'translateY(0)';
-            }, 3500 + (index * 200)); // Après le loader + délai progressif
+            }, 3500 + (index * 200));
         });
     </script>
 
     <style>
-        /* Styles additionnels pour le bouton avec loader */
+        /* Styles pour le lien mot de passe oublié */
+        .forgot-password-container {
+            text-align: right;
+            margin-bottom: 1.5rem;
+        }
+        
+        .forgot-password-link {
+            background: none;
+            border: none;
+            color: var(--primary-color, #3B82F6);
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .forgot-password-link:hover {
+            color: var(--primary-hover, #2563EB);
+            text-decoration: underline;
+        }
+        
+        /* Styles pour le popup */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+        
+        .popup-container {
+            background: var(--card-bg, #1F2937);
+            border-radius: 20px;
+            padding: 2rem;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--border-color, #374151);
+            animation: popupSlideIn 0.3s ease-out;
+        }
+        
+        @keyframes popupSlideIn {
+            from {
+                transform: scale(0.9) translateY(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1) translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .popup-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: var(--text-secondary, #9CA3AF);
+            font-size: 1.5rem;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .popup-close:hover {
+            background: rgba(239, 68, 68, 0.1);
+            color: #EF4444;
+        }
+        
+        .popup-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .popup-icon {
+            font-size: 3rem;
+            color: var(--primary-color, #3B82F6);
+            margin-bottom: 1rem;
+        }
+        
+        .popup-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary, white);
+            margin-bottom: 0.5rem;
+        }
+        
+        .popup-subtitle {
+            color: var(--text-secondary, #9CA3AF);
+            font-size: 0.875rem;
+            line-height: 1.5;
+        }
+        
+        .popup-form .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .popup-btn {
+            width: 100%;
+            margin-top: 1rem;
+        }
+        
+        /* Styles pour le bouton avec loader */
         .submit-btn {
             position: relative;
             overflow: hidden;
@@ -344,8 +505,16 @@
         }
         
         /* Animation pour les éléments du formulaire */
-        .form-group, .submit-btn {
+        .form-group, .forgot-password-container, .submit-btn {
             transition: all 0.6s ease;
+        }
+        
+        /* Responsive pour le popup */
+        @media (max-width: 640px) {
+            .popup-container {
+                margin: 1rem;
+                padding: 1.5rem;
+            }
         }
     </style>
 </body>

@@ -346,3 +346,355 @@
         .sidebar-overlay {
             backdrop-filter: blur(2px);
         }
+        /* Correction du positionnement du dropdown notifications */
+
+/* Container pour le bouton notifications - doit être en relative */
+.notifications-container {
+    position: relative;
+    display: inline-block;
+}
+
+/* Dropdown des notifications - CORRIGÉ pour les thèmes */
+#notifications-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 320px;
+    max-width: 90vw; /* Responsive pour mobile */
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+    border: 1px solid #e5e7eb;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px) scale(0.95);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+}
+
+/* Dark mode pour le dropdown - AMÉLIORÉ */
+.dark #notifications-dropdown {
+    background: #1f2937;
+    border-color: #374151;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+    color: white; /* Ajout pour assurer la lisibilité */
+}
+
+/* État visible du dropdown */
+#notifications-dropdown.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+}
+
+/* Responsive mobile - centrer le dropdown */
+@media (max-width: 768px) {
+    #notifications-dropdown {
+        position: fixed;
+        top: 50% !important;
+        left: 50% !important;
+        right: auto !important;
+        transform: translate(-50%, -50%) scale(0.95);
+        width: 90vw;
+        max-width: 400px;
+        max-height: 80vh;
+    }
+    
+    #notifications-dropdown.show {
+        transform: translate(-50%, -50%) scale(1);
+    }
+    
+    /* Overlay pour fermer sur mobile */
+    #notifications-dropdown.show::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: -1;
+    }
+}
+
+/* Header du dropdown - CORRIGÉ */
+#notifications-dropdown .p-4 {
+    background: #f9fafb !important;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.dark #notifications-dropdown .p-4 {
+    background: #111827 !important;
+    border-bottom-color: #374151;
+}
+
+/* Titre des notifications - FORCE la couleur selon le thème */
+#notifications-dropdown h3 {
+    color: #111827 !important; /* Noir en mode clair */
+}
+
+.dark #notifications-dropdown h3 {
+    color: #f9fafb !important; /* Blanc en mode sombre */
+}
+
+/* Items de notification - CORRIGÉ */
+.notification-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.notification-item:hover {
+    background: #f3f4f6;
+}
+
+.dark .notification-item:hover {
+    background: #374151;
+}
+
+/* Textes des notifications - FORCE les bonnes couleurs */
+.notification-item p {
+    color: #111827 !important; /* Texte principal noir en mode clair */
+}
+
+.dark .notification-item p {
+    color: #f9fafb !important; /* Texte principal blanc en mode sombre */
+}
+
+/* Textes secondaires (temps, etc.) */
+.notification-item .text-xs {
+    color: #6b7280 !important; /* Gris en mode clair */
+}
+
+.dark .notification-item .text-xs {
+    color: #9ca3af !important; /* Gris clair en mode sombre */
+}
+
+/* Scrollbar custom */
+.custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+/* Dark mode pour la scrollbar */
+.dark .custom-scrollbar {
+    scrollbar-color: #4b5563 transparent;
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #4b5563;
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #6b7280;
+}
+
+/* Animation d'apparition pour les items */
+.notification-item {
+    animation: slideInNotification 0.3s ease-out;
+}
+
+@keyframes slideInNotification {
+    from {
+        opacity: 0;
+        transform: translateX(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Badge de notification (point coloré) */
+.notification-badge {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-top: 4px;
+    flex-shrink: 0;
+}
+
+/* Amélioration du z-index pour éviter les conflits */
+.header-container {
+    position: relative;
+    z-index: 100;
+}
+
+/* Bouton de notification - assurer le bon positionnement */
+#notifications-btn {
+    position: relative;
+    z-index: 101;
+}
+
+/* Animation du bouton au clic */
+#notifications-btn:active {
+    transform: scale(0.95);
+    transition: transform 0.1s ease;
+}
+
+/* Style pour le compteur de notifications - CORRIGÉ */
+.notification-count {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #ef4444;
+    color: white !important; /* Force blanc sur le badge rouge */
+    font-size: 12px;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 10px;
+    min-width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: pulse 2s infinite;
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4);
+}
+
+/* Responsive pour très petits écrans */
+@media (max-width: 480px) {
+    #notifications-dropdown {
+        width: 95vw;
+        margin: 0 auto;
+    }
+    
+    #notifications-dropdown .p-4 h3 {
+        font-size: 16px;
+    }
+    
+    .notification-item {
+        padding: 10px;
+    }
+    
+    .notification-item p {
+        font-size: 13px;
+    }
+}
+
+/* Classes utilitaires pour forcer les couleurs si nécessaire */
+.force-dark-text {
+    color: #111827 !important;
+}
+
+.force-light-text {
+    color: #f9fafb !important;
+}
+
+.dark .force-dark-text {
+    color: #f9fafb !important;
+}
+
+.dark .force-light-text {
+    color: #111827 !important;
+}
+/* CSS Override spécifique pour corriger le problème des notifications */
+
+/* FORCE le fond blanc en mode clair */
+html:not(.dark) #notifications-dropdown {
+    background: #ffffff !important;
+    color: #111827 !important;
+}
+
+/* FORCE le fond sombre uniquement en mode dark */
+html.dark #notifications-dropdown {
+    background: #1f2937 !important;
+    color: #ffffff !important;
+}
+
+/* Header spécifique */
+html:not(.dark) #notifications-dropdown .p-4 {
+    background: #f9fafb !important;
+    color: #111827 !important;
+}
+
+html.dark #notifications-dropdown .p-4 {
+    background: #111827 !important;
+    color: #ffffff !important;
+}
+
+/* Items de notification - Mode clair */
+html:not(.dark) .notification-item {
+    color: #111827 !important;
+    background: transparent !important;
+}
+
+html:not(.dark) .notification-item:hover {
+    background: #f3f4f6 !important;
+}
+
+html:not(.dark) .notification-item p {
+    color: #111827 !important;
+}
+
+html:not(.dark) .notification-item .text-xs {
+    color: #6b7280 !important;
+}
+
+/* Items de notification - Mode sombre */
+html.dark .notification-item {
+    color: #ffffff !important;
+}
+
+html.dark .notification-item:hover {
+    background: #374151 !important;
+}
+
+html.dark .notification-item p {
+    color: #ffffff !important;
+}
+
+html.dark .notification-item .text-xs {
+    color: #9ca3af !important;
+}
+
+/* Zone de contenu scrollable */
+html:not(.dark) #notifications-dropdown .max-h-96 {
+    background: #ffffff !important;
+}
+
+html.dark #notifications-dropdown .max-h-96 {
+    background: #1f2937 !important;
+}
+
+/* Titre des notifications */
+html:not(.dark) #notifications-dropdown h3 {
+    color: #111827 !important;
+}
+
+html.dark #notifications-dropdown h3 {
+    color: #ffffff !important;
+}
+
+/* Footer si présent */
+html:not(.dark) #notifications-dropdown .border-t {
+    background: #f9fafb !important;
+    border-color: #e5e7eb !important;
+}
+
+html.dark #notifications-dropdown .border-t {
+    background: #111827 !important;
+    border-color: #374151 !important;
+}
