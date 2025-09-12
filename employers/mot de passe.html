@@ -11,6 +11,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
         <script src="assets/javascript/animate.js"></script>
  <link rel="stylesheet" href="assets/css/calendrier.css">
+ <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body class="h-full bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 font-poppins transition-all duration-500">
     <!-- Background Pattern -->
@@ -167,37 +168,44 @@
                             </p>
                         </div>
                     </div>
-                    <div class="flex items-center space-x-4">
+                       <div class="flex items-center space-x-4">
                         <div class="relative">
-                            <button id="notifications-btn" class="p-3 bg-gray-100 dark:bg-gray-700 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-all duration-300 click-scale relative hover-lift">
-                                <i class="fas fa-bell text-gray-600 dark:text-gray-400 text-lg"></i>
-                                <span class="absolute -top-1 -right-1 w-6 h-6 bg-red-500 text-white text-xs rounded-full flex items-center justify-center animate-pulse">2</span>
-                            </button>
-                            <!-- Notifications Dropdown -->
-                            <div id="notifications-dropdown" class="absolute right-0 mt-2 w-80 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 notification-dropdown">
-                                <div class="p-4 border-b border-gray-200 dark:border-gray-700">
-                                    <h3 class="font-semibold text-gray-900 dark:text-white">Notifications</h3>
-                                </div>
-                                <div class="max-h-96 overflow-y-auto custom-scrollbar">
-                                    <div class="p-2 space-y-1">
-                                        <div class="flex items-start space-x-3 p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg cursor-pointer transition-colors">
-                                            <div class="w-3 h-3 bg-green-500 rounded-full mt-2 animate-pulse"></div>
-                                            <div class="flex-1">
-                                                <p class="text-sm font-medium text-gray-900 dark:text-white">Congé approuvé</p>
-                                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">15-19 janvier</p>
-                                            </div>
-                                        </div>
-                                        <div class="flex items-start space-x-3 p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg cursor-pointer transition-colors">
-                                            <div class="w-3 h-3 bg-blue-500 rounded-full mt-2 animate-pulse"></div>
-                                            <div class="flex-1">
-                                                <p class="text-sm font-medium text-gray-900 dark:text-white">Rappel: Réunion demain</p>
-                                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Il y a 3h</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+        <button id="notifications-btn" class="p-3 bg-gray-100 dark:bg-gray-700 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-all duration-300 click-scale relative hover-lift">
+            <i class="fas fa-bell text-gray-600 dark:text-gray-400 text-lg"></i>
+            <span class="absolute -top-1 -right-1 w-6 h-6 bg-red-500 text-white text-xs rounded-full flex items-center justify-center animate-pulse">3</span>
+        </button>
+        <!-- Notifications Dropdown -->
+        <div id="notifications-dropdown" class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 max-w-md bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 notification-dropdown z-50">
+            <div class="p-4 border-b border-gray-200 dark:border-gray-700">
+                <h3 class="font-semibold text-gray-900 dark:text-white">Notifications</h3>
+            </div>
+            <div class="max-h-96 overflow-y-auto custom-scrollbar">
+                <div class="p-2 space-y-1">
+                    <div class="flex items-start space-x-3 p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg cursor-pointer transition-colors">
+                        <div class="w-3 h-3 bg-blue-500 rounded-full mt-2 animate-pulse"></div>
+                        <div class="flex-1">
+                            <p class="text-sm font-medium text-gray-900 dark:text-white">Nouvelle demande de Pierre</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Il y a 2h</p>
                         </div>
+                    </div>
+                    <div class="flex items-start space-x-3 p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg cursor-pointer transition-colors">
+                        <div class="w-3 h-3 bg-green-500 rounded-full mt-2 animate-pulse"></div>
+                        <div class="flex-1">
+                            <p class="text-sm font-medium text-gray-900 dark:text-white">Demande approuvée</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Il y a 1j</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-3 p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg cursor-pointer transition-colors">
+                        <div class="w-3 h-3 bg-yellow-500 rounded-full mt-2 animate-pulse"></div>
+                        <div class="flex-1">
+                            <p class="text-sm font-medium text-gray-900 dark:text-white">Rappel: Réunion demain</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Il y a 3h</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
                         <button id="theme-toggle" class="p-3 bg-gray-100 dark:bg-gray-700 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-all duration-300 click-scale hover-lift">
                             <i class="fas fa-moon dark:hidden text-gray-600 text-lg"></i>
                             <i class="fas fa-sun hidden dark:block text-yellow-400 text-lg"></i>
@@ -376,9 +384,6 @@
         </div>
     </form>
 </div>
-
-<!-- FontAwesome pour les icônes -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
 <script>
 // Éléments du DOM pour les mots de passe
