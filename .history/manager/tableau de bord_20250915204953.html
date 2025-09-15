@@ -1,0 +1,1376 @@
+<!DOCTYPE html>
+<html lang="fr" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graxel Tech - Tableau de bord Chef de Département</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+   
+    <!-- Vos fichiers existants -->
+    <script src="assets/javascript/config.js"></script>
+    <script src="assets/javascript/animate.js"></script>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <!-- Nouveaux scripts pour les graphiques -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/luxon@3.0.1"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1.2.0"></script>
+    <style>
+        /* Styles supplémentaires pour les nouvelles fonctionnalités */
+        .chart-container { position: relative; height: 280px; width: 100%; }
+        .alert-timeline { display: flex; flex-direction: column; gap: 8px; }
+        .alert-item { display: flex; align-items: center; padding: 8px 12px; background: rgba(255, 0, 0, 0.1); border-radius: 8px; font-size: 14px; }
+        .alert-icon { margin-right: 12px; color: #ef4444; }
+        .kpi-gauge { width: 100%; height: 150px; display: flex; align-items: center; justify-content: center; position: relative; }
+        .gauge-value { font-size: 2rem; font-weight: bold; color: #3b82f6; }
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+        .calendar-day { padding: 8px; text-align: center; border-radius: 4px; font-size: 12px; }
+        .calendar-day.absent { background: rgba(255, 0, 0, 0.1); color: #ef4444; }
+        .calendar-day.today { background: #3b82f6; color: white; }
+            /* CORRECTION CSS NOTIFICATIONS - Version simplifiée et fonctionnelle */
+        
+        /* Container notifications - MUST be relative */
+        .notifications-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .hover-lift {
+            transition: transform 0.2s ease-in-out;
+        }
+        
+        .hover-lift:hover {
+            transform: translateY(-2px);
+        }
+        /* Badge de notification */
+        .notification-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 11px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        /* Dropdown - États initial et visible */
+        .notification-dropdown {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            width: 320px;
+            max-width: 90vw;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            border: 1px solid #e5e7eb;
+            z-index: 1000;
+            
+            /* États de transition */
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px) scale(0.95);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            
+            /* Empêche les problèmes d'overflow */
+            max-height: 400px;
+            overflow: hidden;
+        }
+
+        /* État visible du dropdown */
+        .notification-dropdown.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0) scale(1);
+        }
+
+        /* Dark mode pour le dropdown */
+        .dark .notification-dropdown {
+            background: #1f2937;
+            border-color: #374151;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Header du dropdown */
+        .notification-dropdown .dropdown-header {
+            padding: 16px;
+            border-bottom: 1px solid #e5e7eb;
+            background: #f9fafb;
+        }
+
+        .dark .notification-dropdown .dropdown-header {
+            border-bottom-color: #374151;
+            background: #111827;
+        }
+
+        /* Titre des notifications */
+        .notification-dropdown h3 {
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .dark .notification-dropdown h3 {
+            color: #f9fafb;
+        }
+
+        /* Zone scrollable */
+        .notifications-list {
+            max-height: 280px;
+            overflow-y: auto;
+            padding: 8px;
+        }
+
+        /* Custom scrollbar */
+        .notifications-list::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .notifications-list::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .notifications-list::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 2px;
+        }
+
+        .dark .notifications-list::-webkit-scrollbar-thumb {
+            background: #475569;
+        }
+
+        /* Items de notification */
+        .notification-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            margin-bottom: 4px;
+        }
+
+        .notification-item:hover {
+            background: #f3f4f6;
+        }
+
+        .dark .notification-item:hover {
+            background: #374151;
+        }
+
+        /* Indicateur de notification */
+        .notification-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-top: 2px;
+            flex-shrink: 0;
+        }
+
+        /* Contenu de la notification */
+        .notification-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .notification-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: #111827;
+            line-height: 1.4;
+            margin-bottom: 4px;
+        }
+
+        .dark .notification-title {
+            color: #f9fafb;
+        }
+
+        .notification-desc {
+            font-size: 12px;
+            color: #6b7280;
+            line-height: 1.3;
+            margin-bottom: 6px;
+        }
+
+        .dark .notification-desc {
+            color: #9ca3af;
+        }
+
+        .notification-time {
+            font-size: 11px;
+            color: #9ca3af;
+        }
+
+        .dark .notification-time {
+            color: #6b7280;
+        }
+
+        /* Footer du dropdown */
+        .notification-footer {
+            padding: 12px 16px;
+            border-top: 1px solid #e5e7eb;
+            background: #f9fafb;
+            text-align: center;
+        }
+
+        .dark .notification-footer {
+            border-top-color: #374151;
+            background: #111827;
+        }
+
+        .notification-footer button {
+            font-size: 13px;
+            color: #3b82f6;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .notification-footer button:hover {
+            color: #1d4ed8;
+        }
+
+        .dark .notification-footer button {
+            color: #60a5fa;
+        }
+
+        .dark .notification-footer button:hover {
+            color: #93c5fd;
+        }
+
+        /* Responsive mobile */
+        @media (max-width: 768px) {
+            .notification-dropdown {
+                position: fixed;
+                top: 50% !important;
+                left: 50% !important;
+                right: auto !important;
+                transform: translate(-50%, -50%) scale(0.95);
+                width: 90vw;
+                max-width: 350px;
+            }
+            
+            .notification-dropdown.show {
+                transform: translate(-50%, -50%) scale(1);
+            }
+            
+            /* Overlay mobile */
+            .notification-dropdown.show::before {
+                content: '';
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                background: rgba(0, 0, 0, 0.5);
+                z-index: -1;
+                backdrop-filter: blur(4px);
+            }
+        }
+        .hover-lift:hover {
+            transform: translateY(-2px);
+        }
+        
+        .modal {
+            transition: opacity 0.25s ease-out, transform 0.25s ease-out;
+        }
+        
+        .modal.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        .modal:not(.show) {
+            opacity: 0;
+            transform: scale(0.95);
+        }
+        
+        .backdrop {
+            transition: opacity 0.25s ease-out;
+        }
+        
+        .backdrop.show {
+            opacity: 1;
+        }
+        
+        .backdrop:not(.show) {
+            opacity: 0;
+        }
+        
+        .fade-out {
+            animation: fadeOut 0.5s ease-out forwards;
+        }
+        
+        @keyframes fadeOut {
+            to {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+        }
+        
+        .pdf-viewer {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+       .hover-lift:hover {
+            transform: translateY(-2px);
+        }
+        
+        .modal {
+            transition: opacity 0.25s ease-out, transform 0.25s ease-out;
+        }
+        
+        .modal.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        .modal:not(.show) {
+            opacity: 0;
+            transform: scale(0.95);
+        }
+        
+        .backdrop {
+            transition: opacity 0.25s ease-out;
+        }
+        
+        .backdrop.show {
+            opacity: 1;
+        }
+        
+        .backdrop:not(.show) {
+            opacity: 0;
+        }
+        
+        .fade-out {
+            animation: fadeOut 0.5s ease-out forwards;
+        }
+        
+        @keyframes fadeOut {
+            to {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+        }
+        
+        .pdf-viewer {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body class="h-full bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 font-poppins transition-all duration-500">
+    <!-- Background Pattern -->
+    <div class="fixed inset-0 bg-pattern opacity-5 pointer-events-none"></div>
+
+    <!-- Token de notification -->
+    <div id="notification-token" class="notification-token glass-effect text-white px-6 py-3 rounded-2xl shadow-2xl">
+        <div class="flex items-center space-x-3">
+            <div class="w-3 h-3 bg-white rounded-full animate-pulse"></div>
+            <span id="token-text" class="text-sm font-medium">Bienvenue, Chef de Département</span>
+            <i id="token-icon" class="fas fa-check text-sm"></i>
+        </div>
+    </div>
+
+    <!-- Sidebar Overlay (Mobile) -->
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden sidebar-overlay"></div>
+
+    <div class="flex h-full">
+        <!-- Sidebar -->
+        <div id="sidebar" class="fixed md:relative w-80 md:w-72 bg-white dark:bg-gray-800 shadow-2xl border-r border-gray-200 dark:border-gray-700 z-50 md:z-auto sidebar-mobile animate-slide-right transition-all duration-300">
+            <div class="p-6 h-full flex flex-col">
+                <!-- Close button (Mobile) -->
+                <button id="close-sidebar" class="absolute top-4 right-4 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 md:hidden">
+                    <i class="fas fa-times text-gray-600 dark:text-gray-400"></i>
+                </button>
+
+                <!-- Logo -->
+                <div class="flex items-center space-x-4 mb-10">
+                    <div class="w-30 h-30 rounded-2xl flex items-center justify-center shadow-lg">
+                        <img src="assets/images/logo.png" alt="Logo Graxel Tech" class="w-full h-full object-contain rounded-2xl" />
+                    </div>
+                </div>
+
+                <!-- Navigation -->
+                <nav class="space-y-3 flex-1">
+                    <a href="#" class="nav-item flex items-center space-x-4 px-4 py-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl hover-lift transition-all duration-300 click-scale shadow-lg">
+                        <i class="fas fa-chart-pie w-5 h-5 text-lg"></i>
+                        <span class="font-medium">Tableau de bord</span>
+                    </a>
+                    <a href="demandes-equipe.html" class="nav-item flex items-center space-x-4 px-4 py-4 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-xl hover-lift transition-all duration-300 click-scale">
+                        <i class="fas fa-users w-5 h-5 text-lg"></i>
+                        <span>Demandes d'équipe</span>
+                    </a>
+                    <a href="calendrier-equipe.html" class="nav-item flex items-center space-x-4 px-4 py-4 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-xl hover-lift transition-all duration-300 click-scale">
+                        <i class="fas fa-calendar-alt w-5 h-5 text-lg"></i>
+                        <span>Calendrier équipe</span>
+                    </a>
+                    <a href="alertes.html" class="nav-item flex items-center space-x-4 px-4 py-4 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-xl hover-lift transition-all duration-300 click-scale">
+                        <i class="fas fa-exclamation-triangle w-5 h-5 text-lg"></i>
+                        <span>Alertes</span>
+                    </a>
+                    <a href="profile.html" class="nav-item flex items-center space-x-4 px-4 py-4 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-xl hover-lift transition-all duration-300 click-scale">
+                        <i class="fas fa-user w-5 h-5 text-lg"></i>
+                        <span>Mon profil</span>
+                    </a>
+                    <a href="mot-de-passe.html" class="nav-item flex items-center space-x-4 px-4 py-4 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-xl hover-lift transition-all duration-300 click-scale">
+                        <i class="fas fa-key w-5 h-5 text-lg"></i>
+                        <span>Mot de passe</span>
+                    </a>
+                </nav>
+
+                <!-- User Profile -->
+                <div class="border-t border-gray-200 dark:border-gray-700 pt-6 mt-6">
+                    <div class="flex items-center space-x-4 mb-4">
+                        <div class="w-12 h-12 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full flex items-center justify-center text-white font-bold text-lg animate-float">
+                            JM
+                        </div>
+                        <div class="flex-2">
+                            <p class="font-semibold text-gray-900 dark:text-white">Jean Martin</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">Chef de Département Finance</p>
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <a href="#"  id="logoutBtn"  class="flex items-center space-x-3 text-red-600 hover:text-red-700 dark:text-red-400 text-sm hover-lift transition-all duration-200 p-2 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20">
+                            <i class="fas fa-sign-out-alt w-4 h-4"></i>
+                            <span>Déconnexion</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+<!-- Main Content -->
+<div class="flex-1 overflow-auto custom-scrollbar">
+    <!-- Header -->
+    <div class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-lg shadow-lg border-b border-gray-200/50 dark:border-gray-700/50 px-4 md:px-8 py-6 animate-fade-in sticky top-0 z-30">
+        <div class="flex justify-between items-center">
+            <div class="flex items-center space-x-4">
+                <button id="toggle-sidebar" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 md:hidden">
+                    <i class="fas fa-bars text-gray-600 dark:text-gray-400"></i>
+                </button>
+                <div>
+                    <h1 class="text-2xl md:text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Tableau de bord Chef de Département</h1>
+                    <p class="text-gray-600 dark:text-gray-400 mt-1">
+                        <i class="fas fa-users mr-2"></i>
+                        <span id="current-date"></span>
+                        <span>| Département Finance</span>
+                    </p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div class="relative notifications-container">
+                    <button id="notifications-btn" class="p-3 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-colors relative">
+                        <i class="fas fa-bell text-lg"></i>
+                        <span class="notification-count">5</span>
+                    </button>
+                    <div id="notifications-dropdown" class="notification-dropdown">
+                        <!-- [Ton dropdown de notifications existant] -->
+                    </div>
+                </div>
+                <button id="theme-toggle" class="p-3 bg-gray-100 dark:bg-gray-700 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-all duration-300 click-scale hover-lift">
+                    <i class="fas fa-moon dark:hidden text-gray-600 text-lg"></i>
+                    <i class="fas fa-sun hidden dark:block text-yellow-400 text-lg"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard Content -->
+    <div class="p-4 md:p-8 space-y-8">
+        <!-- Actions rapides -->
+        <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-700/50 animate-slide-up overflow-hidden" style="animation-delay: 0.4s;">
+            <div class="p-6 border-b border-gray-200/50 dark:border-gray-700/50 bg-gradient-to-r from-green-500/5 to-blue-500/5">
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Actions rapides</h3>
+                <p class="text-sm text-gray-500 dark:text-gray-400">Gestion de l'équipe</p>
+            </div>
+            <div class="p-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <!-- Gérer les demandes -->
+                    <a href="demandes-equipe.html" class="group gradient-bg text-white p-6 rounded-2xl hover:shadow-2xl transition-all duration-500 hover-lift click-scale relative overflow-hidden">
+                        <div class="relative z-10 flex flex-col items-center space-y-3">
+                            <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                                <i class="fas fa-users-cog text-2xl"></i>
+                            </div>
+                            <span class="font-semibold text-sm">Gérer les demandes</span>
+                        </div>
+                    </a>
+                    <!-- Voir calendrier équipe -->
+                    <a href="calendrier.html" class="bg-gradient-to-r from-purple-500 to-pink-500 text-white p-6 rounded-2xl hover:shadow-2xl transition-all duration-500 hover-lift click-scale relative overflow-hidden group">
+                        <div class="relative z-10 flex flex-col items-center space-y-3">
+                            <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                                <i class="fas fa-calendar-alt text-2xl"></i>
+                            </div>
+                            <span class="font-semibold text-sm">Calendrier équipe</span>
+                        </div>
+                    </a>
+                    <!-- Alertes -->
+                    <a href="alertes.html" class="bg-gradient-to-r from-red-500 to-orange-500 text-white p-6 rounded-2xl hover:shadow-2xl transition-all duration-500 hover-lift click-scale relative overflow-hidden group">
+                        <div class="relative z-10 flex flex-col items-center space-y-3">
+                            <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                                <i class="fas fa-exclamation-triangle text-2xl"></i>
+                            </div>
+                            <span class="font-semibold text-sm">Alertes infos</span>
+                        </div>
+                    </a>
+                    <!-- Statistiques -->
+                    <a href="profile.html" class="bg-gradient-to-r from-green-500 to-teal-500 text-white p-6 rounded-2xl hover:shadow-2xl transition-all duration-500 hover-lift click-scale relative overflow-hidden group">
+                        <div class="relative z-10 flex flex-col items-center space-y-3">
+                            <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                                <i class="fas fa-user text-2xl"></i>
+                            </div>
+                            <span class="font-semibold text-sm">Mon profile</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-700/50 p-6 hover-lift transition-all duration-500 animate-slide-up overflow-hidden relative">
+                <div class="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 pointer-events-none"></div>
+                <div class="relative flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">Demandes en attente</p>
+                        <p class="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">12</p>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">à valider</p>
+                    </div>
+                    <div class="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-2xl flex items-center justify-center shadow-lg animate-float">
+                        <i class="fas fa-hourglass-half text-white text-2xl"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-700/50 p-6 hover-lift transition-all duration-500 animate-slide-up overflow-hidden relative" style="animation-delay: 0.1s;">
+                <div class="absolute inset-0 bg-gradient-to-r from-orange-500/10 to-red-500/10 pointer-events-none"></div>
+                <div class="relative flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">Employés du département Finance</p>
+                        <p class="text-4xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent mb-2">5</p>
+                    </div>
+                    <div class="w-16 h-16 bg-gradient-to-r from-orange-500 to-red-500 rounded-2xl flex items-center justify-center shadow-lg animate-float" style="animation-delay: 0.5s;">
+                        <i class="fas fa-users text-white text-2xl"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-700/50 p-6 hover-lift transition-all duration-500 animate-slide-up overflow-hidden relative" style="animation-delay: 0.2s;">
+                <div class="absolute inset-0 bg-gradient-to-r from-green-500/10 to-teal-500/10 pointer-events-none"></div>
+                <div class="relative flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">Demandes validées</p>
+                        <p class="text-4xl font-bold bg-gradient-to-r from-green-600 to-teal-600 bg-clip-text text-transparent mb-2">47</p>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">ce mois</p>
+                    </div>
+                    <div class="w-16 h-16 bg-gradient-to-r from-green-500 to-teal-500 rounded-2xl flex items-center justify-center shadow-lg animate-float" style="animation-delay: 0.6s;">
+                        <i class="fas fa-check-circle text-white text-2xl"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-700/50 p-6 hover-lift transition-all duration-500 animate-slide-up overflow-hidden relative" style="animation-delay: 0.3s;">
+                <div class="absolute inset-0 bg-gradient-to-r from-yellow-500/10 to-orange-500/10 pointer-events-none"></div>
+                <div class="relative flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">Demandes refusées</p>
+                        <p class="text-4xl font-bold bg-gradient-to-r from-yellow-600 to-orange-600 bg-clip-text text-transparent mb-2">3</p>
+                    </div>
+                    <div class="w-16 h-16 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-2xl flex items-center justify-center shadow-lg animate-float" style="animation-delay: 0.7s;">
+                        <i class="fas fa-exclamation-triangle text-white text-2xl"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Graphiques -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            <!-- Graphique évolution des demandes -->
+            <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-700/50 animate-slide-up">
+                <div class="p-6 border-b border-gray-200/50 dark:border-gray-700/50 bg-gradient-to-r from-blue-500/5 to-purple-500/5">
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Évolution des demandes</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Demandes de congés par mois</p>
+                </div>
+                <div class="p-6">
+                    <div class="chart-container-large">
+                        <canvas id="demandesChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <!-- Graphique répartition par type -->
+            <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-700/50 animate-slide-up">
+                <div class="p-6 border-b border-gray-200/50 dark:border-gray-700/50 bg-gradient-to-r from-green-500/5 to-blue-500/5">
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Types de congés</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Répartition par catégorie</p>
+                </div>
+                <div class="p-6">
+                    <div class="chart-container-large">
+                        <canvas id="typesChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Analyse temporelle -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+            <!-- Taux d'approbation -->
+            <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-700/50 animate-slide-up">
+                <div class="p-6 border-b border-gray-200/50 dark:border-gray-700/50 bg-gradient-to-r from-purple-500/5 to-pink-500/5">
+                    <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2">Taux d'approbation</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">6 derniers mois</p>
+                </div>
+                <div class="p-6">
+                    <div class="chart-container">
+                        <canvas id="approvalChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <!-- Top employés -->
+            <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-700/50 animate-slide-up">
+                <div class="p-6 border-b border-gray-200/50 dark:border-gray-700/50 bg-gradient-to-r from-indigo-500/5 to-blue-500/5">
+                    <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2">Top demandeurs</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Ce mois</p>
+                </div>
+                <div class="p-6 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
+                                <span class="text-white text-xs font-bold">1</span>
+                            </div>
+                            <span class="text-sm font-medium text-gray-900 dark:text-white">Marie Dupont</span>
+                        </div>
+                        <span class="px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-300 text-xs rounded-full">8 jours</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-8 h-8 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center">
+                                <span class="text-white text-xs font-bold">2</span>
+                            </div>
+                            <span class="text-sm font-medium text-gray-900 dark:text-white">Jean Martin</span>
+                        </div>
+                        <span class="px-2 py-1 bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-300 text-xs rounded-full">6 jours</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-8 h-8 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-full flex items-center justify-center">
+                                <span class="text-white text-xs font-bold">3</span>
+                            </div>
+                            <span class="text-sm font-medium text-gray-900 dark:text-white">Pierre Leroux</span>
+                        </div>
+                        <span class="px-2 py-1 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-600 dark:text-yellow-300 text-xs rounded-full">5 jours</span>
+                    </div>
+                </div>
+            </div>
+            <!-- Statistiques rapides -->
+            <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-700/50 animate-slide-up">
+                <div class="p-6 border-b border-gray-200/50 dark:border-gray-700/50 bg-gradient-to-r from-pink-500/5 to-red-500/5">
+                    <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2">Statistiques</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Résumé mensuel</p>
+                </div>
+                <div class="p-6 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm text-gray-600 dark:text-gray-400">Temps de traitement moyen</span>
+                        <span class="font-semibold text-gray-900 dark:text-white">2.4h</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm text-gray-600 dark:text-gray-400">Demandes urgentes</span>
+                        <span class="font-semibold text-red-500">3</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm text-gray-600 dark:text-gray-400">Satisfaction équipe</span>
+                        <span class="font-semibold text-green-500">94%</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm text-gray-600 dark:text-gray-400">Pic de demandes</span>
+                        <span class="font-semibold text-blue-500">Vendredi</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section "Demandes d'équipe" (mise à jour) -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-4 space-y-4">
+                <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-700/50 animate-slide-up overflow-hidden">
+                    <div class="p-6 border-b border-gray-200/50 dark:border-gray-700/50 bg-gradient-to-r from-blue-500/5 to-purple-500/5">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Demandes d'équipe</h3>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">Dernières demandes de congés</p>
+                            </div>
+                            <div class="flex space-x-2 overflow-x-auto pb-2">
+                                <button class="px-3 py-1 text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-300 rounded-full hover:bg-blue-200 dark:hover:bg-blue-900/50 transition-colors">
+                                    Tous
+                                </button>
+                                <button class="px-3 py-1 text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+                                    En attente
+                                </button>
+                                <button class="px-3 py-1 text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+                                    Approuvé
+                                </button>
+                                <button class="px-3 py-1 text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+                                    Refusé
+                                </button>
+                                <select class="px-3 py-1 text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+                                    <option>Tous les employés</option>
+                                    <option>Jean Martin</option>
+                                    <option>Marie Dupont</option>
+                                    <option>Pierre Leroux</option>
+                                    <option>Sophie Moreau</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6 space-y-4">
+                        <!-- Demande 1 -->
+                        <div class="demand-item flex flex-col md:flex-row items-start md:items-center justify-between">
+                            <div class="flex items-center space-x-4 w-full md:w-auto">
+                                <div class="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-user text-white"></i>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <div class="flex items-center space-x-2">
+                                        <h4 class="font-semibold text-gray-900 dark:text-white truncate">Jean Martin - Congés payés</h4>
+                                        <span class="text-yellow-500">🟡</span>
+                                    </div>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400 truncate">2025-09-15 - 2025-09-20 (5 jours)</p>
+                                    <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Demande soumise il y a 2h</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-2 mt-4 md:mt-0" style="flex-shrink: 0; white-space: nowrap; gap: 0.75rem;">
+                                <span class="status-badge px-4 py-2 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300 text-xs font-semibold rounded-full">En attente</span>
+                                <button class="approve-btn px-4 py-2" onclick="showConfirmModal('approve', 1)">
+                                    <i class="fas fa-check mr-1"></i> Approuver
+                                </button>
+                                <button class="reject-btn px-4 py-2" onclick="showConfirmModal('reject', 1)">
+                                    <i class="fas fa-times mr-1"></i> Refuser
+                                </button>
+                                <button class="view-btn px-4 py-2" onclick="showDetailsModal(1)">
+                                    <i class="fas fa-eye mr-1"></i> Détails
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Demande 2 -->
+                        <div class="demand-item flex flex-col md:flex-row items-start md:items-center justify-between">
+                            <div class="flex items-center space-x-4 w-full md:w-auto">
+                                <div class="w-12 h-12 bg-gradient-to-r from-green-500 to-teal-500 rounded-xl flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-user text-white"></i>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <div class="flex items-center space-x-2">
+                                        <h4 class="font-semibold text-gray-900 dark:text-white truncate">Sophie Dubois - Congé maladie</h4>
+                                        <span class="text-yellow-500">🟡</span>
+                                    </div>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400 truncate">2025-09-16 - 2025-09-18 (3 jours)</p>
+                                    <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Demande soumise il y a 1h</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-2 mt-4 md:mt-0" style="flex-shrink: 0; white-space: nowrap; gap: 0.75rem;">
+                                <span class="status-badge px-4 py-2 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300 text-xs font-semibold rounded-full">En attente</span>
+                                <button class="approve-btn px-4 py-2" onclick="showConfirmModal('approve', 2)">
+                                    <i class="fas fa-check mr-1"></i> Approuver
+                                </button>
+                                <button class="reject-btn px-4 py-2" onclick="showConfirmModal('reject', 2)">
+                                    <i class="fas fa-times mr-1"></i> Refuser
+                                </button>
+                                <button class="view-btn px-4 py-2" onclick="showDetailsModal(2)">
+                                    <i class="fas fa-eye mr-1"></i> Détails
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+       
+
+            <!-- Footer -->
+            <footer class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg border-t border-gray-200/50 dark:border-gray-700/50 p-6 mt-8">
+                <div class="max-w-7xl mx-auto">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                        <div class="col-span-1 md:col-span-2">
+                            <div class="flex items-center space-x-4 mb-4">
+                                <div class="w-12 h-12 rounded-xl flex items-center justify-center shadow-lg">
+                                    <img src="assets/images/logo.png" alt="Logo Graxel Tech" class="w-full h-full object-contain rounded-xl" />
+                                </div>
+                                <div>
+                                    <h3 class="text-xl font-bold text-gray-900 dark:text-white">Graxel Tech</h3>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">Gestion des congés pour les responsables</p>
+                                </div>
+                            </div>
+                            <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">
+                                Solution dédiée aux chefs de département pour une gestion optimale des congés et des ressources humaines.
+                            </p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-900 dark:text-white mb-4">Liens rapides</h4>
+                            <ul class="space-y-2 text-sm">
+                                <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Tableau de bord</a></li>
+                                <li><a href="demandes-equipe.html" class="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Demandes d'équipe</a></li>
+                                <li><a href="calendrier-equipe.html" class="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Calendrier équipe</a></li>
+                                <li><a href="alertes.html" class="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Alertes</a></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-900 dark:text-white mb-4">Support</h4>
+                            <ul class="space-y-2 text-sm">
+                                <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Centre d'aide</a></li>
+                                <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Contact RH</a></li>
+                                <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">FAQ</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="border-t border-gray-200 dark:border-gray-700 mt-8 pt-6">
+                        <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+                            <p class="text-sm text-gray-600 dark:text-gray-400">
+                                © 2025 Graxel Tech. Tous droits réservés.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+  
+    <script>
+        // Animation d'entrée
+        document.addEventListener('DOMContentLoaded', function() {
+            const elements = document.querySelectorAll('.animate-slide-up');
+            elements.forEach((el, index) => {
+                setTimeout(() => {
+                    el.style.opacity = '1';
+                    el.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+
+            // Configuration des graphiques
+            initCharts();
+        });
+
+        function initCharts() {
+            // Graphique évolution des demandes
+            const ctxDemandes = document.getElementById('demandesChart').getContext('2d');
+            new Chart(ctxDemandes, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Jun', 'Jul', 'Aoû', 'Sep'],
+                    datasets: [{
+                        label: 'Demandes',
+                        data: [12, 19, 15, 25, 22, 18, 28, 24, 20],
+                        borderColor: 'rgb(59, 130, 246)',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(156, 163, 175, 0.2)'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                color: 'rgba(156, 163, 175, 0.2)'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Graphique types de congés
+            const ctxTypes = document.getElementById('typesChart').getContext('2d');
+            new Chart(ctxTypes, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Congés payés', 'RTT', 'Maladie', 'Formation', 'Autres'],
+                    datasets: [{
+                        data: [45, 25, 15, 10, 5],
+                        backgroundColor: [
+                            'rgb(59, 130, 246)',
+                            'rgb(34, 197, 94)',
+                            'rgb(239, 68, 68)',
+                            'rgb(139, 92, 246)',
+                            'rgb(236, 72, 153)'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+
+            // Graphique taux d'approbation
+            const ctxApproval = document.getElementById('approvalChart').getContext('2d');
+            new Chart(ctxApproval, {
+                type: 'bar',
+                data: {
+                    labels: ['Avr', 'Mai', 'Jun', 'Jul', 'Aoû', 'Sep'],
+                    datasets: [{
+                        label: 'Taux d\'approbation',
+                        data: [85, 88, 82, 90, 87, 87],
+                        backgroundColor: 'rgba(139, 92, 246, 0.8)',
+                        borderColor: 'rgb(139, 92, 246)',
+                        borderWidth: 1,
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            grid: {
+                                color: 'rgba(156, 163, 175, 0.2)'
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    return value + '%';
+                                }
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Fonctions d'interaction
+        function filterRequests(status) {
+            const items = document.querySelectorAll('.demand-item');
+            items.forEach(item => {
+                if (status === 'all') {
+                    item.style.display = 'flex';
+                } else {
+                    const statusElement = item.querySelector('span[class*="bg-"]');
+                    const statusText = statusElement.textContent.toLowerCase();
+                    if (statusText.includes(status)) {
+                        item.style.display = 'flex';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                }
+            });
+        }
+
+        // Animation des cartes métriques
+        function animateMetricCards() {
+            const cards = document.querySelectorAll('.metric-card');
+            cards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.classList.add('animate-bounce');
+                    setTimeout(() => {
+                        card.classList.remove('animate-bounce');
+                    }, 1000);
+                }, index * 200);
+            });
+        }
+
+        // Animation des barres de progression
+        function animateProgressBars() {
+            const progressBars = document.querySelectorAll('.progress-bar');
+            progressBars.forEach(bar => {
+                const width = bar.style.width || bar.className.match(/w-(\d+)\/(\d+)/);
+                bar.style.width = '0%';
+                setTimeout(() => {
+                    bar.style.transition = 'width 1s ease-in-out';
+                    if (width) {
+                        bar.style.width = width;
+                    }
+                }, 500);
+            });
+        }
+
+        // Initialiser les animations après le chargement
+        setTimeout(() => {
+            animateProgressBars();
+        }, 1000);
+    </script>
+  <!-- Vos fichiers existants -->
+   
+    <script>
+        let currentAction = '';
+        let currentRequestId = 0;
+        
+        // Données simulées des demandes
+        const requests = {
+            1: {
+                name: "Jean Martin",
+                type: "Congés payés",
+                startDate: "2025-09-15",
+                endDate: "2025-09-20",
+                duration: "5 jours",
+                reason: "Congés pour vacances en famille. Voyage prévu depuis plusieurs mois.",
+                pdfName: "justificatif_conges.pdf",
+                avatar: "from-blue-500 to-purple-500",
+                submitted: "il y a 2h"
+            },
+            2: {
+                name: "Sophie Dubois",
+                type: "Congé maladie",
+                startDate: "2025-09-16",
+                endDate: "2025-09-18",
+                duration: "3 jours",
+                reason: "Arrêt maladie suite à une grippe. Certificat médical fourni.",
+                pdfName: "certificat_medical.pdf",
+                avatar: "from-green-500 to-teal-500",
+                submitted: "il y a 1h"
+            }
+        };
+
+        function showDetailsModal(requestId) {
+            currentRequestId = requestId;
+            const request = requests[requestId];
+            
+            // Remplir les détails
+            document.getElementById('detailsName').textContent = request.name;
+            document.getElementById('detailsType').textContent = request.type;
+            document.getElementById('detailsStartDate').textContent = request.startDate;
+            document.getElementById('detailsEndDate').textContent = request.endDate;
+            document.getElementById('detailsDuration').textContent = request.duration;
+            document.getElementById('detailsReason').textContent = request.reason;
+            document.getElementById('pdfName').textContent = request.pdfName;
+            document.getElementById('detailsAvatar').className = `w-16 h-16 bg-gradient-to-r ${request.avatar} rounded-xl flex items-center justify-center`;
+            
+            showModal('detailsModal');
+        }
+
+        function showConfirmModal(action, requestId) {
+            currentAction = action;
+            currentRequestId = requestId;
+            const request = requests[requestId];
+            
+            const isApprove = action === 'approve';
+            const icon = document.getElementById('confirmIcon');
+            const title = document.getElementById('confirmTitle');
+            const message = document.getElementById('confirmMessage');
+            const actionBtn = document.getElementById('confirmActionBtn');
+            
+            // Configuration selon l'action
+            if (isApprove) {
+                icon.className = 'w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center';
+                icon.innerHTML = '<i class="fas fa-check text-green-500"></i>';
+                title.textContent = 'Approuver la demande';
+                message.textContent = 'Êtes-vous sûr de vouloir approuver cette demande de congés ?';
+                actionBtn.className = 'px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors';
+                actionBtn.innerHTML = '<i class="fas fa-check mr-2"></i>Approuver';
+            } else {
+                icon.className = 'w-12 h-12 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center';
+                icon.innerHTML = '<i class="fas fa-times text-red-500"></i>';
+                title.textContent = 'Refuser la demande';
+                message.textContent = 'Êtes-vous sûr de vouloir refuser cette demande de congés ?';
+                actionBtn.className = 'px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors';
+                actionBtn.innerHTML = '<i class="fas fa-times mr-2"></i>Refuser';
+            }
+            
+            document.getElementById('confirmDetails').textContent = `${request.name} - ${request.type}`;
+            document.getElementById('confirmDates').textContent = `${request.startDate} - ${request.endDate} (${request.duration})`;
+            
+            showModal('confirmModal');
+        }
+
+        function executeAction() {
+            const request = requests[currentRequestId];
+            const isApprove = currentAction === 'approve';
+            
+            // Fermer le modal de confirmation
+            closeModal('confirmModal');
+            
+            // Simuler un délai de traitement
+            setTimeout(() => {
+                // Mettre à jour l'interface
+                updateRequestStatus(currentRequestId, isApprove);
+                
+                // Afficher la notification
+                showToast(
+                    isApprove ? 'Demande approuvée' : 'Demande refusée',
+                    `La demande de ${request.name} a été ${isApprove ? 'approuvée' : 'refusée'} avec succès.`,
+                    isApprove ? 'success' : 'error'
+                );
+            }, 500);
+        }
+
+        function updateRequestStatus(requestId, approved) {
+            // Trouver l'élément de demande
+            const demandItems = document.querySelectorAll('.demand-item');
+            const demandItem = demandItems[requestId - 1];
+            
+            // Mettre à jour le badge de statut
+            const statusBadge = demandItem.querySelector('.status-badge');
+            const statusText = approved ? 'Approuvée' : 'Refusée';
+            const statusClass = approved ? 
+                'px-4 py-2 bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 text-xs font-semibold rounded-full' :
+                'px-4 py-2 bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300 text-xs font-semibold rounded-full';
+            
+            statusBadge.textContent = statusText;
+            statusBadge.className = statusClass;
+            
+            // Masquer les boutons d'action
+            const approveBtn = demandItem.querySelector('.approve-btn');
+            const rejectBtn = demandItem.querySelector('.reject-btn');
+            approveBtn.style.display = 'none';
+            rejectBtn.style.display = 'none';
+            
+            // Changer l'émoji de statut
+            const statusEmoji = demandItem.querySelector('.text-yellow-500');
+            statusEmoji.textContent = approved ? '🟢' : '🔴';
+            statusEmoji.className = approved ? 'text-green-500' : 'text-red-500';
+            
+            // Animation de fade
+            demandItem.style.animation = 'fadeOut 0.3s ease-out';
+            setTimeout(() => {
+                demandItem.style.animation = '';
+                demandItem.style.opacity = '0.7';
+            }, 300);
+        }
+
+        function showModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.remove('hidden');
+            
+            // Force reflow
+            modal.offsetHeight;
+            
+            const backdrop = modal.querySelector('.backdrop');
+            const modalContent = modal.querySelector('.modal');
+            
+            backdrop.classList.add('show');
+            modalContent.classList.add('show');
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            const backdrop = modal.querySelector('.backdrop');
+            const modalContent = modal.querySelector('.modal');
+            
+            backdrop.classList.remove('show');
+            modalContent.classList.remove('show');
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 250);
+        }
+
+        function showToast(title, message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastIcon = document.getElementById('toastIcon');
+            const toastTitle = document.getElementById('toastTitle');
+            const toastMessage = document.getElementById('toastMessage');
+            
+            // Configuration selon le type
+            if (type === 'success') {
+                toastIcon.className = 'w-8 h-8 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center';
+                toastIcon.innerHTML = '<i class="fas fa-check text-green-500"></i>';
+                toast.querySelector('.border-l-4').style.borderLeftColor = '#10B981';
+            } else {
+                toastIcon.className = 'w-8 h-8 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center';
+                toastIcon.innerHTML = '<i class="fas fa-times text-red-500"></i>';
+                toast.querySelector('.border-l-4').style.borderLeftColor = '#EF4444';
+            }
+            
+            toastTitle.textContent = title;
+            toastMessage.textContent = message;
+            
+            // Afficher le toast
+            toast.style.transform = 'translateX(0)';
+            
+            // Masquer automatiquement après 3 secondes
+            setTimeout(() => {
+                toast.style.transform = 'translateX(100%)';
+            }, 3000);
+        }
+
+        function viewPDF() {
+            // Simulation de l'ouverture du PDF
+            showToast('PDF ouvert', 'Le justificatif a été ouvert dans un nouvel onglet.', 'success');
+        }
+
+        // Fermer les modals avec Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const openModals = document.querySelectorAll('.modal:not(.hidden)');
+                openModals.forEach(modal => {
+                    closeModal(modal.id);
+                });
+            }
+        });
+    </script>
+    
+    <!-- Modal de confirmation de déconnexion -->
+    <div id="logoutConfirmModal" class="fixed inset-0 z-50 hidden">
+        <div class="backdrop absolute inset-0 bg-black bg-opacity-50" onclick="closeLogoutModal()"></div>
+        <div class="modal relative z-10 flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl max-w-md w-full">
+                <!-- Header -->
+                <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-12 h-12 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
+                            <i class="fas fa-sign-out-alt text-xl text-red-600 dark:text-red-400"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Confirmation de déconnexion</h3>
+                    </div>
+                </div>
+                
+                <!-- Content -->
+                <div class="p-6">
+                    <p class="text-gray-600 dark:text-gray-400 mb-4">Êtes-vous sûr de vouloir vous déconnecter ?</p>
+                    <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-8 h-8 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                                JM
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium text-gray-900 dark:text-white">Jean Martin</p>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">Chef de Département Finance</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Actions -->
+                <div class="flex items-center justify-end space-x-3 p-6 border-t border-gray-200 dark:border-gray-700">
+                    <button class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors" onclick="closeLogoutModal()">
+                        Annuler
+                    </button>
+                    <button class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors" onclick="executeLogout()">
+                        Se déconnecter
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast notification de déconnexion -->
+    <div id="logoutToast" class="fixed top-4 right-4 z-50 transform translate-x-full transition-transform duration-300">
+        <div class="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-4 border-l-4 border-l-green-500 max-w-sm">
+            <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
+                    <i class="fas fa-check text-green-600 dark:text-green-400"></i>
+                </div>
+                <div>
+                    <p class="font-semibold text-gray-900 dark:text-white">Déconnexion réussie</p>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">Vous allez être redirigé...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Fonction pour ouvrir le modal de déconnexion
+        function openLogoutModal() {
+            const modal = document.getElementById('logoutConfirmModal');
+            modal.classList.remove('hidden');
+            // Animation d'ouverture
+            setTimeout(() => {
+                modal.querySelector('.modal').style.opacity = '1';
+                modal.querySelector('.modal').style.transform = 'scale(1)';
+            }, 10);
+        }
+
+        // Fonction pour fermer le modal de déconnexion
+        function closeLogoutModal() {
+            const modal = document.getElementById('logoutConfirmModal');
+            modal.querySelector('.modal').style.opacity = '0';
+            modal.querySelector('.modal').style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 200);
+        }
+
+        // Fonction pour afficher le toast de déconnexion
+        function showLogoutToast() {
+            const toast = document.getElementById('logoutToast');
+            toast.classList.remove('translate-x-full');
+            toast.classList.add('translate-x-0');
+            
+            // Masquer automatiquement après 3 secondes
+            setTimeout(() => {
+                toast.classList.remove('translate-x-0');
+                toast.classList.add('translate-x-full');
+            }, 3000);
+        }
+
+        // Fonction d'exécution de la déconnexion
+        function executeLogout() {
+            // Fermer le modal
+            closeLogoutModal();
+            
+            // Afficher le toast
+            setTimeout(() => {
+                showLogoutToast();
+            }, 300);
+            
+            // Rediriger vers la page d'accueil après 2 secondes
+            setTimeout(() => {
+                window.location.href = '../index.html';
+            }, 2000);
+        }
+
+        // Event listener pour le bouton de déconnexion
+        document.getElementById('logoutBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            openLogoutModal();
+        });
+
+        // Fermer le modal en appuyant sur Échap
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeLogoutModal();
+            }
+        });
+
+        // Initialisation des styles du modal
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('logoutConfirmModal').querySelector('.modal');
+            modal.style.opacity = '0';
+            modal.style.transform = 'scale(0.95)';
+            modal.style.transition = 'all 0.2s ease-out';
+        });
+    </script>
+    <script src="assets/javascript/config.js"></script>
+</body>
+</html>

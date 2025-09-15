@@ -1,0 +1,1404 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nouveau Mot de Passe - Graxel Technologies</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/notyf/3.10.0/notyf.min.css" rel="stylesheet">
+    <style>
+        /* Variables CSS pour les thèmes */
+        :root {
+            --primary-color: #3B82F6;
+            --primary-hover: #2563EB;
+            --success-color: #10B981;
+            --warning-color: #F59E0B;
+            --error-color: #EF4444;
+            --text-primary: #FFFFFF;
+            --text-secondary: #9CA3AF;
+            --bg-primary: #0F172A;
+            --bg-secondary: #1E293B;
+            --bg-card: rgba(255, 255, 255, 0.05);
+            --border-color: rgba(255, 255, 255, 0.1);
+            --shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        [data-theme="light"] {
+            --text-primary: #1F2937;
+            --text-secondary: #6B7280;
+            --bg-primary: #F8FAFC;
+            --bg-secondary: #FFFFFF;
+            --bg-card: rgba(0, 0, 0, 0.02);
+            --border-color: rgba(0, 0, 0, 0.05);
+            --shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            min-height: 100vh;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+
+        /* Loader */
+        .loader-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-primary);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: all 0.5s ease;
+        }
+
+        .loader-container.hide {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loader-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(59, 130, 246, 0.3);
+            border-top: 3px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .loader-text {
+            margin-top: 1rem;
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .loader-subtitle {
+            margin-top: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .loader-progress {
+            width: 200px;
+            height: 4px;
+            background: rgba(59, 130, 246, 0.2);
+            border-radius: 2px;
+            margin-top: 1rem;
+            overflow: hidden;
+        }
+
+        .loader-progress-bar {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), #60A5FA);
+            border-radius: 2px;
+            animation: loading 2.5s ease-out forwards;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes loading {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+
+        /* Main Content */
+        .main-content {
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.5s ease;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .main-content.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .login-container {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 3rem;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--text-primary);
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.125rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
+        }
+
+        /* Back Button */
+        .back-btn {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--text-primary);
+            padding: 0.75rem 1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Logo */
+        .logo-container {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        /* Password Reset Header */
+        .password-reset-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .reset-icon {
+            font-size: 4rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--primary-color) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 1rem 3rem 1rem 3rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .password-toggle:hover {
+            color: var(--primary-color);
+        }
+
+        /* Password Strength */
+        .password-strength {
+            margin-top: 0.75rem;
+        }
+
+        .strength-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 0.75rem;
+        }
+
+        .strength-fill {
+            height: 100%;
+            width: 0%;
+            transition: all 0.4s ease;
+            border-radius: 3px;
+            background: #6B7280;
+        }
+
+        .strength-fill.very-weak {
+            background: linear-gradient(90deg, #DC2626, #EF4444);
+        }
+
+        .strength-fill.weak {
+            background: linear-gradient(90deg, #EF4444, #F87171);
+        }
+
+        .strength-fill.fair {
+            background: linear-gradient(90deg, #F59E0B, #FBBF24);
+        }
+
+        .strength-fill.good {
+            background: linear-gradient(90deg, #3B82F6, #60A5FA);
+        }
+
+        .strength-fill.strong {
+            background: linear-gradient(90deg, #10B981, #34D399);
+        }
+
+        .strength-fill.excellent {
+            background: linear-gradient(90deg, #059669, #10B981);
+        }
+
+        .strength-text {
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .strength-text.very-weak { color: #DC2626; }
+        .strength-text.weak { color: #EF4444; }
+        .strength-text.fair { color: #F59E0B; }
+        .strength-text.good { color: #3B82F6; }
+        .strength-text.strong { color: #10B981; }
+        .strength-text.excellent { color: #059669; }
+
+        /* Password Match */
+        .password-match {
+            margin-top: 0.75rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .password-match.success { color: var(--success-color); }
+        .password-match.error { color: var(--error-color); }
+
+        /* Security Requirements */
+        .security-requirements {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .requirements-title {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .requirements-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            gap: 0.75rem;
+        }
+
+        .requirement {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .requirement-icon {
+            font-size: 0.875rem;
+            color: #6B7280;
+            transition: all 0.3s ease;
+        }
+
+        .requirement.met {
+            color: var(--text-primary);
+        }
+
+        .requirement.met .requirement-icon {
+            color: var(--success-color);
+        }
+
+        /* Submit Button */
+        .submit-btn {
+            width: 100%;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-hover) 100%);
+            border: none;
+            border-radius: 16px;
+            color: white;
+            font-size: 1.125rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(59, 130, 246, 0.4);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-loader {
+            color: white;
+        }
+
+        /* Modal Styles */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2.5rem;
+            max-width: 450px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            transform: scale(0.8) translateY(20px);
+            transition: all 0.3s ease;
+        }
+
+        .modal.show .modal-content {
+            transform: scale(1) translateY(0);
+        }
+
+        .modal-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .modal-icon.success { color: var(--success-color); }
+        .modal-icon.warning { color: var(--warning-color); }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .modal-message {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            line-height: 1.5;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .modal-btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .modal-btn.primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .modal-btn.primary:hover {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+
+        .modal-btn.secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .modal-btn.secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 1rem;
+            }
+            
+            .login-container {
+                max<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nouveau Mot de Passe - Graxel Technologies</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Variables CSS pour les thèmes */
+        :root {
+            --primary-color: #3B82F6;
+            --primary-hover: #2563EB;
+            --success-color: #10B981;
+            --warning-color: #F59E0B;
+            --error-color: #EF4444;
+            --text-primary: #FFFFFF;
+            --text-secondary: #9CA3AF;
+            --bg-primary: #0F172A;
+            --bg-secondary: #1E293B;
+            --bg-card: rgba(255, 255, 255, 0.05);
+            --border-color: rgba(255, 255, 255, 0.1);
+            --shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        [data-theme="light"] {
+            --text-primary: #1F2937;
+            --text-secondary: #6B7280;
+            --bg-primary: #F8FAFC;
+            --bg-secondary: #FFFFFF;
+            --bg-card: rgba(0, 0, 0, 0.02);
+            --border-color: rgba(0, 0, 0, 0.05);
+            --shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            min-height: 100vh;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+
+        /* Main Content */
+        .main-content {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .login-container {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 3rem;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--text-primary);
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.125rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
+        }
+
+        /* Back Button */
+        .back-btn {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--text-primary);
+            padding: 0.75rem 1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Logo */
+        .logo-container {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        /* Password Reset Header */
+        .password-reset-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .reset-icon {
+            font-size: 4rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--primary-color) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 1rem 3rem 1rem 3rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .password-toggle:hover {
+            color: var(--primary-color);
+        }
+
+        /* Password Strength */
+        .password-strength {
+            margin-top: 0.75rem;
+        }
+
+        .strength-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 0.75rem;
+        }
+
+        .strength-fill {
+            height: 100%;
+            width: 0%;
+            transition: all 0.4s ease;
+            border-radius: 3px;
+            background: #6B7280;
+        }
+
+        .strength-fill.very-weak {
+            background: linear-gradient(90deg, #DC2626, #EF4444);
+        }
+
+        .strength-fill.weak {
+            background: linear-gradient(90deg, #EF4444, #F87171);
+        }
+
+        .strength-fill.fair {
+            background: linear-gradient(90deg, #F59E0B, #FBBF24);
+        }
+
+        .strength-fill.good {
+            background: linear-gradient(90deg, #3B82F6, #60A5FA);
+        }
+
+        .strength-fill.strong {
+            background: linear-gradient(90deg, #10B981, #34D399);
+        }
+
+        .strength-fill.excellent {
+            background: linear-gradient(90deg, #059669, #10B981);
+        }
+
+        .strength-text {
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .strength-text.very-weak { color: #DC2626; }
+        .strength-text.weak { color: #EF4444; }
+        .strength-text.fair { color: #F59E0B; }
+        .strength-text.good { color: #3B82F6; }
+        .strength-text.strong { color: #10B981; }
+        .strength-text.excellent { color: #059669; }
+
+        /* Password Match */
+        .password-match {
+            margin-top: 0.75rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .password-match.success { color: var(--success-color); }
+        .password-match.error { color: var(--error-color); }
+
+        /* Security Requirements */
+        .security-requirements {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .requirements-title {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .requirements-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            gap: 0.75rem;
+        }
+
+        .requirement {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .requirement-icon {
+            font-size: 0.875rem;
+            color: #6B7280;
+            transition: all 0.3s ease;
+        }
+
+        .requirement.met {
+            color: var(--text-primary);
+        }
+
+        .requirement.met .requirement-icon {
+            color: var(--success-color);
+        }
+
+        /* Submit Button */
+        .submit-btn {
+            width: 100%;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-hover) 100%);
+            border: none;
+            border-radius: 16px;
+            color: white;
+            font-size: 1.125rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(59, 130, 246, 0.4);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-loader {
+            color: white;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 1rem;
+            }
+            
+            .login-container {
+                max-width: 600px; /* Augmentation de la largeur max sur tablettes */
+                padding: 2.5rem;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .main-content {
+                padding: 0.75rem;
+            }
+            
+            .login-container {
+                max-width: none; /* Supprime la limite de largeur sur mobile */
+                width: calc(100vw - 1.5rem); /* Utilise presque toute la largeur de l'écran */
+                padding: 2rem 1.5rem; /* Réduit le padding horizontal */
+                margin: 0;
+                border-radius: 20px;
+            }
+
+            .back-btn {
+                top: 1.5rem;
+                left: 1.5rem;
+                padding: 0.5rem 0.75rem;
+                font-size: 0.8rem;
+            }
+
+            .theme-toggle {
+                top: 1.5rem;
+                right: 1.5rem;
+                width: 44px;
+                height: 44px;
+            }
+
+            .reset-icon {
+                font-size: 3rem;
+            }
+
+            .title {
+                font-size: 1.75rem;
+            }
+
+            .subtitle {
+                font-size: 0.9rem;
+            }
+
+            .security-requirements {
+                padding: 1.25rem 1rem;
+            }
+
+            .form-input {
+                padding: 0.875rem 2.75rem 0.875rem 2.5rem;
+                font-size: 0.95rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .login-container {
+                width: calc(100vw - 1rem); /* Encore plus large sur très petits écrans */
+                padding: 1.5rem 1rem;
+            }
+
+            .back-btn {
+                top: 1rem;
+                left: 1rem;
+                padding: 0.4rem 0.6rem;
+                font-size: 0.75rem;
+            }
+
+            .back-btn span {
+                display: none; /* Cache le texte "Retour" sur très petits écrans */
+            }
+
+            .theme-toggle {
+                top: 1rem;
+                right: 1rem;
+                width: 40px;
+                height: 40px;
+            }
+
+            .title {
+                font-size: 1.5rem;
+            }
+
+            .subtitle {
+                font-size: 0.85rem;
+            }
+
+            .form-input {
+                padding: 0.75rem 2.5rem 0.75rem 2.25rem;
+            }
+
+            .security-requirements {
+                padding: 1rem 0.75rem;
+            }
+
+            .requirements-title {
+                font-size: 1rem;
+            }
+
+            .requirement {
+                font-size: 0.85rem;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .login-container {
+                width: calc(100vw - 0.5rem);
+                padding: 1.25rem 0.75rem;
+            }
+
+            .form-input {
+                font-size: 0.9rem;
+            }
+
+            .submit-btn {
+                font-size: 1rem;
+                padding: 0.875rem 1.5rem;
+            }
+        }
+
+        /* Light Theme Adjustments */
+        [data-theme="light"] .back-btn,
+        [data-theme="light"] .theme-toggle {
+            background: rgba(0, 0, 0, 0.05);
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="light"] .back-btn:hover,
+        [data-theme="light"] .theme-toggle:hover {
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="light"] .form-input {
+            background: rgba(0, 0, 0, 0.02);
+        }
+
+        [data-theme="light"] .strength-bar {
+            background: rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        <div class="login-container">
+            <button class="theme-toggle" id="themeToggle" aria-label="Changer de thème">
+                <i class="fas fa-moon"></i>
+            </button>
+
+            <!-- Bouton retour -->
+            <button class="back-btn" id="backBtn" aria-label="Retour à la connexion">
+                <i class="fas fa-arrow-left"></i>
+                <span>Retour</span>
+            </button>
+
+            <div class="logo-container">
+                <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #3B82F6, #1D4ED8); border-radius: 16px; display: flex; align-items: center; justify-content: center; margin: 0 auto;">
+                    <i class="fas fa-shield-alt" style="font-size: 2rem; color: white;"></i>
+                </div>
+            </div>
+            
+            <div class="password-reset-header">
+                <div class="reset-icon">
+                    <i class="fas fa-key"></i>
+                </div>
+                <h1 class="title">Nouveau Mot de Passe</h1>
+                <p class="subtitle">Créez un nouveau mot de passe sécurisé pour votre compte Graxel Technologies</p>
+            </div>
+
+            <form id="newPasswordForm">
+                <div class="form-group">
+                    <label for="newPassword" class="form-label">
+                        <i class="fas fa-lock"></i>
+                        Nouveau mot de passe
+                    </label>
+                    <div class="input-wrapper">
+                        <input 
+                            type="password" 
+                            id="newPassword" 
+                            class="form-input" 
+                            placeholder="Votre nouveau mot de passe"
+                            required
+                        >
+                        <i class="fas fa-key input-icon"></i>
+                        <button type="button" class="password-toggle" id="newPasswordToggle" aria-label="Afficher/masquer le mot de passe">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                    <div class="password-strength" id="passwordStrength">
+                        <div class="strength-bar">
+                            <div class="strength-fill" id="strengthFill"></div>
+                        </div>
+                        <p class="strength-text" id="strengthText">
+                            <i class="fas fa-info-circle"></i>
+                            Saisissez un mot de passe
+                        </p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword" class="form-label">
+                        <i class="fas fa-check-double"></i>
+                        Confirmer le mot de passe
+                    </label>
+                    <div class="input-wrapper">
+                        <input 
+                            type="password" 
+                            id="confirmPassword" 
+                            class="form-input" 
+                            placeholder="Confirmez votre nouveau mot de passe"
+                            required
+                        >
+                        <i class="fas fa-check-double input-icon"></i>
+                        <button type="button" class="password-toggle" id="confirmPasswordToggle" aria-label="Afficher/masquer le mot de passe">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                    <div class="password-match" id="passwordMatch"></div>
+                </div>
+
+                <!-- Critères de sécurité -->
+                <div class="security-requirements">
+                    <h3 class="requirements-title">
+                        <i class="fas fa-shield-check"></i>
+                        Critères de sécurité
+                    </h3>
+                    <ul class="requirements-list">
+                        <li class="requirement" id="lengthReq">
+                            <i class="fas fa-circle requirement-icon"></i>
+                            Au moins 8 caractères
+                        </li>
+                        <li class="requirement" id="uppercaseReq">
+                            <i class="fas fa-circle requirement-icon"></i>
+                            Une lettre majuscule (A-Z)
+                        </li>
+                        <li class="requirement" id="lowercaseReq">
+                            <i class="fas fa-circle requirement-icon"></i>
+                            Une lettre minuscule (a-z)
+                        </li>
+                        <li class="requirement" id="numberReq">
+                            <i class="fas fa-circle requirement-icon"></i>
+                            Au moins un chiffre (0-9)
+                        </li>
+                    </ul>
+                </div>
+
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    <span class="btn-text">Mettre à jour le mot de passe</span>
+                    <i class="fas fa-shield-alt submit-icon"></i>
+                    <div class="btn-loader" style="display: none;">
+                        <i class="fas fa-spinner fa-spin"></i>
+                    </div>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', newTheme);
+            
+            const icon = themeToggle.querySelector('i');
+            icon.className = newTheme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
+        });
+
+        // Password Toggle Functionality
+        function setupPasswordToggle(toggleId, inputId) {
+            const toggle = document.getElementById(toggleId);
+            const input = document.getElementById(inputId);
+            
+            toggle.addEventListener('click', () => {
+                const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+                input.setAttribute('type', type);
+                
+                const icon = toggle.querySelector('i');
+                icon.className = type === 'password' ? 'fas fa-eye' : 'fas fa-eye-slash';
+            });
+        }
+
+        setupPasswordToggle('newPasswordToggle', 'newPassword');
+        setupPasswordToggle('confirmPasswordToggle', 'confirmPassword');
+
+        // Password Strength Checker
+        function checkPasswordStrength(password) {
+            let score = 0;
+            let feedback = [];
+            
+            if (password.length >= 8) score += 1;
+            if (password.match(/[a-z]/)) score += 1;
+            if (password.match(/[A-Z]/)) score += 1;
+            if (password.match(/[0-9]/)) score += 1;
+            if (password.match(/[^a-zA-Z0-9]/)) score += 1;
+            if (password.length >= 12) score += 1;
+            
+            const levels = [
+                { class: 'very-weak', text: 'Très faible', width: 20, icon: 'fas fa-times-circle' },
+                { class: 'weak', text: 'Faible', width: 35, icon: 'fas fa-exclamation-triangle' },
+                { class: 'fair', text: 'Moyen', width: 50, icon: 'fas fa-minus-circle' },
+                { class: 'good', text: 'Bon', width: 70, icon: 'fas fa-check-circle' },
+                { class: 'strong', text: 'Fort', width: 85, icon: 'fas fa-shield-alt' },
+                { class: 'excellent', text: 'Excellent', width: 100, icon: 'fas fa-crown' }
+            ];
+            
+            const level = Math.min(score, levels.length - 1);
+            return levels[level];
+        }
+
+        // Update Requirements
+        function updateRequirements(password) {
+            const requirements = {
+                lengthReq: password.length >= 8,
+                uppercaseReq: /[A-Z]/.test(password),
+                lowercaseReq: /[a-z]/.test(password),
+                numberReq: /[0-9]/.test(password)
+            };
+            
+            Object.keys(requirements).forEach(reqId => {
+                const element = document.getElementById(reqId);
+                const icon = element.querySelector('.requirement-icon');
+                
+                if (requirements[reqId]) {
+                    element.classList.add('met');
+                    icon.className = 'fas fa-check-circle requirement-icon';
+                } else {
+                    element.classList.remove('met');
+                    icon.className = 'fas fa-circle requirement-icon';
+                }
+            });
+        }
+
+        // Password Input Event Listeners
+        const newPasswordInput = document.getElementById('newPassword');
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+        const strengthFill = document.getElementById('strengthFill');
+        const strengthText = document.getElementById('strengthText');
+        const passwordMatch = document.getElementById('passwordMatch');
+
+        newPasswordInput.addEventListener('input', function() {
+            const password = this.value;
+            
+            if (password) {
+                const strength = checkPasswordStrength(password);
+                
+                strengthFill.className = `strength-fill ${strength.class}`;
+                strengthFill.style.width = `${strength.width}%`;
+                
+                strengthText.className = `strength-text ${strength.class}`;
+                strengthText.innerHTML = `<i class="${strength.icon}"></i> ${strength.text}`;
+                
+                updateRequirements(password);
+            } else {
+                strengthFill.className = 'strength-fill';
+                strengthFill.style.width = '0%';
+                strengthText.className = 'strength-text';
+                strengthText.innerHTML = '<i class="fas fa-info-circle"></i> Saisissez un mot de passe';
+                
+                updateRequirements('');
+            }
+            
+            checkPasswordMatch();
+        });
+
+        confirmPasswordInput.addEventListener('input', checkPasswordMatch);
+
+        function checkPasswordMatch() {
+            const password = newPasswordInput.value;
+            const confirmPassword = confirmPasswordInput.value;
+            
+            if (confirmPassword) {
+                if (password === confirmPassword) {
+                    passwordMatch.className = 'password-match success';
+                    passwordMatch.innerHTML = '<i class="fas fa-check-circle"></i> Les mots de passe correspondent';
+                } else {
+                    passwordMatch.className = 'password-match error';
+                    passwordMatch.innerHTML = '<i class="fas fa-times-circle"></i> Les mots de passe ne correspondent pas';
+                }
+            } else {
+                passwordMatch.innerHTML = '';
+                passwordMatch.className = 'password-match';
+            }
+        }
+
+        // Form Submit
+        document.getElementById('newPasswordForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const password = newPasswordInput.value;
+            const confirmPassword = confirmPasswordInput.value;
+            
+            if (password !== confirmPassword) {
+                alert('Les mots de passe ne correspondent pas');
+                return;
+            }
+            
+            const strength = checkPasswordStrength(password);
+            if (strength.width < 50) {
+                alert('Veuillez choisir un mot de passe plus sécurisé');
+                return;
+            }
+            
+            // Simulate form submission
+            const submitBtn = document.getElementById('submitBtn');
+            const btnText = submitBtn.querySelector('.btn-text');
+            const btnIcon = submitBtn.querySelector('.submit-icon');
+            const btnLoader = submitBtn.querySelector('.btn-loader');
+            
+            submitBtn.disabled = true;
+            btnText.style.display = 'none';
+            btnIcon.style.display = 'none';
+            btnLoader.style.display = 'block';
+            
+            setTimeout(() => {
+                alert('Mot de passe mis à jour avec succès !');
+                
+                submitBtn.disabled = false;
+                btnText.style.display = 'block';
+                btnIcon.style.display = 'block';
+                btnLoader.style.display = 'none';
+            }, 2000);
+        });
+
+        // Back Button
+        document.getElementById('backBtn').addEventListener('click', () => {
+            if (confirm('Êtes-vous sûr de vouloir revenir ? Vos modifications seront perdues.')) {
+                window.history.back();
+            }
+        });
+    </script>
+</body>
+</html>

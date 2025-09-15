@@ -1,4 +1,3 @@
-
 "use strict";
 
 try {
@@ -56,6 +55,9 @@ const appData = {
     ]
 };
 
+// Variable pour tracker si c'est la première visite
+let isFirstVisit = true;
+
 // Utility Functions
 function updateDateTime() {
     const now = new Date();
@@ -64,7 +66,7 @@ function updateDateTime() {
         hour: '2-digit', minute: '2-digit', second: '2-digit'
     };
     const el = document.getElementById('current-date');
-    if (el) el.textContent = now.toLocaleString('fr-FR', options); // toLocaleString pour date+heure
+    if (el) el.textContent = now.toLocaleString('fr-FR', options);
 }
 
 function showNotificationToken(message, icon = 'fas fa-check', type = 'success') {
@@ -83,7 +85,6 @@ function showNotificationToken(message, icon = 'fas fa-check', type = 'success')
         error: 'from-red-500 to-pink-500'
     };
 
-    // Remplace les classes précédentes par les classes voulues
     token.className = `notification-token glass-effect text-white px-6 py-3 rounded-2xl shadow-2xl bg-gradient-to-r ${colors[type] || colors.success}`;
     token.classList.add('show');
 
@@ -104,12 +105,7 @@ function toggleTheme() {
     document.documentElement.className = newTheme === 'dark' ? 'dark h-full' : 'h-full';
     localStorage.setItem('theme', newTheme);
 
-    showNotificationToken(
-        `Mode ${newTheme === 'dark' ? 'sombre' : 'clair'} activé`,
-        newTheme === 'dark' ? 'fas fa-moon' : 'fas fa-sun',
-        'info'
-    );
-    if (window.notyf) notyf.success && notyf.success(`Interface basculée en mode ${newTheme === 'dark' ? 'sombre' : 'clair'}`);
+    // Pas de notification pour le changement de thème
 }
 
 // Sidebar Management
@@ -134,11 +130,7 @@ function toggleNotifications() {
     const dropdown = document.getElementById('notifications-dropdown');
     if (!dropdown) return;
     dropdown.classList.toggle('show');
-
-    if (dropdown.classList.contains('show')) {
-        showNotificationToken('Notifications consultées', 'fas fa-bell', 'info');
-        if (window.notyf && notyf.info) notyf.info(`${appData.notifications.length} notifications disponibles`);
-    }
+    // Pas de notification pour l'ouverture des notifications
 }
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -147,11 +139,14 @@ document.addEventListener('DOMContentLoaded', function() {
     updateDateTime();
     setInterval(updateDateTime, 1000);
 
-    // Welcome message (avec garde)
-    setTimeout(() => {
-        showNotificationToken('Bienvenue sur Graxel Tech', 'fas fa-rocket', 'success');
-        if (window.notyf && notyf.success) notyf.success('Bienvenue Jean Martin ! Tableau de bord chargé avec succès.');
-    }, 1000);
+    // SEULE notification de bienvenue au premier chargement
+    if (isFirstVisit) {
+        setTimeout(() => {
+            showNotificationToken('Bienvenue sur Graxel Tech', 'fas fa-rocket', 'success');
+            if (window.notyf && notyf.success) notyf.success('Bienvenue Jean Martin ! Tableau de bord chargé avec succès.');
+            isFirstVisit = false; // Marquer comme visité
+        }, 1000);
+    }
 
     // Safely attach listeners only if elements exist
     const themeToggle = document.getElementById('theme-toggle');
@@ -184,92 +179,71 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Action buttons (avec gardes)
+    // Action buttons SANS notifications
     const newRequestBtn = document.getElementById('new-request-btn');
     if (newRequestBtn) newRequestBtn.addEventListener('click', function() {
-        showNotificationToken('Nouvelle demande initialisée', 'fas fa-plus', 'success');
-        if (window.notyf && notyf.success) notyf.success('Redirection vers le formulaire de demande...');
+        // Juste l'action, pas de notification
+        console.log('Nouvelle demande cliquée');
     });
 
     const calendarBtn = document.getElementById('calendar-btn');
     if (calendarBtn) calendarBtn.addEventListener('click', function() {
-        showNotificationToken('Ouverture du calendrier', 'fas fa-calendar-alt', 'info');
-        if (window.notyf && notyf.info) notyf.info('Chargement du calendrier...');
+        console.log('Calendrier cliqué');
     });
 
     const reportsBtn = document.getElementById('reports-btn');
     if (reportsBtn) reportsBtn.addEventListener('click', function() {
-        showNotificationToken('Génération des rapports', 'fas fa-chart-bar', 'info');
-        if (window.notyf && notyf.info) notyf.info('Préparation des rapports statistiques...');
+        console.log('Rapports cliqué');
     });
 
     const teamBtn = document.getElementById('team-btn');
     if (teamBtn) teamBtn.addEventListener('click', function() {
-        showNotificationToken('Vue équipe activée', 'fas fa-users', 'info');
-        if (window.notyf && notyf.info) notyf.info('Chargement des informations de l\'équipe...');
+        console.log('Équipe cliquée');
     });
 
- const navItems = document.querySelectorAll('.nav-item');
-if (navItems && navItems.length) {
-    navItems.forEach(item => {
-        item.addEventListener('click', function(e) {
-            e.preventDefault(); // empêche le clic direct
-
-            const span = this.querySelector('span');
-            const text = span ? span.textContent.trim() : (this.textContent || 'élément');
-
-            // Affiche la notification
-            showNotificationToken(`Navigation vers "${text}"`, 'fas fa-arrow-right', 'info');
-            if (window.notyf && notyf.info) notyf.info(`Redirection vers ${text}...`);
-
-            // Récupère le lien
-            const targetUrl = this.getAttribute('href');
-
-            // Redirige après 1 seconde
-            if (targetUrl && targetUrl !== "#") {
-                setTimeout(() => {
-                    window.location.href = targetUrl;
-                }, 1000);
-            }
-        });
-    });
-}
-
-
-    // Demand items
-    const demandItems = document.querySelectorAll('.demand-item');
-    if (demandItems && demandItems.length) {
-        demandItems.forEach(item => {
-            item.addEventListener('click', function() {
-                const titleEl = this.querySelector('h4');
-                const title = titleEl ? titleEl.textContent.trim() : 'demande';
-                showNotificationToken(`Demande "${title}" consultée`, 'fas fa-eye', 'info');
-                if (window.notyf && notyf.info) notyf.info(`Ouverture des détails: ${title}`);
+    // Navigation SANS notifications
+    const navItems = document.querySelectorAll('.nav-item');
+    if (navItems && navItems.length) {
+        navItems.forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetUrl = this.getAttribute('href');
+                if (targetUrl && targetUrl !== "#") {
+                    setTimeout(() => {
+                        window.location.href = targetUrl;
+                    }, 300);
+                }
             });
         });
     }
 
-    // Status badges (générique)
+    // Demand items SANS notifications
+    const demandItems = document.querySelectorAll('.demand-item');
+    if (demandItems && demandItems.length) {
+        demandItems.forEach(item => {
+            item.addEventListener('click', function() {
+                console.log('Demande consultée');
+            });
+        });
+    }
+
+    // Status badges SANS notifications
     const badges = document.querySelectorAll('span[class*="bg-yellow-100"], span[class*="bg-green-500"], span[class*="bg-red-500"]');
     if (badges && badges.length) {
         badges.forEach(badge => {
             badge.addEventListener('click', function(e) {
                 e.stopPropagation();
-                const status = this.textContent.trim();
-                showNotificationToken(`Statut "${status}" consulté`, 'fas fa-info-circle', 'info');
-                if (window.notyf && notyf.info) notyf.info(`Détails du statut: ${status}`);
+                console.log('Badge cliqué');
             });
         });
     }
 
-    // Calendar dates (CORRECTION: ne pas utiliser `this` dans arrow => utilise param)
+    // Calendar dates SANS notifications
     const greenDates = document.querySelectorAll('[class*="bg-green-100"]');
     if (greenDates && greenDates.length) {
         greenDates.forEach(dateEl => {
             dateEl.addEventListener('click', function() {
-                const dateNum = this.textContent.trim();
-                showNotificationToken(`Congé prévu le ${dateNum} sept.`, 'fas fa-calendar-check', 'info');
-                if (window.notyf && notyf.info) notyf.info(`Détails du congé pour le ${dateNum} septembre`);
+                console.log('Date cliquée');
             });
         });
     }
@@ -277,7 +251,6 @@ if (navItems && navItems.length) {
     // Add smooth animations to cards on scroll
     const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
     const observer = new IntersectionObserver((entries) => {
-        // CORRECTION: callback propre (suppression du HTML collé par erreur)
         entries.forEach((entry) => {
             if (entry.isIntersecting) {
                 entry.target.style.animationDelay = '0s';
@@ -309,18 +282,6 @@ if (navItems && navItems.length) {
             });
         });
     }
-
-    // Simulate real-time updates for pulse indicators
-    setInterval(() => {
-        const notifications = document.querySelectorAll('.animate-pulse');
-        if (notifications.length > 0) {
-            const randomNotif = notifications[Math.floor(Math.random() * notifications.length)];
-            randomNotif.style.animationDuration = '0.5s';
-            setTimeout(() => {
-                randomNotif.style.animationDuration = '';
-            }, 1500);
-        }
-    }, 15000);
 
     // Add keyboard shortcuts
     document.addEventListener('keydown', function(e) {
@@ -354,7 +315,6 @@ if (navItems && navItems.length) {
     // Add ripple effect to buttons
     document.querySelectorAll('button').forEach(button => {
         button.addEventListener('click', function(e) {
-            // ignore if the button already contains a ripple wrapper
             const ripple = document.createElement('span');
             const rect = this.getBoundingClientRect();
             const size = Math.max(rect.width, rect.height);
@@ -410,17 +370,6 @@ if (navItems && navItems.length) {
         });
     }
 
-    // Auto-refresh notifications count (sécurisé)
-    setInterval(() => {
-        const notifBadge = document.querySelector('.animate-pulse');
-        if (notifBadge && Math.random() > 0.7) {
-            const parsed = parseInt(notifBadge.textContent, 10);
-            const currentCount = isNaN(parsed) ? 0 : parsed;
-            notifBadge.textContent = currentCount + 1;
-            showNotificationToken('Nouvelle notification reçue', 'fas fa-bell', 'info');
-        }
-    }, 30000);
-
     // Add smooth scrolling for all internal anchors
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
@@ -459,205 +408,311 @@ if ('serviceWorker' in navigator) {
         console.log('💡 Service Worker support detected');
     });
 }
-    
-        // Configuration Tailwind
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    fontFamily: {
-                        'poppins': ['Poppins', 'sans-serif'],
-                    },
-                    animation: {
-                        'fade-in': 'fadeIn 0.8s cubic-bezier(0.4, 0, 0.2, 1)',
-                        'slide-up': 'slideUp 0.8s cubic-bezier(0.4, 0, 0.2, 1)',
-                        'slide-right': 'slideRight 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
-                        'bounce-subtle': 'bounceSubtle 1.2s ease-out',
-                        'pulse-ring': 'pulseRing 2s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite',
-                        'float': 'float 6s ease-in-out infinite',
-                        'glow': 'glow 2s ease-in-out infinite alternate',
-                        'shimmer': 'shimmer 2s linear infinite',
-                    },
-                    backgroundImage: {
-                        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-                        'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
-                    }
-                }
+
+// Configuration Tailwind
+tailwind.config = {
+    darkMode: 'class',
+    theme: {
+        extend: {
+            fontFamily: {
+                'poppins': ['Poppins', 'sans-serif'],
+            },
+            animation: {
+                'fade-in': 'fadeIn 0.8s cubic-bezier(0.4, 0, 0.2, 1)',
+                'slide-up': 'slideUp 0.8s cubic-bezier(0.4, 0, 0.2, 1)',
+                'slide-right': 'slideRight 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
+                'bounce-subtle': 'bounceSubtle 1.2s ease-out',
+                'pulse-ring': 'pulseRing 2s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite',
+                'float': 'float 6s ease-in-out infinite',
+                'glow': 'glow 2s ease-in-out infinite alternate',
+                'shimmer': 'shimmer 2s linear infinite',
+            },
+            backgroundImage: {
+                'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+                'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
             }
         }
+    }
+}
 
-        // Attendre que le DOM et config.js soient chargés
-        document.addEventListener('DOMContentLoaded', function() {
-            // Gestion du pop-up nouvelle demande
-            const btnNouvelleDemande = document.getElementById('btn-nouvelle-demande');
-            const popupNouvelleDemande = document.getElementById('popup-nouvelle-demande');
-            const closePopup = document.getElementById('close-popup');
-            const annulerDemande = document.getElementById('annuler-demande');
-            const soumettreDemandeBtn = document.getElementById('soumettre-demande');
+// Attendre que le DOM et config.js soient chargés
+document.addEventListener('DOMContentLoaded', function() {
+    // Gestion du pop-up nouvelle demande
+    const btnNouvelleDemande = document.getElementById('btn-nouvelle-demande');
+    const popupNouvelleDemande = document.getElementById('popup-nouvelle-demande');
+    const closePopup = document.getElementById('close-popup');
+    const annulerDemande = document.getElementById('annuler-demande');
+    const soumettreDemandeBtn = document.getElementById('soumettre-demande');
 
-            // Ouvrir le pop-up
-            if (btnNouvelleDemande && popupNouvelleDemande) {
-                btnNouvelleDemande.addEventListener('click', () => {
-                    popupNouvelleDemande.classList.remove('hidden');
-                    if (window.showNotificationToken) {
-                        showNotificationToken('Nouvelle demande initialisée', 'fas fa-plus', 'info');
-                    }
-                });
-            }
-
-            // Fermer le pop-up
-            function fermerPopup() {
-                if (popupNouvelleDemande) {
-                    popupNouvelleDemande.classList.add('hidden');
-                }
-            }
-
-            if (closePopup) closePopup.addEventListener('click', fermerPopup);
-            if (annulerDemande) annulerDemande.addEventListener('click', fermerPopup);
-
-            // Fermer en cliquant en dehors
-            if (popupNouvelleDemande) {
-                popupNouvelleDemande.addEventListener('click', (e) => {
-                    if (e.target === popupNouvelleDemande) {
-                        fermerPopup();
-                    }
-                });
-            }
-
-            // Soumettre la demande
-            if (soumettreDemandeBtn) {
-                soumettreDemandeBtn.addEventListener('click', () => {
-                    if (window.showNotificationToken) {
-                        showNotificationToken('Demande soumise avec succès', 'fas fa-check', 'success');
-                    }
-                    if (window.notyf && notyf.success) {
-                        notyf.success('Votre demande de congé a été soumise pour validation');
-                    }
-                    fermerPopup();
-                });
-            }
-
-            // Actions rapides - utiliser les fonctions existantes si disponibles
-            const actionButtons = document.querySelectorAll('.gradient-bg, a[href*="calendrier"], a[href*="rapports"], a[href*="equipe"]');
-            actionButtons.forEach(button => {
-                button.addEventListener('click', function(e) {
-                    const href = this.getAttribute('href');
-                    if (!href || href === '#') {
-                        e.preventDefault();
-                        const text = this.querySelector('span') ? this.querySelector('span').textContent : 'Action';
-                        if (window.showNotificationToken) {
-                            showNotificationToken(`${text} activé`, 'fas fa-arrow-right', 'info');
-                        }
-                    }
-                });
-            });
+    // Ouvrir le pop-up SANS notification
+    if (btnNouvelleDemande && popupNouvelleDemande) {
+        btnNouvelleDemande.addEventListener('click', () => {
+            popupNouvelleDemande.classList.remove('hidden');
         });
+    }
+
+    // Fermer le pop-up
+    function fermerPopup() {
+        if (popupNouvelleDemande) {
+            popupNouvelleDemande.classList.add('hidden');
+        }
+    }
+
+    if (closePopup) closePopup.addEventListener('click', fermerPopup);
+    if (annulerDemande) annulerDemande.addEventListener('click', fermerPopup);
+
+    // Fermer en cliquant en dehors
+    if (popupNouvelleDemande) {
+        popupNouvelleDemande.addEventListener('click', (e) => {
+            if (e.target === popupNouvelleDemande) {
+                fermerPopup();
+            }
+        });
+    }
+
+    // Soumettre la demande AVEC notification (car c'est important)
+    if (soumettreDemandeBtn) {
+        soumettreDemandeBtn.addEventListener('click', () => {
+            showNotificationToken('Demande soumise avec succès', 'fas fa-check', 'success');
+            if (window.notyf && notyf.success) {
+                notyf.success('Votre demande de congé a été soumise pour validation');
+            }
+            fermerPopup();
+        });
+    }
+
+    // Actions rapides SANS notifications
+    const actionButtons = document.querySelectorAll('.gradient-bg, a[href*="calendrier"], a[href*="rapports"], a[href*="equipe"]');
+    actionButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            const href = this.getAttribute('href');
+            if (!href || href === '#') {
+                e.preventDefault();
+            }
+        });
+    });
+});
+
+// Gestion du loader
+window.addEventListener('load', function() {
+    const loader = document.getElementById('loader');
+    const mainContent = document.getElementById('mainContent');
     
+    setTimeout(() => {
+        loader.classList.add('hide');
+        setTimeout(() => {
+            loader.style.display = 'none';
+            mainContent.classList.add('show');
+        }, 500);
+    }, 3000);
+});
+
+// Gestion du thème (utilisation de variables JS au lieu de localStorage pour éviter les erreurs)
+const themeToggleLogin = document.getElementById('themeToggle');
+if (themeToggleLogin) {
+    const body = document.body;
+    let currentTheme = 'dark';
     
-        // Gestion du loader
-        window.addEventListener('load', function() {
-            const loader = document.getElementById('loader');
-            const mainContent = document.getElementById('mainContent');
-            
-            setTimeout(() => {
-                loader.classList.add('hide');
-                setTimeout(() => {
-                    loader.style.display = 'none';
-                    mainContent.classList.add('show');
-                }, 500);
-            }, 3000);
-        });
+    themeToggleLogin.addEventListener('click', () => {
+        if (currentTheme === 'light') {
+            body.removeAttribute('data-theme');
+            themeToggleLogin.innerHTML = '<i class="fas fa-moon"></i>';
+            currentTheme = 'dark';
+        } else {
+            body.setAttribute('data-theme', 'light');
+            themeToggleLogin.innerHTML = '<i class="fas fa-sun"></i>';
+            currentTheme = 'light';
+        }
+    });
+}
 
-        // Gestion du thème (utilisation de variables JS au lieu de localStorage pour éviter les erreurs)
-        const themeToggle = document.getElementById('themeToggle');
-        const body = document.body;
-        
-        let currentTheme = 'dark'; // Variable par défaut
-        
-        themeToggle.addEventListener('click', () => {
-            if (currentTheme === 'light') {
-                body.removeAttribute('data-theme');
-                themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
-                currentTheme = 'dark';
-            } else {
-                body.setAttribute('data-theme', 'light');
-                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
-                currentTheme = 'light';
-            }
-        });
+// Gestion du mot de passe
+const passwordToggle = document.getElementById('passwordToggle');
+const passwordInput = document.getElementById('password');
 
-        // Gestion du mot de passe
-        const passwordToggle = document.getElementById('passwordToggle');
-        const passwordInput = document.getElementById('password');
-        
-        passwordToggle.addEventListener('click', () => {
-            const icon = passwordToggle.querySelector('i');
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                icon.className = 'fas fa-eye-slash';
-            } else {
-                passwordInput.type = 'password';
-                icon.className = 'fas fa-eye';
-            }
-        });
+if (passwordToggle && passwordInput) {
+    passwordToggle.addEventListener('click', () => {
+        const icon = passwordToggle.querySelector('i');
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            icon.className = 'fas fa-eye-slash';
+        } else {
+            passwordInput.type = 'password';
+            icon.className = 'fas fa-eye';
+        }
+    });
+}
 
-        // Gestion des rôles
-        const roleOptions = document.querySelectorAll('.role-option');
-        const roleRadios = document.querySelectorAll('.role-radio');
-        
-        roleOptions.forEach((option, index) => {
-            option.addEventListener('click', () => {
+// Gestion des rôles
+const roleOptions = document.querySelectorAll('.role-option');
+const roleRadios = document.querySelectorAll('.role-radio');
+
+if (roleOptions.length && roleRadios.length) {
+    roleOptions.forEach((option, index) => {
+        option.addEventListener('click', () => {
+            roleOptions.forEach(opt => opt.classList.remove('selected'));
+            option.classList.add('selected');
+            roleRadios[index].checked = true;
+        });
+    });
+
+    roleRadios.forEach((radio, index) => {
+        radio.addEventListener('change', () => {
+            if (radio.checked) {
                 roleOptions.forEach(opt => opt.classList.remove('selected'));
-                option.classList.add('selected');
-                roleRadios[index].checked = true;
-            });
+                roleOptions[index].classList.add('selected');
+            }
         });
+    });
+}
 
-        roleRadios.forEach((radio, index) => {
-            radio.addEventListener('change', () => {
-                if (radio.checked) {
-                    roleOptions.forEach(opt => opt.classList.remove('selected'));
-                    roleOptions[index].classList.add('selected');
-                }
-            });
-        });
+// Soumission du formulaire
+const loginForm = document.getElementById('loginForm');
 
-        // Soumission du formulaire
-        const loginForm = document.getElementById('loginForm');
+if (loginForm) {
+    loginForm.addEventListener('submit', (e) => {
+        e.preventDefault();
         
-        loginForm.addEventListener('submit', (e) => {
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const selectedRole = document.querySelector('input[name="role"]:checked');
+        
+        if (!selectedRole) {
+            alert('Veuillez sélectionner un rôle');
+            return;
+        }
+        
+        console.log('Connexion:', {
+            email: email,
+            password: password,
+            role: selectedRole.value
+        });
+        
+        alert(`Connexion en cours...\nEmail: ${email}\nRôle: ${selectedRole.value}`);
+    });
+}
+
+// Animations au focus
+const inputs = document.querySelectorAll('.form-input');
+inputs.forEach(input => {
+    input.addEventListener('focus', () => {
+        input.style.transform = 'translateY(-2px)';
+    });
+    
+    input.addEventListener('blur', () => {
+        input.style.transform = '';
+    });
+});
+
+// Profile page specific functionality
+document.addEventListener('DOMContentLoaded', function() {
+    let isEditing = false;
+    let selectedPhoto = null;
+
+    const editProfileBtn = document.getElementById('edit-profile-btn');
+    if (!editProfileBtn) return; // Sort si on n'est pas sur la page profil
+
+    // Edit profile functionality
+    editProfileBtn.addEventListener('click', function() {
+        isEditing = true;
+        toggleEditMode();
+        // Pas de notification pour l'édition
+    });
+
+    // Cancel edit
+    const cancelEditBtn = document.getElementById('cancel-edit-btn');
+    if (cancelEditBtn) {
+        cancelEditBtn.addEventListener('click', function() {
+            isEditing = false;
+            toggleEditMode();
+            resetForm();
+            // Pas de notification pour l'annulation
+        });
+    }
+
+    // Save profile - FORM SUBMIT
+    const profileForm = document.getElementById('profile-form');
+    if (profileForm) {
+        profileForm.addEventListener('submit', function(e) {
             e.preventDefault();
             
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const selectedRole = document.querySelector('input[name="role"]:checked');
-            
-            if (!selectedRole) {
-                alert('Veuillez sélectionner un rôle');
-                return;
+            const formData = new FormData(this);
+            if (selectedPhoto) {
+                formData.append('profile_photo', selectedPhoto);
             }
             
-            // Simulation de connexion
-            console.log('Connexion:', {
-                email: email,
-                password: password,
-                role: selectedRole.value
-            });
+            console.log('Données du profil à sauvegarder:');
+            for (let [key, value] of formData.entries()) {
+                console.log(key + ':', value);
+            }
             
-            alert(`Connexion en cours...\nEmail: ${email}\nRôle: ${selectedRole.value}`);
-            
-            // Redirection simulée
-            // window.location.href = 'dashboard.html';
+            isEditing = false;
+            toggleEditMode();
+            showNotificationToken('Profil sauvegardé', 'fas fa-save', 'success');
+            if (window.notyf && notyf.success) {
+                notyf.success('Vos informations ont été mises à jour avec succès');
+            }
+        });
+    }
+
+    // Fonctions pour le profil...
+    function toggleEditMode() {
+        const editableFields = ['lastname', 'firstname', 'email', 'phone', 'profession'];
+        const formActions = document.getElementById('form-actions');
+        const editBtn = document.getElementById('edit-profile-btn');
+
+        editableFields.forEach(fieldId => {
+            const field = document.getElementById(fieldId);
+            if (field) {
+                field.readOnly = !isEditing;
+                if (isEditing) {
+                    field.classList.remove('bg-gray-50', 'dark:bg-gray-700');
+                    field.classList.add('bg-white', 'dark:bg-gray-800');
+                } else {
+                    field.classList.add('bg-gray-50', 'dark:bg-gray-700');
+                    field.classList.remove('bg-white', 'dark:bg-gray-800');
+                }
+            }
         });
 
-        // Animations au focus
-        const inputs = document.querySelectorAll('.form-input');
-        inputs.forEach(input => {
-            input.addEventListener('focus', () => {
-                input.style.transform = 'translateY(-2px)';
-            });
-            
-            input.addEventListener('blur', () => {
-                input.style.transform = '';
-            });
+        if (formActions) {
+            if (isEditing) {
+                formActions.classList.remove('hidden');
+                if (editBtn) editBtn.style.display = 'none';
+            } else {
+                formActions.classList.add('hidden');
+                if (editBtn) editBtn.style.display = 'block';
+            }
+        }
+    }
+
+    function resetForm() {
+        const fields = {
+            'lastname': 'Martin',
+            'firstname': 'Jean',
+            'email': 'jean.martin@graxel.com',
+            'phone': '+33 6 12 34 56 78',
+            'profession': 'Développeur Full Stack'
+        };
+        
+        Object.entries(fields).forEach(([id, value]) => {
+            const field = document.getElementById(id);
+            if (field) field.value = value;
         });
+    }
+});
+
+// Gestion des popups
+document.addEventListener('DOMContentLoaded', function() {
+    const popupElement = document.getElementById('popup-nouvelle-demande');
+    if (popupElement) {
+        // Méthodes pour ouvrir/fermer le popup
+        window.openPopup = function() {
+            popupElement.classList.add('show');
+        };
+        
+        window.closePopup = function() {
+            popupElement.classList.remove('show');
+        };
+    }
+});
