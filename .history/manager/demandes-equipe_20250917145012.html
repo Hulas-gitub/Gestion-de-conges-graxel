@@ -419,15 +419,18 @@
                             <i class="fas fa-chart-pie w-5 h-5 text-lg"></i>
                         <span>Tableau de bord</span>
                     </a>
-                    <a  href="demandes-equipe.html" class="nav-item flex items-center space-x-4 px-4 py-4 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-xl hover-lift transition-all duration-300 click-scale">
-                           <i class="fas fa-users w-5 h-5 text-lg"></i>
-                        <span>Demandes d'équipe</span>
+                    <a href="demandes-equipe.html" class="nav-item flex items-center space-x-4 px-4 py-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl hover-lift transition-all duration-300 click-scale shadow-lg">
+                         <i class="fas fa-users w-5 h-5 text-lg"></i>
+                        <span class="font-medium">Demandes d'équipe</span>
                     </a>
-                    <a href="calendrier.html" class="nav-item flex items-center space-x-4 px-4 py-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl hover-lift transition-all duration-300 click-scale shadow-lg">
+                    <a href="calendrier-equipe.html" class="nav-item flex items-center space-x-4 px-4 py-4 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-xl hover-lift transition-all duration-300 click-scale">
                         <i class="fas fa-calendar-alt w-5 h-5 text-lg"></i>
-                        <span class="font-medium">Calendrier</span>
+                        <span>Calendrier équipe</span>
                     </a>
-                  
+                    <a href="alertes.html" class="nav-item flex items-center space-x-4 px-4 py-4 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-xl hover-lift transition-all duration-300 click-scale">
+                        <i class="fas fa-exclamation-triangle w-5 h-5 text-lg"></i>
+                        <span>Alertes</span>
+                    </a>
                     <a href="profile.html" class="nav-item flex items-center space-x-4 px-4 py-4 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-xl hover-lift transition-all duration-300 click-scale">
                         <i class="fas fa-user w-5 h-5 text-lg"></i>
                         <span>Mon profil</span>
@@ -598,38 +601,103 @@
                 </div>
             </div>
         </div>
-<style>
-.backdrop.show {
-    opacity: 1;
-}
 
-.modal.show {
-    opacity: 1;
-    transform: scale(1);
-}
+     
+        <!-- Section "Demandes d'équipe" (à fleur + boutons originaux) -->
+        <div class="grid grid-cols-1 gap-0 w-full mb-6">
+            <div class="w-full">
+                <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-none shadow-xl border border-gray-200/50 dark:border-gray-700/50 animate-slide-up overflow-hidden w-full">
+                    <div class="p-6 border-b border-gray-200/50 dark:border-gray-700/50 bg-gradient-to-r from-blue-500/5 to-purple-500/5">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Demandes d'équipe</h3>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">Dernières demandes de congés</p>
+                            </div>
+                            <div class="flex space-x-2 overflow-x-auto pb-2">
+                                <button class="px-3 py-1 text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-300 rounded-full hover:bg-blue-200 dark:hover:bg-blue-900/50 transition-colors">
+                                    Tous
+                                </button>
+                                <button class="px-3 py-1 text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+                                    En attente
+                                </button>
+                                <button class="px-3 py-1 text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+                                    Approuvé
+                                </button>
+                                <button class="px-3 py-1 text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+                                    Refusé
+                                </button>
+                                <select class="px-3 py-1 text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+                                    <option>Tous les employés</option>
+                                    <option>Jean Martin</option>
+                                    <option>Marie Dupont</option>
+                                    <option>Pierre Leroux</option>
+                                    <option>Sophie Moreau</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6 space-y-4">
+                        <!-- Demande 1 -->
+                        <div class="demand-item w-full flex flex-col md:flex-row items-start md:items-center justify-between bg-gray-50 dark:bg-gray-700/50 rounded-none p-4">
+                            <div class="flex items-center space-x-4 w-full md:w-auto">
+                                <div class="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-user text-white"></i>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <div class="flex items-center space-x-2">
+                                        <h4 class="font-semibold text-gray-900 dark:text-white truncate">Jean Martin - Congés payés</h4>
+                                        <span class="text-yellow-500">🟡</span>
+                                    </div>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400 truncate">2025-09-15 - 2025-09-20 (5 jours)</p>
+                                    <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Demande soumise il y a 2h</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-2 mt-4 md:mt-0" style="flex-shrink: 0; white-space: nowrap; gap: 0.75rem;">
+                                <span class="status-badge px-4 py-2 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300 text-xs font-semibold rounded-full">En attente</span>
+                                <button class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors" onclick="showConfirmModal('approve', 1)">
+                                    <i class="fas fa-check mr-2"></i>
+                                </button>
+                                <button class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors" onclick="showConfirmModal('reject', 1)">
+                                    <i class="fas fa-times mr-2"></i>
+                                </button>
+                                <button class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors" onclick="showDetailsModal(1)">
+                                    <i class="fas fa-eye mr-2"></i>
+                                </button>
+                            </div>
+                        </div>
 
-.note-row:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-@keyframes slideInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.note-added {
-    animation: slideInUp 0.5s ease-out;
-}
-</style>
-
-
+                        <!-- Demande 2 -->
+                        <div class="demand-item w-full flex flex-col md:flex-row items-start md:items-center justify-between bg-gray-50 dark:bg-gray-700/50 rounded-none p-4">
+                            <div class="flex items-center space-x-4 w-full md:w-auto">
+                                <div class="w-12 h-12 bg-gradient-to-r from-green-500 to-teal-500 rounded-xl flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-user text-white"></i>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <div class="flex items-center space-x-2">
+                                        <h4 class="font-semibold text-gray-900 dark:text-white truncate">Sophie Dubois - Congé maladie</h4>
+                                        <span class="text-yellow-500">🟡</span>
+                                    </div>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400 truncate">2025-09-16 - 2025-09-18 (3 jours)</p>
+                                    <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Demande soumise il y a 1h</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-2 mt-4 md:mt-0" style="flex-shrink: 0; white-space: nowrap; gap: 0.75rem;">
+                                <span class="status-badge px-4 py-2 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300 text-xs font-semibold rounded-full">En attente</span>
+                                <button class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors" onclick="showConfirmModal('approve', 2)">
+                                    <i class="fas fa-check mr-2"></i>
+                                </button>
+                                <button class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors" onclick="showConfirmModal('reject', 2)">
+                                    <i class="fas fa-times mr-2"></i>
+                                </button>
+                                <button class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors" onclick="showDetailsModal(2)">
+                                    <i class="fas fa-eye mr-2"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
             <!-- Footer -->
@@ -680,6 +748,43 @@
         </div>
     </div>
 
+      <!-- Modal de confirmation -->
+    <div id="confirmModal" class="fixed inset-0 z-50 hidden">
+        <div class="backdrop absolute inset-0 bg-black bg-opacity-50" onclick="closeModal('confirmModal')"></div>
+        <div class="modal relative z-10 flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl max-w-md w-full">
+                <!-- Header -->
+                <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+                    <div class="flex items-center space-x-3">
+                        <div id="confirmIcon" class="w-12 h-12 rounded-full flex items-center justify-center">
+                            <i class="fas fa-question text-xl"></i>
+                        </div>
+                        <h3 id="confirmTitle" class="text-xl font-semibold text-gray-900 dark:text-white">Confirmation</h3>
+                    </div>
+                </div>
+                
+                <!-- Content -->
+                <div class="p-6">
+                    <p id="confirmMessage" class="text-gray-600 dark:text-gray-400 mb-4">Êtes-vous sûr de vouloir effectuer cette action ?</p>
+                    <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                        <p class="text-sm font-medium text-gray-900 dark:text-white" id="confirmDetails">Jean Martin - Congés payés</p>
+                        <p class="text-sm text-gray-500 dark:text-gray-400" id="confirmDates">2025-09-15 - 2025-09-20 (5 jours)</p>
+                    </div>
+                </div>
+                
+                <!-- Actions -->
+                <div class="flex items-center justify-end space-x-3 p-6 border-t border-gray-200 dark:border-gray-700">
+                    <button class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors" onclick="closeModal('confirmModal')">
+                        Annuler
+                    </button>
+                    <button id="confirmActionBtn" class="px-4 py-2 rounded-lg transition-colors" onclick="executeAction()">
+                        Confirmer
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Toast notification -->
     <div id="toast" class="fixed top-4 right-4 z-50 transform translate-x-full transition-transform duration-300">
         <div class="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-4 border-l-4 max-w-sm">
@@ -694,7 +799,396 @@
             </div>
         </div>
     </div>
+    <script>
+        // Animation d'entrée
+        document.addEventListener('DOMContentLoaded', function() {
+            const elements = document.querySelectorAll('.animate-slide-up');
+            elements.forEach((el, index) => {
+                setTimeout(() => {
+                    el.style.opacity = '1';
+                    el.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+
+            // Configuration des graphiques
+            initCharts();
+        });
+
+        function initCharts() {
+            // Graphique évolution des demandes
+            const ctxDemandes = document.getElementById('demandesChart').getContext('2d');
+            new Chart(ctxDemandes, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Jun', 'Jul', 'Aoû', 'Sep'],
+                    datasets: [{
+                        label: 'Demandes',
+                        data: [12, 19, 15, 25, 22, 18, 28, 24, 20],
+                        borderColor: 'rgb(59, 130, 246)',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(156, 163, 175, 0.2)'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                color: 'rgba(156, 163, 175, 0.2)'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Graphique types de congés
+            const ctxTypes = document.getElementById('typesChart').getContext('2d');
+            new Chart(ctxTypes, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Congés payés', 'RTT', 'Maladie', 'Formation', 'Autres'],
+                    datasets: [{
+                        data: [45, 25, 15, 10, 5],
+                        backgroundColor: [
+                            'rgb(59, 130, 246)',
+                            'rgb(34, 197, 94)',
+                            'rgb(239, 68, 68)',
+                            'rgb(139, 92, 246)',
+                            'rgb(236, 72, 153)'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+
+            // Graphique taux d'approbation
+            const ctxApproval = document.getElementById('approvalChart').getContext('2d');
+            new Chart(ctxApproval, {
+                type: 'bar',
+                data: {
+                    labels: ['Avr', 'Mai', 'Jun', 'Jul', 'Aoû', 'Sep'],
+                    datasets: [{
+                        label: 'Taux d\'approbation',
+                        data: [85, 88, 82, 90, 87, 87],
+                        backgroundColor: 'rgba(139, 92, 246, 0.8)',
+                        borderColor: 'rgb(139, 92, 246)',
+                        borderWidth: 1,
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            grid: {
+                                color: 'rgba(156, 163, 175, 0.2)'
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    return value + '%';
+                                }
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Fonctions d'interaction
+        function filterRequests(status) {
+            const items = document.querySelectorAll('.demand-item');
+            items.forEach(item => {
+                if (status === 'all') {
+                    item.style.display = 'flex';
+                } else {
+                    const statusElement = item.querySelector('span[class*="bg-"]');
+                    const statusText = statusElement.textContent.toLowerCase();
+                    if (statusText.includes(status)) {
+                        item.style.display = 'flex';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                }
+            });
+        }
+
+        // Animation des cartes métriques
+        function animateMetricCards() {
+            const cards = document.querySelectorAll('.metric-card');
+            cards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.classList.add('animate-bounce');
+                    setTimeout(() => {
+                        card.classList.remove('animate-bounce');
+                    }, 1000);
+                }, index * 200);
+            });
+        }
+
+        // Animation des barres de progression
+        function animateProgressBars() {
+            const progressBars = document.querySelectorAll('.progress-bar');
+            progressBars.forEach(bar => {
+                const width = bar.style.width || bar.className.match(/w-(\d+)\/(\d+)/);
+                bar.style.width = '0%';
+                setTimeout(() => {
+                    bar.style.transition = 'width 1s ease-in-out';
+                    if (width) {
+                        bar.style.width = width;
+                    }
+                }, 500);
+            });
+        }
+
+        // Initialiser les animations après le chargement
+        setTimeout(() => {
+            animateProgressBars();
+        }, 1000);
+    </script>
+  <!-- Vos fichiers existants -->
    
+    <script>
+        let currentAction = '';
+        let currentRequestId = 0;
+        
+        // Données simulées des demandes
+        const requests = {
+            1: {
+                name: "Jean Martin",
+                type: "Congés payés",
+                startDate: "2025-09-15",
+                endDate: "2025-09-20",
+                duration: "5 jours",
+                reason: "Congés pour vacances en famille. Voyage prévu depuis plusieurs mois.",
+                pdfName: "justificatif_conges.pdf",
+                avatar: "from-blue-500 to-purple-500",
+                submitted: "il y a 2h"
+            },
+            2: {
+                name: "Sophie Dubois",
+                type: "Congé maladie",
+                startDate: "2025-09-16",
+                endDate: "2025-09-18",
+                duration: "3 jours",
+                reason: "Arrêt maladie suite à une grippe. Certificat médical fourni.",
+                pdfName: "certificat_medical.pdf",
+                avatar: "from-green-500 to-teal-500",
+                submitted: "il y a 1h"
+            }
+        };
+
+        function showDetailsModal(requestId) {
+            currentRequestId = requestId;
+            const request = requests[requestId];
+            
+            // Remplir les détails
+            document.getElementById('detailsName').textContent = request.name;
+            document.getElementById('detailsType').textContent = request.type;
+            document.getElementById('detailsStartDate').textContent = request.startDate;
+            document.getElementById('detailsEndDate').textContent = request.endDate;
+            document.getElementById('detailsDuration').textContent = request.duration;
+            document.getElementById('detailsReason').textContent = request.reason;
+            document.getElementById('pdfName').textContent = request.pdfName;
+            document.getElementById('detailsAvatar').className = `w-16 h-16 bg-gradient-to-r ${request.avatar} rounded-xl flex items-center justify-center`;
+            
+            showModal('detailsModal');
+        }
+
+        function showConfirmModal(action, requestId) {
+            currentAction = action;
+            currentRequestId = requestId;
+            const request = requests[requestId];
+            
+            const isApprove = action === 'approve';
+            const icon = document.getElementById('confirmIcon');
+            const title = document.getElementById('confirmTitle');
+            const message = document.getElementById('confirmMessage');
+            const actionBtn = document.getElementById('confirmActionBtn');
+            
+            // Configuration selon l'action
+            if (isApprove) {
+                icon.className = 'w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center';
+                icon.innerHTML = '<i class="fas fa-check text-green-500"></i>';
+                title.textContent = 'Approuver la demande';
+                message.textContent = 'Êtes-vous sûr de vouloir approuver cette demande de congés ?';
+                actionBtn.className = 'px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors';
+                actionBtn.innerHTML = '<i class="fas fa-check mr-2"></i>Approuver';
+            } else {
+                icon.className = 'w-12 h-12 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center';
+                icon.innerHTML = '<i class="fas fa-times text-red-500"></i>';
+                title.textContent = 'Refuser la demande';
+                message.textContent = 'Êtes-vous sûr de vouloir refuser cette demande de congés ?';
+                actionBtn.className = 'px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors';
+                actionBtn.innerHTML = '<i class="fas fa-times mr-2"></i>Refuser';
+            }
+            
+            document.getElementById('confirmDetails').textContent = `${request.name} - ${request.type}`;
+            document.getElementById('confirmDates').textContent = `${request.startDate} - ${request.endDate} (${request.duration})`;
+            
+            showModal('confirmModal');
+        }
+
+        function executeAction() {
+            const request = requests[currentRequestId];
+            const isApprove = currentAction === 'approve';
+            
+            // Fermer le modal de confirmation
+            closeModal('confirmModal');
+            
+            // Simuler un délai de traitement
+            setTimeout(() => {
+                // Mettre à jour l'interface
+                updateRequestStatus(currentRequestId, isApprove);
+                
+                // Afficher la notification
+                showToast(
+                    isApprove ? 'Demande approuvée' : 'Demande refusée',
+                    `La demande de ${request.name} a été ${isApprove ? 'approuvée' : 'refusée'} avec succès.`,
+                    isApprove ? 'success' : 'error'
+                );
+            }, 500);
+        }
+
+        function updateRequestStatus(requestId, approved) {
+            // Trouver l'élément de demande
+            const demandItems = document.querySelectorAll('.demand-item');
+            const demandItem = demandItems[requestId - 1];
+            
+            // Mettre à jour le badge de statut
+            const statusBadge = demandItem.querySelector('.status-badge');
+            const statusText = approved ? 'Approuvée' : 'Refusée';
+            const statusClass = approved ? 
+                'px-4 py-2 bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 text-xs font-semibold rounded-full' :
+                'px-4 py-2 bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300 text-xs font-semibold rounded-full';
+            
+            statusBadge.textContent = statusText;
+            statusBadge.className = statusClass;
+            
+            // Masquer les boutons d'action
+            const approveBtn = demandItem.querySelector('.approve-btn');
+            const rejectBtn = demandItem.querySelector('.reject-btn');
+            approveBtn.style.display = 'none';
+            rejectBtn.style.display = 'none';
+            
+            // Changer l'émoji de statut
+            const statusEmoji = demandItem.querySelector('.text-yellow-500');
+            statusEmoji.textContent = approved ? '🟢' : '🔴';
+            statusEmoji.className = approved ? 'text-green-500' : 'text-red-500';
+            
+            // Animation de fade
+            demandItem.style.animation = 'fadeOut 0.3s ease-out';
+            setTimeout(() => {
+                demandItem.style.animation = '';
+                demandItem.style.opacity = '0.7';
+            }, 300);
+        }
+
+        function showModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.remove('hidden');
+            
+            // Force reflow
+            modal.offsetHeight;
+            
+            const backdrop = modal.querySelector('.backdrop');
+            const modalContent = modal.querySelector('.modal');
+            
+            backdrop.classList.add('show');
+            modalContent.classList.add('show');
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            const backdrop = modal.querySelector('.backdrop');
+            const modalContent = modal.querySelector('.modal');
+            
+            backdrop.classList.remove('show');
+            modalContent.classList.remove('show');
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 250);
+        }
+
+        function showToast(title, message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastIcon = document.getElementById('toastIcon');
+            const toastTitle = document.getElementById('toastTitle');
+            const toastMessage = document.getElementById('toastMessage');
+            
+            // Configuration selon le type
+            if (type === 'success') {
+                toastIcon.className = 'w-8 h-8 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center';
+                toastIcon.innerHTML = '<i class="fas fa-check text-green-500"></i>';
+                toast.querySelector('.border-l-4').style.borderLeftColor = '#10B981';
+            } else {
+                toastIcon.className = 'w-8 h-8 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center';
+                toastIcon.innerHTML = '<i class="fas fa-times text-red-500"></i>';
+                toast.querySelector('.border-l-4').style.borderLeftColor = '#EF4444';
+            }
+            
+            toastTitle.textContent = title;
+            toastMessage.textContent = message;
+            
+            // Afficher le toast
+            toast.style.transform = 'translateX(0)';
+            
+            // Masquer automatiquement après 3 secondes
+            setTimeout(() => {
+                toast.style.transform = 'translateX(100%)';
+            }, 3000);
+        }
+
+        function viewPDF() {
+            // Simulation de l'ouverture du PDF
+            showToast('PDF ouvert', 'Le justificatif a été ouvert dans un nouvel onglet.', 'success');
+        }
+
+        // Fermer les modals avec Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const openModals = document.querySelectorAll('.modal:not(.hidden)');
+                openModals.forEach(modal => {
+                    closeModal(modal.id);
+                });
+            }
+        });
+    </script>
+    
     <!-- Modal de confirmation de déconnexion -->
     <div id="logoutConfirmModal" class="fixed inset-0 z-50 hidden">
         <div class="backdrop absolute inset-0 bg-black bg-opacity-50" onclick="closeLogoutModal()"></div>
@@ -753,7 +1247,92 @@
             </div>
         </div>
     </div>
- 
+  <!-- Modal de détails de la demande -->
+    <div id="detailsModal" class="fixed inset-0 z-50 hidden">
+        <div class="backdrop absolute inset-0 bg-black bg-opacity-50" onclick="closeModal('detailsModal')"></div>
+        <div class="modal relative z-10 flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl max-w-2xl w-full max-h-screen overflow-hidden">
+                <!-- Header -->
+                <div class="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Détails de la demande</h3>
+                    <button class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300" onclick="closeModal('detailsModal')">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <!-- Content -->
+                <div class="p-6 space-y-6 max-h-96 overflow-y-auto">
+                    <div class="flex items-center space-x-4">
+                        <div id="detailsAvatar" class="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl flex items-center justify-center">
+                            <i class="fas fa-user text-white text-xl"></i>
+                        </div>
+                        <div>
+                            <h4 id="detailsName" class="text-lg font-semibold text-gray-900 dark:text-white">Jean Martin</h4>
+                            <p id="detailsType" class="text-sm text-gray-500 dark:text-gray-400">Congés payés</p>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="space-y-2">
+                            <label class="text-sm font-medium text-gray-600 dark:text-gray-400">Date de début</label>
+                            <p id="detailsStartDate" class="text-gray-900 dark:text-white">2025-09-15</p>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-sm font-medium text-gray-600 dark:text-gray-400">Date de fin</label>
+                            <p id="detailsEndDate" class="text-gray-900 dark:text-white">2025-09-20</p>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-sm font-medium text-gray-600 dark:text-gray-400">Durée</label>
+                            <p id="detailsDuration" class="text-gray-900 dark:text-white">5 jours</p>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-sm font-medium text-gray-600 dark:text-gray-400">Statut</label>
+                            <p id="detailsStatus" class="text-yellow-600 dark:text-yellow-400">En attente</p>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-2">
+                        <label class="text-sm font-medium text-gray-600 dark:text-gray-400">Motif</label>
+                        <p id="detailsReason" class="text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">Congés pour vacances en famille. Voyage prévu depuis plusieurs mois.</p>
+                    </div>
+                    
+                    <div class="space-y-2">
+                        <label class="text-sm font-medium text-gray-600 dark:text-gray-400">Justificatif (PDF)</label>
+                        <div class="pdf-viewer bg-gray-50 dark:bg-gray-700 p-4 rounded-lg border">
+                            <div class="flex items-center space-x-3 mb-3">
+                                <i class="fas fa-file-pdf text-red-500 text-xl"></i>
+                                <span id="pdfName" class="text-gray-900 dark:text-white font-medium">justificatif_conges.pdf</span>
+                                <button class="text-blue-500 hover:text-blue-700 text-sm" onclick="viewPDF()">
+                                    <i class="fas fa-external-link-alt mr-1"></i>Ouvrir
+                                </button>
+                            </div>
+                            <div class="text-sm text-gray-600 dark:text-gray-400 space-y-2">
+                                <p><strong>Contenu du document:</strong></p>
+                                <p>• Réservation d'hôtel confirmée</p>
+                                <p>• Billets d'avion</p>
+                                <p>• Planning de congés équipe</p>
+                                <p>• Accord du chef d'équipe</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Actions -->
+                <div class="flex items-center justify-end space-x-3 p-6 border-t border-gray-200 dark:border-gray-700">
+                    <button class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors" onclick="closeModal('detailsModal')">
+                        Fermer
+                    </button>
+                    <button class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors" onclick="closeModal('detailsModal'); showConfirmModal('reject', currentRequestId)">
+                        <i class="fas fa-times mr-2"></i>Refuser
+                    </button>
+                    <button class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors" onclick="closeModal('detailsModal'); showConfirmModal('approve', currentRequestId)">
+                        <i class="fas fa-check mr-2"></i>Approuver
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Fonction pour ouvrir le modal de déconnexion
         function openLogoutModal() {

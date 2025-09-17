@@ -423,9 +423,13 @@
                          <i class="fas fa-users w-5 h-5 text-lg"></i>
                         <span class="font-medium">Demandes d'équipe</span>
                     </a>
-                    <a href="calendrier.html" class="nav-item flex items-center space-x-4 px-4 py-4 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-xl hover-lift transition-all duration-300 click-scale">
+                    <a href="calendrier-equipe.html" class="nav-item flex items-center space-x-4 px-4 py-4 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-xl hover-lift transition-all duration-300 click-scale">
                         <i class="fas fa-calendar-alt w-5 h-5 text-lg"></i>
                         <span>Calendrier équipe</span>
+                    </a>
+                    <a href="alertes.html" class="nav-item flex items-center space-x-4 px-4 py-4 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-xl hover-lift transition-all duration-300 click-scale">
+                        <i class="fas fa-exclamation-triangle w-5 h-5 text-lg"></i>
+                        <span>Alertes</span>
                     </a>
                     <a href="profile.html" class="nav-item flex items-center space-x-4 px-4 py-4 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-xl hover-lift transition-all duration-300 click-scale">
                         <i class="fas fa-user w-5 h-5 text-lg"></i>
@@ -1298,11 +1302,10 @@
         </div>
     </div>
 </div>
-
 <!-- Section "Demandes approuvées" -->
 <div class="grid grid-cols-1 gap-0 w-full mb-6">
     <div class="w-full">
-        <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-none shadow-xl border border-gray-200/50 dark:border-gray-700/50 animate-slide-up overflow-hidden w-full">
+        <div class="bg-white/80 dark:bg-gra-800/80 backdrop-blur-lg rounded-none shadow-xl border border-gray-200/50 dark:border-gray-700/50 animate-slide-up overflow-hidden w-full">
             <div class="p-6 border-b border-gray-200/50 dark:border-gray-700/50 bg-gradient-to-r from-green-500/5 to-emerald-500/5">
                 <div class="flex items-center justify-between mb-4">
                     <div>
@@ -1570,6 +1573,8 @@ function simulateUpdateSolde(employeeId, newUtilise) {
     }
 }
 </script>
+
+
 
     <!-- Modal de téléchargement de justificatif par le chef -->
     <div id="uploadJustificatifChefModal" class="hidden fixed inset-0 z-50 overflow-y-auto">

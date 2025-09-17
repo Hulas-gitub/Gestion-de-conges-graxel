@@ -423,9 +423,13 @@
                         <i class="fas fa-users w-5 h-5 text-lg"></i>
                         <span>Demandes d'équipe</span>
                     </a>
-                    <a href="calendrier.html" class="nav-item flex items-center space-x-4 px-4 py-4 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-xl hover-lift transition-all duration-300 click-scale">
+                    <a href="calendrier-equipe.html" class="nav-item flex items-center space-x-4 px-4 py-4 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-xl hover-lift transition-all duration-300 click-scale">
                         <i class="fas fa-calendar-alt w-5 h-5 text-lg"></i>
                         <span>Calendrier équipe</span>
+                    </a>
+                    <a href="alertes.html" class="nav-item flex items-center space-x-4 px-4 py-4 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-xl hover-lift transition-all duration-300 click-scale">
+                        <i class="fas fa-exclamation-triangle w-5 h-5 text-lg"></i>
+                        <span>Alertes</span>
                     </a>
                     <a href="profile.html" class="nav-item flex items-center space-x-4 px-4 py-4 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-xl hover-lift transition-all duration-300 click-scale">
                         <i class="fas fa-user w-5 h-5 text-lg"></i>
@@ -449,7 +453,7 @@
                         </div>
                     </div>
                     <div class="space-y-2">
-                        <a href="#"  id="logoutBtn"  class="flex items-center space-x-3 text-red-600 hover:text-red-700 dark:text-red-400 text-sm hover-lift transition-all duration-200 p-2 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20">
+                        <a href="#" class="flex items-center space-x-3 text-red-600 hover:text-red-700 dark:text-red-400 text-sm hover-lift transition-all duration-200 p-2 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20">
                             <i class="fas fa-sign-out-alt w-4 h-4"></i>
                             <span>Déconnexion</span>
                         </a>
@@ -458,13 +462,12 @@
             </div>
         </div>
 
-
-<!-- Main Content -->
-<div class="flex-1 overflow-auto custom-scrollbar">
-    <!-- Header (à fleur) -->
-    <div class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-lg shadow-lg border-b border-gray-200/50 dark:border-gray-700/50 px-4 md:px-0 py-6 animate-fade-in sticky top-0 z-30 w-full">
-        <div class="max-w-full mx-0 px-4 md:px-6 flex justify-between items-center w-full">
-             <div class="flex items-center space-x-4">
+        <!-- Main Content -->
+        <div class="flex-1 overflow-auto custom-scrollbar">
+            <!-- Header -->
+            <div class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-lg shadow-lg border-b border-gray-200/50 dark:border-gray-700/50 px-4 md:px-8 py-6 animate-fade-in sticky top-0 z-30">
+                <div class="flex justify-between items-center">
+                    <div class="flex items-center space-x-4">
                         <button id="toggle-sidebar" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 md:hidden">
                             <i class="fas fa-bars text-gray-600 dark:text-gray-400"></i>
                         </button>
@@ -552,146 +555,161 @@
                     </div>
                 </div>
             </div>
-    <!-- Dashboard Content (à fleur) -->
-    <div class="p-0 md:p-0 space-y-6 w-full">
-        <!-- Actions rapides (à fleur) -->
-        <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-none shadow-xl border border-gray-200/50 dark:border-gray-700/50 animate-slide-up overflow-hidden w-full" style="animation-delay: 0.4s;">
-            <div class="p-6 border-b border-gray-200/50 dark:border-gray-700/50 bg-gradient-to-r from-green-500/5 to-blue-500/5">
-                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Actions rapides</h3>
-                <p class="text-sm text-gray-500 dark:text-gray-400">Gestion de l'équipe</p>
-            </div>
-            <div class="p-6">
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 w-full">
-                    <a href="demandes-equipe.html" class="group gradient-bg text-white p-6 rounded-xl hover:shadow-2xl transition-all duration-500 hover-lift click-scale relative overflow-hidden">
-                        <div class="relative z-10 flex flex-col items-center space-y-3">
-                            <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                                <i class="fas fa-users-cog text-2xl"></i>
-                            </div>
-                            <span class="font-semibold text-sm">Gérer les demandes</span>
+
+            <!-- Dashboard Content -->
+            <div class="p-4 md:p-8 space-y-8">
+                <!-- Actions rapides -->
+                <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-700/50 animate-slide-up overflow-hidden" style="animation-delay: 0.4s;">
+                    <div class="p-6 border-b border-gray-200/50 dark:border-gray-700/50 bg-gradient-to-r from-green-500/5 to-blue-500/5">
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Actions rapides</h3>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Gestion de l'équipe</p>
+                    </div>
+                    <div class="p-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                            <!-- Gérer les demandes -->
+                            <a href="demandes-equipe.html" class="group gradient-bg text-white p-6 rounded-2xl hover:shadow-2xl transition-all duration-500 hover-lift click-scale relative overflow-hidden">
+                                <div class="relative z-10 flex flex-col items-center space-y-3">
+                                    <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                                        <i class="fas fa-users-cog text-2xl"></i>
+                                    </div>
+                                    <span class="font-semibold text-sm">Gérer les demandes</span>
+                                </div>
+                            </a>
+                            <!-- Voir calendrier équipe -->
+                            <a href="calendrier.html" class="bg-gradient-to-r from-purple-500 to-pink-500 text-white p-6 rounded-2xl hover:shadow-2xl transition-all duration-500 hover-lift click-scale relative overflow-hidden group">
+                                <div class="relative z-10 flex flex-col items-center space-y-3">
+                                    <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                                        <i class="fas fa-calendar-alt text-2xl"></i>
+                                    </div>
+                                    <span class="font-semibold text-sm">Calendrier équipe</span>
+                                </div>
+                            </a>
+                            <!-- Alertes -->
+                            <a href="alertes.html" class="bg-gradient-to-r from-red-500 to-orange-500 text-white p-6 rounded-2xl hover:shadow-2xl transition-all duration-500 hover-lift click-scale relative overflow-hidden group">
+                                <div class="relative z-10 flex flex-col items-center space-y-3">
+                                    <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                                        <i class="fas fa-exclamation-triangle text-2xl"></i>
+                                    </div>
+                                    <span class="font-semibold text-sm">Alertes infos</span>
+                                </div>
+                            </a>
+                            <!-- Statistiques -->
+                            <a href="profile.html" class="bg-gradient-to-r from-green-500 to-teal-500 text-white p-6 rounded-2xl hover:shadow-2xl transition-all duration-500 hover-lift click-scale relative overflow-hidden group">
+                                <div class="relative z-10 flex flex-col items-center space-y-3">
+                                    <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                                        <i class="fas fa-user text-2xl"></i>
+                                    </div>
+                                    <span class="font-semibold text-sm">Mon profile</span>
+                                </div>
+                            </a>
                         </div>
-                    </a>
-                    <a href="calendrier.html" class="bg-gradient-to-r from-purple-500 to-pink-500 text-white p-6 rounded-xl hover:shadow-2xl transition-all duration-500 hover-lift click-scale relative overflow-hidden group">
-                        <div class="relative z-10 flex flex-col items-center space-y-3">
-                            <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                                <i class="fas fa-calendar-alt text-2xl"></i>
-                            </div>
-                            <span class="font-semibold text-sm">Calendrier équipe</span>
-                        </div>
-                    </a>
-                    <a href="alertes.html" class="bg-gradient-to-r from-red-500 to-orange-500 text-white p-6 rounded-xl hover:shadow-2xl transition-all duration-500 hover-lift click-scale relative overflow-hidden group">
-                        <div class="relative z-10 flex flex-col items-center space-y-3">
-                            <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                                <i class="fas fa-exclamation-triangle text-2xl"></i>
-                            </div>
-                            <span class="font-semibold text-sm">Alertes infos</span>
-                        </div>
-                    </a>
-                    <a href="profile.html" class="bg-gradient-to-r from-green-500 to-teal-500 text-white p-6 rounded-xl hover:shadow-2xl transition-all duration-500 hover-lift click-scale relative overflow-hidden group">
-                        <div class="relative z-10 flex flex-col items-center space-y-3">
-                            <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                                <i class="fas fa-user text-2xl"></i>
-                            </div>
-                            <span class="font-semibold text-sm">Mon profile</span>
-                        </div>
-                    </a>
+                    </div>
                 </div>
-            </div>
+
+                <!-- Stats Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-700/50 p-6 hover-lift transition-all duration-500 animate-slide-up overflow-hidden relative">
+                        <div class="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 pointer-events-none"></div>
+                        <div class="relative flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">Demandes en attente</p>
+                                <p class="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">12</p>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">à valider</p>
+                            </div>
+                            <div class="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-2xl flex items-center justify-center shadow-lg animate-float">
+                                <i class="fas fa-hourglass-half text-white text-2xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-700/50 p-6 hover-lift transition-all duration-500 animate-slide-up overflow-hidden relative" style="animation-delay: 0.1s;">
+                        <div class="absolute inset-0 bg-gradient-to-r from-orange-500/10 to-red-500/10 pointer-events-none"></div>
+                        <div class="relative flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">Employés du departement Finance</p>
+                                <p class="text-4xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent mb-2">5</p>
+                            </div>
+                            <div class="w-16 h-16 bg-gradient-to-r from-orange-500 to-red-500 rounded-2xl flex items-center justify-center shadow-lg animate-float" style="animation-delay: 0.5s;">
+                                <i class="fas fa-users text-white text-2xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-700/50 p-6 hover-lift transition-all duration-500 animate-slide-up overflow-hidden relative" style="animation-delay: 0.2s;">
+                        <div class="absolute inset-0 bg-gradient-to-r from-green-500/10 to-teal-500/10 pointer-events-none"></div>
+                        <div class="relative flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">Demandes validées</p>
+                                <p class="text-4xl font-bold bg-gradient-to-r from-green-600 to-teal-600 bg-clip-text text-transparent mb-2">47</p>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">ce mois</p>
+                            </div>
+                            <div class="w-16 h-16 bg-gradient-to-r from-green-500 to-teal-500 rounded-2xl flex items-center justify-center shadow-lg animate-float" style="animation-delay: 0.6s;">
+                                <i class="fas fa-check-circle text-white text-2xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-700/50 p-6 hover-lift transition-all duration-500 animate-slide-up overflow-hidden relative" style="animation-delay: 0.3s;">
+                        <div class="absolute inset-0 bg-gradient-to-r from-yellow-500/10 to-orange-500/10 pointer-events-none"></div>
+                        <div class="relative flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">Demandes refusées</p>
+                                <p class="text-4xl font-bold bg-gradient-to-r from-yellow-600 to-orange-600 bg-clip-text text-transparent mb-2">3</p>
+                            </div>
+                            <div class="w-16 h-16 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-2xl flex items-center justify-center shadow-lg animate-float" style="animation-delay: 0.7s;">
+                                <i class="fas fa-exclamation-triangle text-white text-2xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+  <div class="container mx-auto px-6 py-8">
+        <!-- Section des métriques principales -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
         </div>
 
-        <!-- Stats Cards (à fleur) -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-0 w-full">
-            <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-none shadow-xl border border-gray-200/50 dark:border-gray-700/50 p-6 hover-lift transition-all duration-500 animate-slide-up overflow-hidden relative w-full">
-                <div class="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 pointer-events-none"></div>
-                <div class="relative flex items-center justify-between">
-                    <div>
-                        <p class="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">Demandes en attente</p>
-                        <p class="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">12</p>
-                        <p class="text-sm text-gray-500 dark:text-gray-400">à valider</p>
-                    </div>
-                    <div class="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl flex items-center justify-center shadow-lg animate-float">
-                        <i class="fas fa-hourglass-half text-white text-2xl"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-none shadow-xl border border-gray-200/50 dark:border-gray-700/50 p-6 hover-lift transition-all duration-500 animate-slide-up overflow-hidden relative w-full" style="animation-delay: 0.1s;">
-                <div class="absolute inset-0 bg-gradient-to-r from-orange-500/10 to-red-500/10 pointer-events-none"></div>
-                <div class="relative flex items-center justify-between">
-                    <div>
-                        <p class="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">Employés du département Finance</p>
-                        <p class="text-4xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent mb-2">5</p>
-                    </div>
-                    <div class="w-16 h-16 bg-gradient-to-r from-orange-500 to-red-500 rounded-xl flex items-center justify-center shadow-lg animate-float" style="animation-delay: 0.5s;">
-                        <i class="fas fa-users text-white text-2xl"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-none shadow-xl border border-gray-200/50 dark:border-gray-700/50 p-6 hover-lift transition-all duration-500 animate-slide-up overflow-hidden relative w-full" style="animation-delay: 0.2s;">
-                <div class="absolute inset-0 bg-gradient-to-r from-green-500/10 to-teal-500/10 pointer-events-none"></div>
-                <div class="relative flex items-center justify-between">
-                    <div>
-                        <p class="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">Demandes validées</p>
-                        <p class="text-4xl font-bold bg-gradient-to-r from-green-600 to-teal-600 bg-clip-text text-transparent mb-2">47</p>
-                        <p class="text-sm text-gray-500 dark:text-gray-400">ce mois</p>
-                    </div>
-                    <div class="w-16 h-16 bg-gradient-to-r from-green-500 to-teal-500 rounded-xl flex items-center justify-center shadow-lg animate-float" style="animation-delay: 0.6s;">
-                        <i class="fas fa-check-circle text-white text-2xl"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-none shadow-xl border border-gray-200/50 dark:border-gray-700/50 p-6 hover-lift transition-all duration-500 animate-slide-up overflow-hidden relative w-full" style="animation-delay: 0.3s;">
-                <div class="absolute inset-0 bg-gradient-to-r from-yellow-500/10 to-orange-500/10 pointer-events-none"></div>
-                <div class="relative flex items-center justify-between">
-                    <div>
-                        <p class="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">Demandes refusées</p>
-                        <p class="text-4xl font-bold bg-gradient-to-r from-yellow-600 to-orange-600 bg-clip-text text-transparent mb-2">3</p>
-                    </div>
-                    <div class="w-16 h-16 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-xl flex items-center justify-center shadow-lg animate-float" style="animation-delay: 0.7s;">
-                        <i class="fas fa-exclamation-triangle text-white text-2xl"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Graphiques (à fleur) -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-0 mb-6 w-full">
-            <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-none shadow-xl border border-gray-200/50 dark:border-gray-700/50 animate-slide-up w-full">
+        <!-- Section des graphiques -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            <!-- Graphique évolution des demandes -->
+            <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-700/50 animate-slide-up">
                 <div class="p-6 border-b border-gray-200/50 dark:border-gray-700/50 bg-gradient-to-r from-blue-500/5 to-purple-500/5">
                     <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Évolution des demandes</h3>
                     <p class="text-sm text-gray-500 dark:text-gray-400">Demandes de congés par mois</p>
                 </div>
                 <div class="p-6">
-                    <div class="chart-container-large w-full">
+                    <div class="chart-container-large">
                         <canvas id="demandesChart"></canvas>
                     </div>
                 </div>
             </div>
-            <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-none shadow-xl border border-gray-200/50 dark:border-gray-700/50 animate-slide-up w-full">
+
+            <!-- Graphique répartition par type -->
+            <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-700/50 animate-slide-up">
                 <div class="p-6 border-b border-gray-200/50 dark:border-gray-700/50 bg-gradient-to-r from-green-500/5 to-blue-500/5">
                     <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Types de congés</h3>
                     <p class="text-sm text-gray-500 dark:text-gray-400">Répartition par catégorie</p>
                 </div>
                 <div class="p-6">
-                    <div class="chart-container-large w-full">
+                    <div class="chart-container-large">
                         <canvas id="typesChart"></canvas>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Analyse temporelle (à fleur) -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-0 mb-6 w-full">
-            <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-none shadow-xl border border-gray-200/50 dark:border-gray-700/50 animate-slide-up w-full">
+        <!-- Section analyse temporelle -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+            <!-- Graphique taux d'approbation -->
+            <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-700/50 animate-slide-up">
                 <div class="p-6 border-b border-gray-200/50 dark:border-gray-700/50 bg-gradient-to-r from-purple-500/5 to-pink-500/5">
                     <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2">Taux d'approbation</h3>
                     <p class="text-sm text-gray-500 dark:text-gray-400">6 derniers mois</p>
                 </div>
                 <div class="p-6">
-                    <div class="chart-container w-full">
+                    <div class="chart-container">
                         <canvas id="approvalChart"></canvas>
                     </div>
                 </div>
             </div>
-            <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-none shadow-xl border border-gray-200/50 dark:border-gray-700/50 animate-slide-up w-full">
+
+            <!-- Top employés -->
+            <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-700/50 animate-slide-up">
                 <div class="p-6 border-b border-gray-200/50 dark:border-gray-700/50 bg-gradient-to-r from-indigo-500/5 to-blue-500/5">
                     <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2">Top demandeurs</h3>
                     <p class="text-sm text-gray-500 dark:text-gray-400">Ce mois</p>
@@ -726,7 +744,9 @@
                     </div>
                 </div>
             </div>
-            <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-none shadow-xl border border-gray-200/50 dark:border-gray-700/50 animate-slide-up w-full">
+
+            <!-- Statistiques rapides -->
+            <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-700/50 animate-slide-up">
                 <div class="p-6 border-b border-gray-200/50 dark:border-gray-700/50 bg-gradient-to-r from-pink-500/5 to-red-500/5">
                     <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2">Statistiques</h3>
                     <p class="text-sm text-gray-500 dark:text-gray-400">Résumé mensuel</p>
@@ -752,17 +772,17 @@
             </div>
         </div>
 
-        <!-- Section "Demandes d'équipe" (à fleur + boutons originaux) -->
-        <div class="grid grid-cols-1 gap-0 w-full mb-6">
-            <div class="w-full">
-                <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-none shadow-xl border border-gray-200/50 dark:border-gray-700/50 animate-slide-up overflow-hidden w-full">
+        <!-- Section demandes d'équipe (votre code existant) -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-4 space-y-12">
+                <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-700/50 animate-slide-up overflow-hidden">
                     <div class="p-6 border-b border-gray-200/50 dark:border-gray-700/50 bg-gradient-to-r from-blue-500/5 to-purple-500/5">
                         <div class="flex items-center justify-between">
                             <div>
                                 <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Demandes d'équipe</h3>
                                 <p class="text-sm text-gray-500 dark:text-gray-400">Dernières demandes de congés</p>
                             </div>
-                            <div class="flex space-x-2 overflow-x-auto pb-2">
+                            <div class="flex space-x-2">
                                 <button class="px-3 py-1 text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-300 rounded-full hover:bg-blue-200 dark:hover:bg-blue-900/50 transition-colors">
                                     Tous
                                 </button>
@@ -786,118 +806,152 @@
                         </div>
                     </div>
                     <div class="p-6 space-y-4">
-                        <!-- Demande 1 -->
-                        <div class="demand-item w-full flex flex-col md:flex-row items-start md:items-center justify-between bg-gray-50 dark:bg-gray-700/50 rounded-none p-4">
-                            <div class="flex items-center space-x-4 w-full md:w-auto">
-                                <div class="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl flex items-center justify-center flex-shrink-0">
-                                    <i class="fas fa-user text-white"></i>
-                                </div>
-                                <div class="flex-1 min-w-0">
-                                    <div class="flex items-center space-x-2">
-                                        <h4 class="font-semibold text-gray-900 dark:text-white truncate">Jean Martin - Congés payés</h4>
-                                        <span class="text-yellow-500">🟡</span>
-                                    </div>
-                                    <p class="text-sm text-gray-500 dark:text-gray-400 truncate">2025-09-15 - 2025-09-20 (5 jours)</p>
-                                    <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Demande soumise il y a 2h</p>
-                                </div>
-                            </div>
-                            <div class="flex items-center space-x-2 mt-4 md:mt-0" style="flex-shrink: 0; white-space: nowrap; gap: 0.75rem;">
-                                <span class="status-badge px-4 py-2 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300 text-xs font-semibold rounded-full">En attente</span>
-                                <button class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors" onclick="showConfirmModal('approve', 1)">
-                                    <i class="fas fa-check mr-2"></i>
-                                </button>
-                                <button class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors" onclick="showConfirmModal('reject', 1)">
-                                    <i class="fas fa-times mr-2"></i>
-                                </button>
-                                <button class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors" onclick="showDetailsModal(1)">
-                                    <i class="fas fa-eye mr-2"></i>
-                                </button>
-                            </div>
+                      <div class="demand-item flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700/50 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-300 cursor-pointer hover-lift">
+                <div class="flex items-center space-x-4">
+                    <div class="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-user text-white"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex items-center space-x-2">
+                            <h4 class="font-semibold text-gray-900 dark:text-white">Jean Martin - Congés payés</h4>
+                            <span class="text-yellow-500">🟡</span>
                         </div>
-
-                        <!-- Demande 2 -->
-                        <div class="demand-item w-full flex flex-col md:flex-row items-start md:items-center justify-between bg-gray-50 dark:bg-gray-700/50 rounded-none p-4">
-                            <div class="flex items-center space-x-4 w-full md:w-auto">
-                                <div class="w-12 h-12 bg-gradient-to-r from-green-500 to-teal-500 rounded-xl flex items-center justify-center flex-shrink-0">
-                                    <i class="fas fa-user text-white"></i>
-                                </div>
-                                <div class="flex-1 min-w-0">
-                                    <div class="flex items-center space-x-2">
-                                        <h4 class="font-semibold text-gray-900 dark:text-white truncate">Sophie Dubois - Congé maladie</h4>
-                                        <span class="text-yellow-500">🟡</span>
-                                    </div>
-                                    <p class="text-sm text-gray-500 dark:text-gray-400 truncate">2025-09-16 - 2025-09-18 (3 jours)</p>
-                                    <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Demande soumise il y a 1h</p>
-                                </div>
-                            </div>
-                            <div class="flex items-center space-x-2 mt-4 md:mt-0" style="flex-shrink: 0; white-space: nowrap; gap: 0.75rem;">
-                                <span class="status-badge px-4 py-2 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300 text-xs font-semibold rounded-full">En attente</span>
-                                <button class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors" onclick="showConfirmModal('approve', 2)">
-                                    <i class="fas fa-check mr-2"></i>
-                                </button>
-                                <button class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors" onclick="showConfirmModal('reject', 2)">
-                                    <i class="fas fa-times mr-2"></i>
-                                </button>
-                                <button class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors" onclick="showDetailsModal(2)">
-                                    <i class="fas fa-eye mr-2"></i>
-                                </button>
-                            </div>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">2025-09-15 - 2025-09-20 (5 jours)</p>
+                        <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Demande soumise il y a 2h</p>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <span class="status-badge px-4 py-2 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300 text-xs font-semibold rounded-full">En attente</span>
+                        <button class="approve-btn text-green-500 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300 p-2 rounded-full hover:bg-green-100 dark:hover:bg-green-900/30 transition-colors" onclick="showConfirmModal('approve', 1)">
+                            <i class="fas fa-check"></i>
+                        </button>
+                        <button class="reject-btn text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 p-2 rounded-full hover:bg-red-100 dark:hover:bg-red-900/30 transition-colors" onclick="showConfirmModal('reject', 1)">
+                            <i class="fas fa-times"></i>
+                        </button>
+                        <button class="view-btn text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 p-2 rounded-full hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors" onclick="showDetailsModal(1)">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Demande 2 -->
+            <div class="demand-item flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700/50 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-300 cursor-pointer hover-lift">
+                <div class="flex items-center space-x-4">
+                    <div class="w-12 h-12 bg-gradient-to-r from-green-500 to-teal-500 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-user text-white"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex items-center space-x-2">
+                            <h4 class="font-semibold text-gray-900 dark:text-white">Sophie Dubois - Congé maladie</h4>
+                            <span class="text-yellow-500">🟡</span>
                         </div>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">2025-09-16 - 2025-09-18 (3 jours)</p>
+                        <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Demande soumise il y a 1h</p>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <span class="status-badge px-4 py-2 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300 text-xs font-semibold rounded-full">En attente</span>
+                        <button class="approve-btn text-green-500 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300 p-2 rounded-full hover:bg-green-100 dark:hover:bg-green-900/30 transition-colors" onclick="showConfirmModal('approve', 2)">
+                            <i class="fas fa-check"></i>
+                        </button>
+                        <button class="reject-btn text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 p-2 rounded-full hover:bg-red-100 dark:hover:bg-red-900/30 transition-colors" onclick="showConfirmModal('reject', 2)">
+                            <i class="fas fa-times"></i>
+                        </button>
+                        <button class="view-btn text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 p-2 rounded-full hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors" onclick="showDetailsModal(2)">
+                            <i class="fas fa-eye"></i>
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-            <!-- Footer -->
-            <footer class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg border-t border-gray-200/50 dark:border-gray-700/50 p-6 mt-8">
-                <div class="max-w-7xl mx-auto">
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                        <div class="col-span-1 md:col-span-2">
-                            <div class="flex items-center space-x-4 mb-4">
-                                <div class="w-12 h-12 rounded-xl flex items-center justify-center shadow-lg">
-                                    <img src="assets/images/logo.png" alt="Logo Graxel Tech" class="w-full h-full object-contain rounded-xl" />
-                                </div>
-                                <div>
-                                    <h3 class="text-xl font-bold text-gray-900 dark:text-white">Graxel Tech</h3>
-                                    <p class="text-sm text-gray-600 dark:text-gray-400">Gestion des congés pour les responsables</p>
-                                </div>
-                            </div>
-                            <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">
-                                Solution dédiée aux chefs de département pour une gestion optimale des congés et des ressources humaines.
-                            </p>
+    <!-- Modal de détails de la demande -->
+    <div id="detailsModal" class="fixed inset-0 z-50 hidden">
+        <div class="backdrop absolute inset-0 bg-black bg-opacity-50" onclick="closeModal('detailsModal')"></div>
+        <div class="modal relative z-10 flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl max-w-2xl w-full max-h-screen overflow-hidden">
+                <!-- Header -->
+                <div class="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Détails de la demande</h3>
+                    <button class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300" onclick="closeModal('detailsModal')">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <!-- Content -->
+                <div class="p-6 space-y-6 max-h-96 overflow-y-auto">
+                    <div class="flex items-center space-x-4">
+                        <div id="detailsAvatar" class="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl flex items-center justify-center">
+                            <i class="fas fa-user text-white text-xl"></i>
                         </div>
                         <div>
-                            <h4 class="font-semibold text-gray-900 dark:text-white mb-4">Liens rapides</h4>
-                            <ul class="space-y-2 text-sm">
-                                <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Tableau de bord</a></li>
-                                <li><a href="demandes-equipe.html" class="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Demandes d'équipe</a></li>
-                                <li><a href="calendrier-equipe.html" class="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Calendrier équipe</a></li>
-                                <li><a href="alertes.html" class="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Alertes</a></li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h4 class="font-semibold text-gray-900 dark:text-white mb-4">Support</h4>
-                            <ul class="space-y-2 text-sm">
-                                <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Centre d'aide</a></li>
-                                <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Contact RH</a></li>
-                                <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">FAQ</a></li>
-                            </ul>
+                            <h4 id="detailsName" class="text-lg font-semibold text-gray-900 dark:text-white">Jean Martin</h4>
+                            <p id="detailsType" class="text-sm text-gray-500 dark:text-gray-400">Congés payés</p>
                         </div>
                     </div>
-                    <div class="border-t border-gray-200 dark:border-gray-700 mt-8 pt-6">
-                        <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-                            <p class="text-sm text-gray-600 dark:text-gray-400">
-                                © 2025 Graxel Tech. Tous droits réservés.
-                            </p>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="space-y-2">
+                            <label class="text-sm font-medium text-gray-600 dark:text-gray-400">Date de début</label>
+                            <p id="detailsStartDate" class="text-gray-900 dark:text-white">2025-09-15</p>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-sm font-medium text-gray-600 dark:text-gray-400">Date de fin</label>
+                            <p id="detailsEndDate" class="text-gray-900 dark:text-white">2025-09-20</p>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-sm font-medium text-gray-600 dark:text-gray-400">Durée</label>
+                            <p id="detailsDuration" class="text-gray-900 dark:text-white">5 jours</p>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-sm font-medium text-gray-600 dark:text-gray-400">Statut</label>
+                            <p id="detailsStatus" class="text-yellow-600 dark:text-yellow-400">En attente</p>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-2">
+                        <label class="text-sm font-medium text-gray-600 dark:text-gray-400">Motif</label>
+                        <p id="detailsReason" class="text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">Congés pour vacances en famille. Voyage prévu depuis plusieurs mois.</p>
+                    </div>
+                    
+                    <div class="space-y-2">
+                        <label class="text-sm font-medium text-gray-600 dark:text-gray-400">Justificatif (PDF)</label>
+                        <div class="pdf-viewer bg-gray-50 dark:bg-gray-700 p-4 rounded-lg border">
+                            <div class="flex items-center space-x-3 mb-3">
+                                <i class="fas fa-file-pdf text-red-500 text-xl"></i>
+                                <span id="pdfName" class="text-gray-900 dark:text-white font-medium">justificatif_conges.pdf</span>
+                                <button class="text-blue-500 hover:text-blue-700 text-sm" onclick="viewPDF()">
+                                    <i class="fas fa-external-link-alt mr-1"></i>Ouvrir
+                                </button>
+                            </div>
+                            <div class="text-sm text-gray-600 dark:text-gray-400 space-y-2">
+                                <p><strong>Contenu du document:</strong></p>
+                                <p>• Réservation d'hôtel confirmée</p>
+                                <p>• Billets d'avion</p>
+                                <p>• Planning de congés équipe</p>
+                                <p>• Accord du chef d'équipe</p>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </footer>
+                
+                <!-- Actions -->
+                <div class="flex items-center justify-end space-x-3 p-6 border-t border-gray-200 dark:border-gray-700">
+                    <button class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors" onclick="closeModal('detailsModal')">
+                        Fermer
+                    </button>
+                    <button class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors" onclick="closeModal('detailsModal'); showConfirmModal('reject', currentRequestId)">
+                        <i class="fas fa-times mr-2"></i>Refuser
+                    </button>
+                    <button class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors" onclick="closeModal('detailsModal'); showConfirmModal('approve', currentRequestId)">
+                        <i class="fas fa-check mr-2"></i>Approuver
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 
-      <!-- Modal de confirmation -->
+    <!-- Modal de confirmation -->
     <div id="confirmModal" class="fixed inset-0 z-50 hidden">
         <div class="backdrop absolute inset-0 bg-black bg-opacity-50" onclick="closeModal('confirmModal')"></div>
         <div class="modal relative z-10 flex items-center justify-center min-h-screen p-4">
@@ -948,6 +1002,107 @@
             </div>
         </div>
     </div>
+
+                        <!-- Demande approuvée -->
+                        <div class="demand-item flex items-center justify-between p-4 bg-green-50 dark:bg-green-900/20 rounded-xl hover:bg-green-100 dark:hover:bg-green-900/30 transition-all duration-300 cursor-pointer hover-lift">
+                            <div class="flex items-center space-x-4">
+                                <div class="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-500 rounded-xl flex items-center justify-center">
+                                    <i class="fas fa-user text-white"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex items-center space-x-2">
+                                        <h4 class="font-semibold text-gray-900 dark:text-white">Marie Dupont - Congé maladie</h4>
+                                        <span class="text-green-500">🟢</span>
+                                    </div>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400">2025-09-10 - 2025-09-12 (3 jours)</p>
+                                    <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Validé hier</p>
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <span class="px-4 py-2 bg-green-500 text-white text-xs font-semibold rounded-full">Validé</span>
+                                    <button class="text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Demande refusée -->
+                        <div class="demand-item flex items-center justify-between p-4 bg-red-50 dark:bg-red-900/20 rounded-xl hover:bg-red-100 dark:hover:bg-red-900/30 transition-all duration-300 cursor-pointer hover-lift">
+                            <div class="flex items-center space-x-4">
+                                <div class="w-12 h-12 bg-gradient-to-r from-red-500 to-pink-500 rounded-xl flex items-center justify-center">
+                                    <i class="fas fa-user text-white"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex items-center space-x-2">
+                                        <h4 class="font-semibold text-gray-900 dark:text-white">Pierre Leroux - RTT</h4>
+                                        <span class="text-red-500">🔴</span>
+                                    </div>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400">2025-09-08 - 2025-09-08 (1 jour)</p>
+                                    <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Refusé il y a 2 jours</p>
+                                    <p class="text-xs text-red-500 dark:text-red-400 font-medium">Motif: Période critique</p>
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <span class="px-4 py-2 bg-red-500 text-white text-xs font-semibold rounded-full">Refusé</span>
+                                    <button class="text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+           
+    </div>
+ </div>
+
+            <!-- Footer -->
+            <footer class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg border-t border-gray-200/50 dark:border-gray-700/50 p-6 mt-8">
+                <div class="max-w-7xl mx-auto">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                        <div class="col-span-1 md:col-span-2">
+                            <div class="flex items-center space-x-4 mb-4">
+                                <div class="w-12 h-12 rounded-xl flex items-center justify-center shadow-lg">
+                                    <img src="assets/images/logo.png" alt="Logo Graxel Tech" class="w-full h-full object-contain rounded-xl" />
+                                </div>
+                                <div>
+                                    <h3 class="text-xl font-bold text-gray-900 dark:text-white">Graxel Tech</h3>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">Gestion des congés pour les responsables</p>
+                                </div>
+                            </div>
+                            <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">
+                                Solution dédiée aux chefs de département pour une gestion optimale des congés et des ressources humaines.
+                            </p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-900 dark:text-white mb-4">Liens rapides</h4>
+                            <ul class="space-y-2 text-sm">
+                                <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Tableau de bord</a></li>
+                                <li><a href="demandes-equipe.html" class="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Demandes d'équipe</a></li>
+                                <li><a href="calendrier-equipe.html" class="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Calendrier équipe</a></li>
+                                <li><a href="alertes.html" class="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Alertes</a></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-900 dark:text-white mb-4">Support</h4>
+                            <ul class="space-y-2 text-sm">
+                                <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Centre d'aide</a></li>
+                                <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Contact RH</a></li>
+                                <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">FAQ</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="border-t border-gray-200 dark:border-gray-700 mt-8 pt-6">
+                        <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+                            <p class="text-sm text-gray-600 dark:text-gray-400">
+                                © 2025 Graxel Tech. Tous droits réservés.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+  
     <script>
         // Animation d'entrée
         document.addEventListener('DOMContentLoaded', function() {
@@ -1335,223 +1490,6 @@
                     closeModal(modal.id);
                 });
             }
-        });
-    </script>
-    
-    <!-- Modal de confirmation de déconnexion -->
-    <div id="logoutConfirmModal" class="fixed inset-0 z-50 hidden">
-        <div class="backdrop absolute inset-0 bg-black bg-opacity-50" onclick="closeLogoutModal()"></div>
-        <div class="modal relative z-10 flex items-center justify-center min-h-screen p-4">
-            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl max-w-md w-full">
-                <!-- Header -->
-                <div class="p-6 border-b border-gray-200 dark:border-gray-700">
-                    <div class="flex items-center space-x-3">
-                        <div class="w-12 h-12 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
-                            <i class="fas fa-sign-out-alt text-xl text-red-600 dark:text-red-400"></i>
-                        </div>
-                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Confirmation de déconnexion</h3>
-                    </div>
-                </div>
-                
-                <!-- Content -->
-                <div class="p-6">
-                    <p class="text-gray-600 dark:text-gray-400 mb-4">Êtes-vous sûr de vouloir vous déconnecter ?</p>
-                    <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-8 h-8 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full flex items-center justify-center text-white font-bold text-sm">
-                                JM
-                            </div>
-                            <div>
-                                <p class="text-sm font-medium text-gray-900 dark:text-white">Jean Martin</p>
-                                <p class="text-sm text-gray-500 dark:text-gray-400">Chef de Département Finance</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Actions -->
-                <div class="flex items-center justify-end space-x-3 p-6 border-t border-gray-200 dark:border-gray-700">
-                    <button class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors" onclick="closeLogoutModal()">
-                        Annuler
-                    </button>
-                    <button class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors" onclick="executeLogout()">
-                        Se déconnecter
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Toast notification de déconnexion -->
-    <div id="logoutToast" class="fixed top-4 right-4 z-50 transform translate-x-full transition-transform duration-300">
-        <div class="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-4 border-l-4 border-l-green-500 max-w-sm">
-            <div class="flex items-center space-x-3">
-                <div class="w-8 h-8 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
-                    <i class="fas fa-check text-green-600 dark:text-green-400"></i>
-                </div>
-                <div>
-                    <p class="font-semibold text-gray-900 dark:text-white">Déconnexion réussie</p>
-                    <p class="text-sm text-gray-600 dark:text-gray-400">Vous allez être redirigé...</p>
-                </div>
-            </div>
-        </div>
-    </div>
-  <!-- Modal de détails de la demande -->
-    <div id="detailsModal" class="fixed inset-0 z-50 hidden">
-        <div class="backdrop absolute inset-0 bg-black bg-opacity-50" onclick="closeModal('detailsModal')"></div>
-        <div class="modal relative z-10 flex items-center justify-center min-h-screen p-4">
-            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl max-w-2xl w-full max-h-screen overflow-hidden">
-                <!-- Header -->
-                <div class="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
-                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Détails de la demande</h3>
-                    <button class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300" onclick="closeModal('detailsModal')">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-                
-                <!-- Content -->
-                <div class="p-6 space-y-6 max-h-96 overflow-y-auto">
-                    <div class="flex items-center space-x-4">
-                        <div id="detailsAvatar" class="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl flex items-center justify-center">
-                            <i class="fas fa-user text-white text-xl"></i>
-                        </div>
-                        <div>
-                            <h4 id="detailsName" class="text-lg font-semibold text-gray-900 dark:text-white">Jean Martin</h4>
-                            <p id="detailsType" class="text-sm text-gray-500 dark:text-gray-400">Congés payés</p>
-                        </div>
-                    </div>
-                    
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="space-y-2">
-                            <label class="text-sm font-medium text-gray-600 dark:text-gray-400">Date de début</label>
-                            <p id="detailsStartDate" class="text-gray-900 dark:text-white">2025-09-15</p>
-                        </div>
-                        <div class="space-y-2">
-                            <label class="text-sm font-medium text-gray-600 dark:text-gray-400">Date de fin</label>
-                            <p id="detailsEndDate" class="text-gray-900 dark:text-white">2025-09-20</p>
-                        </div>
-                        <div class="space-y-2">
-                            <label class="text-sm font-medium text-gray-600 dark:text-gray-400">Durée</label>
-                            <p id="detailsDuration" class="text-gray-900 dark:text-white">5 jours</p>
-                        </div>
-                        <div class="space-y-2">
-                            <label class="text-sm font-medium text-gray-600 dark:text-gray-400">Statut</label>
-                            <p id="detailsStatus" class="text-yellow-600 dark:text-yellow-400">En attente</p>
-                        </div>
-                    </div>
-                    
-                    <div class="space-y-2">
-                        <label class="text-sm font-medium text-gray-600 dark:text-gray-400">Motif</label>
-                        <p id="detailsReason" class="text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">Congés pour vacances en famille. Voyage prévu depuis plusieurs mois.</p>
-                    </div>
-                    
-                    <div class="space-y-2">
-                        <label class="text-sm font-medium text-gray-600 dark:text-gray-400">Justificatif (PDF)</label>
-                        <div class="pdf-viewer bg-gray-50 dark:bg-gray-700 p-4 rounded-lg border">
-                            <div class="flex items-center space-x-3 mb-3">
-                                <i class="fas fa-file-pdf text-red-500 text-xl"></i>
-                                <span id="pdfName" class="text-gray-900 dark:text-white font-medium">justificatif_conges.pdf</span>
-                                <button class="text-blue-500 hover:text-blue-700 text-sm" onclick="viewPDF()">
-                                    <i class="fas fa-external-link-alt mr-1"></i>Ouvrir
-                                </button>
-                            </div>
-                            <div class="text-sm text-gray-600 dark:text-gray-400 space-y-2">
-                                <p><strong>Contenu du document:</strong></p>
-                                <p>• Réservation d'hôtel confirmée</p>
-                                <p>• Billets d'avion</p>
-                                <p>• Planning de congés équipe</p>
-                                <p>• Accord du chef d'équipe</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Actions -->
-                <div class="flex items-center justify-end space-x-3 p-6 border-t border-gray-200 dark:border-gray-700">
-                    <button class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors" onclick="closeModal('detailsModal')">
-                        Fermer
-                    </button>
-                    <button class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors" onclick="closeModal('detailsModal'); showConfirmModal('reject', currentRequestId)">
-                        <i class="fas fa-times mr-2"></i>Refuser
-                    </button>
-                    <button class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors" onclick="closeModal('detailsModal'); showConfirmModal('approve', currentRequestId)">
-                        <i class="fas fa-check mr-2"></i>Approuver
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // Fonction pour ouvrir le modal de déconnexion
-        function openLogoutModal() {
-            const modal = document.getElementById('logoutConfirmModal');
-            modal.classList.remove('hidden');
-            // Animation d'ouverture
-            setTimeout(() => {
-                modal.querySelector('.modal').style.opacity = '1';
-                modal.querySelector('.modal').style.transform = 'scale(1)';
-            }, 10);
-        }
-
-        // Fonction pour fermer le modal de déconnexion
-        function closeLogoutModal() {
-            const modal = document.getElementById('logoutConfirmModal');
-            modal.querySelector('.modal').style.opacity = '0';
-            modal.querySelector('.modal').style.transform = 'scale(0.95)';
-            setTimeout(() => {
-                modal.classList.add('hidden');
-            }, 200);
-        }
-
-        // Fonction pour afficher le toast de déconnexion
-        function showLogoutToast() {
-            const toast = document.getElementById('logoutToast');
-            toast.classList.remove('translate-x-full');
-            toast.classList.add('translate-x-0');
-            
-            // Masquer automatiquement après 3 secondes
-            setTimeout(() => {
-                toast.classList.remove('translate-x-0');
-                toast.classList.add('translate-x-full');
-            }, 3000);
-        }
-
-        // Fonction d'exécution de la déconnexion
-        function executeLogout() {
-            // Fermer le modal
-            closeLogoutModal();
-            
-            // Afficher le toast
-            setTimeout(() => {
-                showLogoutToast();
-            }, 300);
-            
-            // Rediriger vers la page d'accueil après 2 secondes
-            setTimeout(() => {
-                window.location.href = '../index.html';
-            }, 2000);
-        }
-
-        // Event listener pour le bouton de déconnexion
-        document.getElementById('logoutBtn').addEventListener('click', function(e) {
-            e.preventDefault();
-            openLogoutModal();
-        });
-
-        // Fermer le modal en appuyant sur Échap
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                closeLogoutModal();
-            }
-        });
-
-        // Initialisation des styles du modal
-        document.addEventListener('DOMContentLoaded', function() {
-            const modal = document.getElementById('logoutConfirmModal').querySelector('.modal');
-            modal.style.opacity = '0';
-            modal.style.transform = 'scale(0.95)';
-            modal.style.transition = 'all 0.2s ease-out';
         });
     </script>
     <script src="assets/javascript/config.js"></script>

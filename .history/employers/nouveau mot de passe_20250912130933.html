@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graxel Technologies - Nouveau Mot de Passe</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+    <link rel="stylesheet" href="./assets/css/style.css">
+</head>
+<body>
+    <!-- Loader -->
+    <div class="loader-container" id="loader">
+        <div class="loader-spinner"></div>
+        <div class="loader-text">Préparation de votre nouveau mot de passe...</div>
+        <div class="loader-progress">
+            <div class="loader-progress-bar"></div>
+        </div>
+        <div class="loader-subtitle">Sécurisation de votre compte en cours...</div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        <div class="login-container">
+            <button class="theme-toggle" id="themeToggle" aria-label="Changer de thème">
+                <i class="fas fa-moon"></i>
+            </button>
+
+            <!-- Bouton retour -->
+            <button class="back-btn" id="backBtn" aria-label="Retour à la connexion">
+                <i class="fas fa-arrow-left"></i>
+                <span>Retour</span>
+            </button>
+
+            <div class="logo-container">
+                <img src="./assets/images/logo.png" alt="Logo Graxel Technologie" />
+            </div>
+            
+            <div class="password-reset-header">
+                <div class="reset-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h1 class="title">Nouveau Mot de Passe</h1>
+                <p class="subtitle">Créez un nouveau mot de passe sécurisé pour votre compte Graxel</p>
+            </div>
+
+            <form id="newPasswordForm">
+                <div class="form-group">
+                    <label for="newPassword" class="form-label">
+                        <i class="fas fa-lock"></i>
+                        Nouveau mot de passe
+                    </label>
+                    <div class="input-wrapper">
+                        <input 
+                            type="password" 
+                            id="newPassword" 
+                            class="form-input" 
+                            placeholder="Votre nouveau mot de passe"
+                            required
+                        >
+                        <i class="fas fa-key input-icon"></i>
+                        <button type="button" class="password-toggle" id="newPasswordToggle" aria-label="Afficher/masquer le mot de passe">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                    <div class="password-strength" id="passwordStrength">
+                        <div class="strength-bar">
+                            <div class="strength-fill" id="strengthFill"></div>
+                        </div>
+                        <p class="strength-text" id="strengthText">Saisissez un mot de passe</p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword" class="form-label">
+                        <i class="fas fa-lock"></i>
+                        Confirmer le mot de passe
+                    </label>
+                    <div class="input-wrapper">
+                        <input 
+                            type="password" 
+                            id="confirmPassword" 
+                            class="form-input" 
+                            placeholder="Confirmez votre nouveau mot de passe"
+                            required
+                        >
+                        <i class="fas fa-check-double input-icon"></i>
+                        <button type="button" class="password-toggle" id="confirmPasswordToggle" aria-label="Afficher/masquer le mot de passe">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                    <div class="password-match" id="passwordMatch"></div>
+                </div>
+
+                <!-- Critères de sécurité -->
+                <div class="security-requirements">
+                    <h3 class="requirements-title">
+                        <i class="fas fa-check-circle"></i>
+                        Critères de sécurité
+                    </h3>
+                    <ul class="requirements-list">
+                        <li class="requirement" id="lengthReq">
+                            <i class="fas fa-circle requirement-icon"></i>
+                            Au moins 8 caractères
+                        </li>
+                        <li class="requirement" id="uppercaseReq">
+                            <i class="fas fa-circle requirement-icon"></i>
+                            Une lettre majuscule
+                        </li>
+                        <li class="requirement" id="lowercaseReq">
+                            <i class="fas fa-circle requirement-icon"></i>
+                            Une lettre minuscule
+                        </li>
+                        <li class="requirement" id="numberReq">
+                            <i class="fas fa-circle requirement-icon"></i>
+                            Un chiffre
+                        </li>
+                    </ul>
+                </div>
+
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    <span class="btn-text">Mettre à jour le mot de passe</span>
+                    <i class="fas fa-shield-alt submit-icon"></i>
+                    <div class="btn-loader" style="display: none;">
+                        <i class="fas fa-spinner fa-spin"></i>
+                    </div>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+    <script>
+        // Initialisation de Notyf
+        const notyf = new Notyf({
+            duration: 4000,
+            position: {
+                x: 'left',
+                y: 'top',
+            },
+            types: [
+                {
+                    type: 'success',
+                    background: '#10B981',
+                    icon: {
+                        className: 'fas fa-check-circle',
+                        tagName: 'i',
+                        color: 'white'
+                    }
+                },
+                {
+                    type: 'error',
+                    background: '#EF4444',
+                    icon: {
+                        className: 'fas fa-exclamation-circle',
+                        tagName: 'i',
+                        color: 'white'
+                    }
+                },
+                {
+                    type: 'warning',
+                    background: '#F59E0B',
+                    icon: {
+                        className: 'fas fa-exclamation-triangle',
+                        tagName: 'i',
+                        color: 'white'
+                    }
+                }
+            ]
+        });
+
+        // Gestion du loader
+        window.addEventListener('load', function() {
+            const loader = document.getElementById('loader');
+            const mainContent = document.getElementById('mainContent');
+            
+            setTimeout(() => {
+                loader.classList.add('hide');
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                    mainContent.classList.add('show');
+                }, 500);
+            }, 2500);
+        });
+
+        // Gestion du thème
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        
+        let currentTheme = 'dark';
+        
+        themeToggle.addEventListener('click', () => {
+            if (currentTheme === 'light') {
+                body.removeAttribute('data-theme');
+                themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                currentTheme = 'dark';
+            } else {
+                body.setAttribute('data-theme', 'light');
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                currentTheme = 'light';
+            }
+        });
+
+        // Bouton retour
+        const backBtn = document.getElementById('backBtn');
+        backBtn.addEventListener('click', () => {
+            window.history.back();
+        });
+
+        // Gestion des mots de passe
+        const passwordToggles = document.querySelectorAll('.password-toggle');
+        passwordToggles.forEach(toggle => {
+            toggle.addEventListener('click', () => {
+                const input = toggle.parentElement.querySelector('input');
+                const icon = toggle.querySelector('i');
+                
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    icon.className = 'fas fa-eye-slash';
+                } else {
+                    input.type = 'password';
+                    icon.className = 'fas fa-eye';
+                }
+            });
+        });
+
+        // Éléments pour la validation du mot de passe
+        const newPasswordInput = document.getElementById('newPassword');
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+        const strengthFill = document.getElementById('strengthFill');
+        const strengthText = document.getElementById('strengthText');
+        const passwordMatch = document.getElementById('passwordMatch');
+
+        // Critères de sécurité
+        const requirements = {
+            length: document.getElementById('lengthReq'),
+            uppercase: document.getElementById('uppercaseReq'),
+            lowercase: document.getElementById('lowercaseReq'),
+            number: document.getElementById('numberReq'),
+            special: document.getElementById('specialReq')
+        };
+
+        // Fonction de validation de la force du mot de passe
+        function checkPasswordStrength(password) {
+            let score = 0;
+            const checks = {
+                length: password.length >= 8,
+                uppercase: /[A-Z]/.test(password),
+                lowercase: /[a-z]/.test(password),
+                number: /[0-9]/.test(password),
+                special: /[^A-Za-z0-9]/.test(password)
+            };
+
+            // Mise à jour des critères visuels
+            Object.keys(checks).forEach(key => {
+                const req = requirements[key];
+                const icon = req.querySelector('.requirement-icon');
+                
+                if (checks[key]) {
+                    req.classList.add('met');
+                    icon.className = 'fas fa-check-circle requirement-icon';
+                    score++;
+                } else {
+                    req.classList.remove('met');
+                    icon.className = 'fas fa-circle requirement-icon';
+                }
+            });
+
+            // Mise à jour de la barre de force
+            const percentage = (score / 5) * 100;
+            strengthFill.style.width = `${percentage}%`;
+
+            // Mise à jour du texte et de la couleur
+            if (score === 0) {
+                strengthText.textContent = 'Saisissez un mot de passe';
+                strengthFill.className = 'strength-fill';
+            } else if (score <= 2) {
+                strengthText.textContent = 'Mot de passe faible';
+                strengthFill.className = 'strength-fill weak';
+            } else if (score <= 3) {
+                strengthText.textContent = 'Mot de passe moyen';
+                strengthFill.className = 'strength-fill medium';
+            } else if (score <= 4) {
+                strengthText.textContent = 'Mot de passe fort';
+                strengthFill.className = 'strength-fill strong';
+            } else {
+                strengthText.textContent = 'Mot de passe très fort';
+                strengthFill.className = 'strength-fill very-strong';
+            }
+
+            return score === 5;
+        }
+
+        // Fonction de vérification de la correspondance des mots de passe
+        function checkPasswordMatch() {
+            const password = newPasswordInput.value;
+            const confirmPassword = confirmPasswordInput.value;
+
+            if (confirmPassword === '') {
+                passwordMatch.innerHTML = '';
+                return false;
+            }
+
+            if (password === confirmPassword) {
+                passwordMatch.innerHTML = '<i class="fas fa-check-circle"></i> Les mots de passe correspondent';
+                passwordMatch.className = 'password-match success';
+                return true;
+            } else {
+                passwordMatch.innerHTML = '<i class="fas fa-times-circle"></i> Les mots de passe ne correspondent pas';
+                passwordMatch.className = 'password-match error';
+                return false;
+            }
+        }
+
+        // Événements de validation en temps réel
+        newPasswordInput.addEventListener('input', () => {
+            checkPasswordStrength(newPasswordInput.value);
+            if (confirmPasswordInput.value) {
+                checkPasswordMatch();
+            }
+        });
+
+        confirmPasswordInput.addEventListener('input', checkPasswordMatch);
+
+        // Soumission du formulaire
+        const newPasswordForm = document.getElementById('newPasswordForm');
+        const submitBtn = document.getElementById('submitBtn');
+
+        newPasswordForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const password = newPasswordInput.value;
+            const confirmPassword = confirmPasswordInput.value;
+            const btnText = submitBtn.querySelector('.btn-text');
+            const submitIcon = submitBtn.querySelector('.submit-icon');
+            const btnLoader = submitBtn.querySelector('.btn-loader');
+            
+            // Validation finale
+            if (!password) {
+                notyf.error('Veuillez saisir un nouveau mot de passe');
+                return;
+            }
+            
+            if (!confirmPassword) {
+                notyf.error('Veuillez confirmer votre mot de passe');
+                return;
+            }
+            
+            if (!checkPasswordStrength(password)) {
+                notyf.error('Le mot de passe ne respecte pas tous les critères de sécurité');
+                return;
+            }
+            
+            if (!checkPasswordMatch()) {
+                notyf.error('Les mots de passe ne correspondent pas');
+                return;
+            }
+            
+            // Affichage du loader
+            submitBtn.disabled = true;
+            btnText.style.display = 'none';
+            submitIcon.style.display = 'none';
+            btnLoader.style.display = 'inline-block';
+            
+            // Simulation de mise à jour du mot de passe
+            setTimeout(() => {
+                notyf.success('Votre mot de passe a été mis à jour avec succès !');
+                
+                // Redirection vers la page de connexion après succès
+                setTimeout(() => {
+                    window.location.href = './index.html'; // ou votre page de connexion
+                }, 2000);
+                
+            }, 2000);
+        });
+
+        // Animations au focus
+        const inputs = document.querySelectorAll('.form-input');
+        inputs.forEach(input => {
+            input.addEventListener('focus', () => {
+                input.style.transform = 'translateY(-2px)';
+            });
+            
+            input.addEventListener('blur', () => {
+                input.style.transform = '';
+            });
+        });
+
+        // Animation d'apparition progressive
+        const animateElements = document.querySelectorAll('.form-group, .security-requirements, .submit-btn');
+        animateElements.forEach((el, index) => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            
+            setTimeout(() => {
+                el.style.transition = 'all 0.6s ease';
+                el.style.opacity = '1';
+                el.style.transform = 'translateY(0)';
+            }, 3000 + (index * 200));
+        });
+    </script>
+
+    <style>
+        /* Styles pour le bouton retour */
+        .back-btn {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--text-primary, white);
+            padding: 0.75rem 1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            backdrop-filter: blur(10px);
+        }
+        
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        /* Header de réinitialisation */
+        .password-reset-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .reset-icon {
+            font-size: 4rem;
+            color: var(--primary-color, #3B82F6);
+            margin-bottom: 1rem;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        /* Indicateur de force du mot de passe */
+        .password-strength {
+            margin-top: 0.5rem;
+        }
+        
+        .strength-bar {
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+        }
+        
+        .strength-fill {
+            height: 100%;
+            width: 0%;
+            transition: all 0.3s ease;
+            border-radius: 2px;
+            background: #6B7280;
+        }
+        
+        .strength-fill.weak {
+            background: linear-gradient(90deg, #EF4444, #F87171);
+        }
+        
+        .strength-fill.medium {
+            background: linear-gradient(90deg, #F59E0B, #FBBF24);
+        }
+        
+        .strength-fill.strong {
+            background: linear-gradient(90deg, #3B82F6, #60A5FA);
+        }
+        
+        .strength-fill.very-strong {
+            background: linear-gradient(90deg, #10B981, #34D399);
+        }
+        
+        .strength-text {
+            font-size: 0.75rem;
+            color: var(--text-secondary, #9CA3AF);
+            margin: 0;
+        }
+        
+        /* Indicateur de correspondance des mots de passe */
+        .password-match {
+            margin-top: 0.5rem;
+            font-size: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        
+        .password-match.success {
+            color: #10B981;
+        }
+        
+        .password-match.error {
+            color: #EF4444;
+        }
+        
+        /* Critères de sécurité */
+        .security-requirements {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+        }
+        
+        .requirements-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary, white);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .requirements-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            gap: 0.75rem;
+        }
+        
+        .requirement {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.875rem;
+            color: var(--text-secondary, #9CA3AF);
+            transition: all 0.3s ease;
+        }
+        
+        .requirement-icon {
+            font-size: 0.75rem;
+            color: #6B7280;
+            transition: all 0.3s ease;
+        }
+        
+        .requirement.met {
+            color: var(--text-primary, white);
+        }
+        
+        .requirement.met .requirement-icon {
+            color: #10B981;
+        }
+        
+        /* Styles pour le bouton avec loader */
+        .submit-btn {
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+        }
+        
+        .btn-loader {
+            color: white;
+        }
+        
+        /* Amélioration des notifications Notyf */
+        .notyf__toast {
+            border-radius: 12px !important;
+            font-weight: 500 !important;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2) !important;
+        }
+        
+        .notyf__wrapper {
+            padding: 16px 20px !important;
+        }
+        
+        .notyf__message {
+            font-size: 14px !important;
+            line-height: 1.4 !important;
+        }
+        
+        /* Animation pour les éléments du formulaire */
+        .form-group, .security-requirements, .submit-btn {
+            transition: all 0.6s ease;
+        }
+        
+        /* Responsive */
+        @media (max-width: 640px) {
+            .back-btn {
+                top: 1rem;
+                left: 1rem;
+                padding: 0.5rem 0.75rem;
+                font-size: 0.8rem;
+            }
+            
+            .reset-icon {
+                font-size: 3rem;
+            }
+            
+            .security-requirements {
+                padding: 1rem;
+            }
+            
+            .requirements-list {
+                gap: 0.5rem;
+            }
+        }
+        
+        /* Thème clair */
+        [data-theme="light"] .back-btn {
+            background: rgba(0, 0, 0, 0.05);
+            border-color: rgba(0, 0, 0, 0.1);
+            color: var(--text-primary);
+        }
+        
+        [data-theme="light"] .back-btn:hover {
+            background: rgba(0, 0, 0, 0.1);
+        }
+        
+        [data-theme="light"] .security-requirements {
+            background: rgba(0, 0, 0, 0.02);
+            border-color: rgba(0, 0, 0, 0.05);
+        }
+        
+        [data-theme="light"] .strength-bar {
+            background: rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</body>
+</html>

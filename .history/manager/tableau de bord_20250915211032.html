@@ -423,9 +423,13 @@
                         <i class="fas fa-users w-5 h-5 text-lg"></i>
                         <span>Demandes d'équipe</span>
                     </a>
-                    <a href="calendrier.html" class="nav-item flex items-center space-x-4 px-4 py-4 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-xl hover-lift transition-all duration-300 click-scale">
+                    <a href="calendrier-equipe.html" class="nav-item flex items-center space-x-4 px-4 py-4 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-xl hover-lift transition-all duration-300 click-scale">
                         <i class="fas fa-calendar-alt w-5 h-5 text-lg"></i>
                         <span>Calendrier équipe</span>
+                    </a>
+                    <a href="alertes.html" class="nav-item flex items-center space-x-4 px-4 py-4 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-xl hover-lift transition-all duration-300 click-scale">
+                        <i class="fas fa-exclamation-triangle w-5 h-5 text-lg"></i>
+                        <span>Alertes</span>
                     </a>
                     <a href="profile.html" class="nav-item flex items-center space-x-4 px-4 py-4 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-xl hover-lift transition-all duration-300 click-scale">
                         <i class="fas fa-user w-5 h-5 text-lg"></i>
@@ -804,13 +808,13 @@
                             <div class="flex items-center space-x-2 mt-4 md:mt-0" style="flex-shrink: 0; white-space: nowrap; gap: 0.75rem;">
                                 <span class="status-badge px-4 py-2 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300 text-xs font-semibold rounded-full">En attente</span>
                                 <button class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors" onclick="showConfirmModal('approve', 1)">
-                                    <i class="fas fa-check mr-2"></i>
+                                    <i class="fas fa-check mr-2"></i>Approuver
                                 </button>
                                 <button class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors" onclick="showConfirmModal('reject', 1)">
-                                    <i class="fas fa-times mr-2"></i>
+                                    <i class="fas fa-times mr-2"></i>Refuser
                                 </button>
                                 <button class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors" onclick="showDetailsModal(1)">
-                                    <i class="fas fa-eye mr-2"></i>
+                                    <i class="fas fa-eye mr-2"></i>Détails
                                 </button>
                             </div>
                         </div>
@@ -839,7 +843,7 @@
                                     <i class="fas fa-times mr-2"></i>
                                 </button>
                                 <button class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors" onclick="showDetailsModal(2)">
-                                    <i class="fas fa-eye mr-2"></i>
+                                    <i class="fas fa-eye mr-2"></i>voir
                                 </button>
                             </div>
                         </div>
@@ -847,6 +851,52 @@
                 </div>
             </div>
         </div>
+
+        <!-- Footer (inchangé) -->
+        <footer class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg border-t border-gray-200/50 dark:border-gray-700/50 p-6 mt-0 w-full">
+            <div class="max-w-full mx-0 px-4 md:px-6">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                    <div class="col-span-1 md:col-span-2">
+                        <div class="flex items-center space-x-4 mb-4">
+                            <div class="w-12 h-12 rounded-xl flex items-center justify-center shadow-lg">
+                                <img src="assets/images/logo.png" alt="Logo Graxel Tech" class="w-full h-full object-contain rounded-xl" />
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-900 dark:text-white">Graxel Tech</h3>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">Gestion des congés pour les responsables</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">
+                            Solution dédiée aux chefs de département pour une gestion optimale des congés et des ressources humaines.
+                        </p>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-gray-900 dark:text-white mb-4">Liens rapides</h4>
+                        <ul class="space-y-2 text-sm">
+                            <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Tableau de bord</a></li>
+                            <li><a href="demandes-equipe.html" class="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Demandes d'équipe</a></li>
+                            <li><a href="calendrier-equipe.html" class="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Calendrier équipe</a></li>
+                            <li><a href="alertes.html" class="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Alertes</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-gray-900 dark:text-white mb-4">Support</h4>
+                        <ul class="space-y-2 text-sm">
+                            <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Centre d'aide</a></li>
+                            <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Contact RH</a></li>
+                            <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">FAQ</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="border-t border-gray-200 dark:border-gray-700 mt-8 pt-6">
+                    <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+                        <p class="text-sm text-gray-600 dark:text-gray-400">
+                            © 2025 Graxel Tech. Tous droits réservés.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </footer>
     </div>
 
             <!-- Footer -->
@@ -1392,91 +1442,6 @@
                 <div>
                     <p class="font-semibold text-gray-900 dark:text-white">Déconnexion réussie</p>
                     <p class="text-sm text-gray-600 dark:text-gray-400">Vous allez être redirigé...</p>
-                </div>
-            </div>
-        </div>
-    </div>
-  <!-- Modal de détails de la demande -->
-    <div id="detailsModal" class="fixed inset-0 z-50 hidden">
-        <div class="backdrop absolute inset-0 bg-black bg-opacity-50" onclick="closeModal('detailsModal')"></div>
-        <div class="modal relative z-10 flex items-center justify-center min-h-screen p-4">
-            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl max-w-2xl w-full max-h-screen overflow-hidden">
-                <!-- Header -->
-                <div class="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
-                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Détails de la demande</h3>
-                    <button class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300" onclick="closeModal('detailsModal')">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-                
-                <!-- Content -->
-                <div class="p-6 space-y-6 max-h-96 overflow-y-auto">
-                    <div class="flex items-center space-x-4">
-                        <div id="detailsAvatar" class="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl flex items-center justify-center">
-                            <i class="fas fa-user text-white text-xl"></i>
-                        </div>
-                        <div>
-                            <h4 id="detailsName" class="text-lg font-semibold text-gray-900 dark:text-white">Jean Martin</h4>
-                            <p id="detailsType" class="text-sm text-gray-500 dark:text-gray-400">Congés payés</p>
-                        </div>
-                    </div>
-                    
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="space-y-2">
-                            <label class="text-sm font-medium text-gray-600 dark:text-gray-400">Date de début</label>
-                            <p id="detailsStartDate" class="text-gray-900 dark:text-white">2025-09-15</p>
-                        </div>
-                        <div class="space-y-2">
-                            <label class="text-sm font-medium text-gray-600 dark:text-gray-400">Date de fin</label>
-                            <p id="detailsEndDate" class="text-gray-900 dark:text-white">2025-09-20</p>
-                        </div>
-                        <div class="space-y-2">
-                            <label class="text-sm font-medium text-gray-600 dark:text-gray-400">Durée</label>
-                            <p id="detailsDuration" class="text-gray-900 dark:text-white">5 jours</p>
-                        </div>
-                        <div class="space-y-2">
-                            <label class="text-sm font-medium text-gray-600 dark:text-gray-400">Statut</label>
-                            <p id="detailsStatus" class="text-yellow-600 dark:text-yellow-400">En attente</p>
-                        </div>
-                    </div>
-                    
-                    <div class="space-y-2">
-                        <label class="text-sm font-medium text-gray-600 dark:text-gray-400">Motif</label>
-                        <p id="detailsReason" class="text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">Congés pour vacances en famille. Voyage prévu depuis plusieurs mois.</p>
-                    </div>
-                    
-                    <div class="space-y-2">
-                        <label class="text-sm font-medium text-gray-600 dark:text-gray-400">Justificatif (PDF)</label>
-                        <div class="pdf-viewer bg-gray-50 dark:bg-gray-700 p-4 rounded-lg border">
-                            <div class="flex items-center space-x-3 mb-3">
-                                <i class="fas fa-file-pdf text-red-500 text-xl"></i>
-                                <span id="pdfName" class="text-gray-900 dark:text-white font-medium">justificatif_conges.pdf</span>
-                                <button class="text-blue-500 hover:text-blue-700 text-sm" onclick="viewPDF()">
-                                    <i class="fas fa-external-link-alt mr-1"></i>Ouvrir
-                                </button>
-                            </div>
-                            <div class="text-sm text-gray-600 dark:text-gray-400 space-y-2">
-                                <p><strong>Contenu du document:</strong></p>
-                                <p>• Réservation d'hôtel confirmée</p>
-                                <p>• Billets d'avion</p>
-                                <p>• Planning de congés équipe</p>
-                                <p>• Accord du chef d'équipe</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Actions -->
-                <div class="flex items-center justify-end space-x-3 p-6 border-t border-gray-200 dark:border-gray-700">
-                    <button class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors" onclick="closeModal('detailsModal')">
-                        Fermer
-                    </button>
-                    <button class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors" onclick="closeModal('detailsModal'); showConfirmModal('reject', currentRequestId)">
-                        <i class="fas fa-times mr-2"></i>Refuser
-                    </button>
-                    <button class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors" onclick="closeModal('detailsModal'); showConfirmModal('approve', currentRequestId)">
-                        <i class="fas fa-check mr-2"></i>Approuver
-                    </button>
                 </div>
             </div>
         </div>
