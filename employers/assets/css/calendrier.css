@@ -698,3 +698,24 @@ html.dark #notifications-dropdown .border-t {
     background: #111827 !important;
     border-color: #374151 !important;
 }
+
+
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            
+            .sidebar {
+                display: none !important;
+            }
+            
+            body {
+                background: white !important;
+            }
+            
+            .calendar-day {
+                print-color-adjust: exact;
+                -webkit-print-color-adjust: exact;
+            }
+        }
+    
