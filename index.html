@@ -5,14 +5,97 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Graxel Technologies - Connexion</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
- <link rel="stylesheet" href="./employers/assets/css/index.css">
+    <link rel="stylesheet" href="./Gestion de congés Graxel Technologie/assets/css/index.css">
+    <link rel="icon" type="image/png" href="./Gestion de congés Graxel Technologie/assets/images/logo.png">
+    <style>
+        /* Styles pour les mini popups toast */
+        .custom-toast {
+            position: fixed;
+            top: 50%;
+            right: -400px;
+            transform: translateY(-50%);
+            min-width: 320px;
+            max-width: 400px;
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            z-index: 10000;
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .custom-toast.show {
+            right: 50%;
+            transform: translate(50%, -50%);
+        }
+
+        .custom-toast.success {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .custom-toast.error {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+            color: white;
+        }
+
+        .custom-toast-icon {
+            font-size: 28px;
+            flex-shrink: 0;
+        }
+
+        .custom-toast-content {
+            flex: 1;
+        }
+
+        .custom-toast-title {
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+
+        .custom-toast-message {
+            font-size: 14px;
+            opacity: 0.95;
+        }
+
+        .custom-toast-close {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .custom-toast-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(90deg);
+        }
+
+        @media (max-width: 768px) {
+            .custom-toast {
+                min-width: 280px;
+                max-width: 90%;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- Loader amélioré et centré -->
     <div class="loader-container" id="loader">
         <div class="loader-content">
             <div class="loader-logo-container">
-                <img src="./employers/assets/images/logo.png" alt="Graxel Logo" class="loader-logo">
+                <img src="./Gestion de congés Graxel Technologie/assets/images/logo.png" alt="Graxel Logo" class="loader-logo">
             </div>
             <div class="loader-spinner"></div>
             <div class="loader-text">Chargement en cours</div>
@@ -25,14 +108,6 @@
                 Préparation de votre espace...
             </div>
         </div>
-    </div>
-
-    <!-- Toast Notification -->
-    <div class="toast" id="toast">
-        <div class="toast-icon">
-            <i class="fas fa-check-circle"></i>
-        </div>
-        <div class="toast-message" id="toastMessage"></div>
     </div>
 
     <!-- Popup Mot de passe oublié -->
@@ -91,7 +166,7 @@
 
                 <div class="logo-section">
                     <div class="logo">
-                        <img src="./employers/assets/images/logo.png" alt="Logo Graxel Technologie" style="width: 150%; height: 150%; object-fit: contain;">
+                        <img src="./Gestion de congés Graxel Technologie/assets/images/logo.png" alt="Logo Graxel Technologie" style="width: 150%; height: 150%; object-fit: contain;">
                     </div>
                     <h1 class="company-name">Graxel Technologies</h1>
                     <p class="company-slogan">Gestion des Congés - Connectez-vous à votre espace</p>
@@ -155,6 +230,7 @@
             </div>
         </div>
     </div>
-<script src="./employers/assets/javascript/index.js"></script>
+
+    <script src="./Gestion de congés Graxel Technologie/assets/javascript/index.js"></script>
 </body>
 </html>
