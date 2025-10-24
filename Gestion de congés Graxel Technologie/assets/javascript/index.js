@@ -3,8 +3,8 @@
         const users = [
             // Administrateurs
             {
-                email: "admin@graxel.com",
-                password: "admin123",
+                email: "grellionelmubaghu@gmail.com",
+                password: "Billynho1721@",
                 role: "admin",
                 name: "Administrateur Principal"
             },
@@ -17,8 +17,8 @@
             
             // Managers (Chefs de département)
             {
-                email: "manager.rh@graxel.com",
-                password: "manager123",
+                email: "grellionelmubaghu+1@gmail.com",
+                password: "Billynho1721@",
                 role: "manager",
                 name: "Manager RH"
             },
@@ -37,8 +37,8 @@
             
             // Employés
             {
-                email: "employe1@graxel.com",
-                password: "employe123",
+                email: "grellionelmubaghu+2@gmail.com",
+                password: "Billynho1721@",
                 role: "employee",
                 name: "Jean Dupont"
             },
