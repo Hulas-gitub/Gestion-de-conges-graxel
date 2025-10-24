@@ -1,5 +1,6 @@
-📧 Email: admin@graxel.com
-🔐 Mot de passe: admin123
+📧  email: "grellionelmubaghu@gmail.com",
+  password: "Billynho1721@"
+🔐 
 ➡️ Page: dashboard-admin.html
 
 📧 Email: admin.system@graxel.com

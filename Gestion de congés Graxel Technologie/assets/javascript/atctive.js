@@ -1,4 +1,4 @@
-  
+ 
         // Initialisation de Notyf
         const notyf = new Notyf({
             duration: 4000,
@@ -21,6 +21,7 @@
                 }
             ]
         });
+
         // Gestion du loader
         window.addEventListener('load', function() {
             const loader = document.getElementById('loader');
@@ -35,6 +36,7 @@
                 }, 500);
             }, 2500);
         });
+
         // Animation des éléments du formulaire
         function animateFormElements() {
             const elements = document.querySelectorAll('.form-group, .security-requirements, .submit-btn');
@@ -49,6 +51,7 @@
                 }, index * 150);
             });
         }
+
         // Gestion du thème
         const themeToggle = document.getElementById('themeToggle');
         const body = document.body;
@@ -65,10 +68,8 @@
                 currentTheme = 'light';
             }
         });
-        // Bouton retour
-        document.getElementById('backBtn').addEventListener('click', () => {
-            window.location.href = '../index.html';
-        });
+      
+
         // Gestion des boutons de visibilité des mots de passe
         const passwordToggles = document.querySelectorAll('.password-toggle');
         passwordToggles.forEach(toggle => {
@@ -85,21 +86,23 @@
                 }
             });
         });
+
         // Éléments pour la validation du mot de passe
-        const newPasswordInput = document.getElementById('newPassword');
+        const passwordInput = document.getElementById('password');
         const confirmPasswordInput = document.getElementById('confirmPassword');
         const strengthFill = document.getElementById('strengthFill');
         const strengthText = document.getElementById('strengthText');
         const passwordMatch = document.getElementById('passwordMatch');
+
         // Critères de sécurité
         const requirements = {
             length: document.getElementById('lengthReq'),
             uppercase: document.getElementById('uppercaseReq'),
             lowercase: document.getElementById('lowercaseReq'),
-            number: document.getElementById('numberReq'),
-            special: document.getElementById('specialReq')
+            number: document.getElementById('numberReq')
         };
-        // Fonction de validation de la force du mot de passe avec niveaux détaillés
+
+        // Fonction de validation de la force du mot de passe
         function checkPasswordStrength(password) {
             let score = 0;
             const checks = {
@@ -109,10 +112,12 @@
                 number: /[0-9]/.test(password),
                 special: /[^A-Za-z0-9]/.test(password)
             };
+
             // Bonus pour longueur supplémentaire
             let lengthBonus = 0;
             if (password.length >= 12) lengthBonus = 1;
             if (password.length >= 16) lengthBonus = 2;
+
             // Mise à jour des critères visuels
             Object.keys(checks).forEach(key => {
                 const req = requirements[key];
@@ -129,12 +134,14 @@
                     }
                 }
             });
+
             // Calcul du score total avec bonus
             const totalScore = score + lengthBonus;
             let level = 'none';
             let percentage = 0;
             let icon = 'fas fa-info-circle';
             let message = 'Saisissez un mot de passe';
+
             // Détermination du niveau de solidité
             if (password.length === 0) {
                 level = 'none';
@@ -172,11 +179,13 @@
                 icon = 'fas fa-crown';
                 message = 'Excellent - Sécurité maximale !';
             }
+
             // Mise à jour de la barre et du texte
             strengthFill.style.width = `${percentage}%`;
             strengthFill.className = `strength-fill ${level}`;
             strengthText.className = `strength-text ${level}`;
             strengthText.innerHTML = `<i class="${icon}"></i> ${message}`;
+
             // Animation de la barre
             strengthFill.style.transform = 'scaleX(0)';
             setTimeout(() => {
@@ -184,17 +193,21 @@
                 strengthFill.style.transformOrigin = 'left';
                 strengthFill.style.transition = 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
             }, 50);
-            return score >= 4; // Minimum "bon" pour être accepté
+
+            return score >= 4;
         }
+
         // Fonction de vérification de la correspondance des mots de passe
         function checkPasswordMatch() {
-            const password = newPasswordInput.value;
+            const password = passwordInput.value;
             const confirmPassword = confirmPasswordInput.value;
+
             if (confirmPassword === '') {
                 passwordMatch.innerHTML = '';
                 passwordMatch.className = 'password-match';
                 return false;
             }
+
             if (password === confirmPassword) {
                 passwordMatch.innerHTML = '<i class="fas fa-check-circle"></i> Les mots de passe correspondent parfaitement';
                 passwordMatch.className = 'password-match success';
@@ -205,55 +218,62 @@
                 return false;
             }
         }
+
         // Validation en temps réel
-        newPasswordInput.addEventListener('input', (e) => {
+        passwordInput.addEventListener('input', (e) => {
             checkPasswordStrength(e.target.value);
             if (confirmPasswordInput.value) {
                 checkPasswordMatch();
             }
 
-            // Animation du champ
             e.target.style.transform = 'scale(1.02)';
             setTimeout(() => {
                 e.target.style.transform = 'scale(1)';
             }, 150);
         });
+
         confirmPasswordInput.addEventListener('input', (e) => {
             checkPasswordMatch();
 
-            // Animation du champ
             e.target.style.transform = 'scale(1.02)';
             setTimeout(() => {
                 e.target.style.transform = 'scale(1)';
             }, 150);
         });
+
         // Gestion des modales
         const confirmModal = document.getElementById('confirmModal');
         const successModal = document.getElementById('successModal');
         const cancelBtn = document.getElementById('cancelBtn');
         const confirmBtn = document.getElementById('confirmBtn');
         const okBtn = document.getElementById('okBtn');
+
         function showModal(modal) {
             modal.classList.add('show');
             document.body.style.overflow = 'hidden';
         }
+
         function hideModal(modal) {
             modal.classList.remove('show');
             document.body.style.overflow = '';
         }
+
         // Événements des modales
         cancelBtn.addEventListener('click', () => {
             hideModal(confirmModal);
-            notyf.open({ type: 'warning', message: 'Modification annulée' });
+            notyf.open({ type: 'warning', message: 'Activation annulée' });
         });
+
         confirmBtn.addEventListener('click', () => {
             hideModal(confirmModal);
-            processPasswordUpdate();
+            processActivation();
         });
+
         okBtn.addEventListener('click', () => {
             hideModal(successModal);
             redirectToLogin();
         });
+
         // Fermeture des modales en cliquant à l'extérieur
         [confirmModal, successModal].forEach(modal => {
             modal.addEventListener('click', (e) => {
@@ -262,19 +282,25 @@
                 }
             });
         });
-        // Traitement de la mise à jour du mot de passe
-        function processPasswordUpdate() {
+
+        // Traitement de l'activation
+        function processActivation() {
             const submitBtn = document.getElementById('submitBtn');
             const btnText = submitBtn.querySelector('.btn-text');
             const submitIcon = submitBtn.querySelector('.submit-icon');
             const btnLoader = submitBtn.querySelector('.btn-loader');
 
-            // Désactiver le bouton et afficher le loader
             submitBtn.disabled = true;
             btnText.style.display = 'none';
             submitIcon.style.display = 'none';
             btnLoader.style.display = 'inline-block';
-          
+
+            const progressMessages = [
+                'Création de votre compte...',
+                'Configuration de la sécurité...',
+                'Activation en cours...'
+            ];
+
             let messageIndex = 0;
             const progressInterval = setInterval(() => {
                 if (messageIndex < progressMessages.length) {
@@ -287,27 +313,22 @@
                 }
             }, 800);
 
-            // Simulation du traitement (3.5 secondes)
             setTimeout(() => {
                 clearInterval(progressInterval);
 
-                // Réinitialiser le bouton
                 submitBtn.disabled = false;
                 btnText.style.display = 'inline';
                 submitIcon.style.display = 'inline';
                 btnLoader.style.display = 'none';
 
-                // Afficher la modale de succès
                 showModal(successModal);
-
-                // Notification finale
-                notyf.success('Mot de passe mis à jour avec succès !');
-
+                notyf.success('Compte activé avec succès !');
+                createSuccessParticles();
             }, 3500);
         }
+
         // Redirection vers la page de connexion
         function redirectToLogin() {
-            // Animation de sortie
             document.querySelector('.login-container').style.transform = 'scale(0.95)';
             document.querySelector('.login-container').style.opacity = '0';
 
@@ -315,25 +336,25 @@
                 window.location.href = '../index.html';
             }, 500);
         }
-        // Soumission du formulaire
-        const newPasswordForm = document.getElementById('newPasswordForm');
 
-        newPasswordForm.addEventListener('submit', (e) => {
+        // Soumission du formulaire
+        const activationForm = document.getElementById('activationForm');
+
+        activationForm.addEventListener('submit', (e) => {
             e.preventDefault();
 
-            const password = newPasswordInput.value.trim();
+            const password = passwordInput.value.trim();
             const confirmPassword = confirmPasswordInput.value.trim();
 
-            // Validation finale complète
             if (!password) {
-                notyf.error('Veuillez saisir un nouveau mot de passe');
-                newPasswordInput.focus();
+                notyf.error('Veuillez saisir un mot de passe');
+                passwordInput.focus();
                 return;
             }
 
             if (password.length < 8) {
                 notyf.error('Le mot de passe doit contenir au moins 8 caractères');
-                newPasswordInput.focus();
+                passwordInput.focus();
                 return;
             }
 
@@ -345,7 +366,7 @@
 
             if (!checkPasswordStrength(password)) {
                 notyf.error('Le mot de passe ne respecte pas les critères de sécurité minimum');
-                newPasswordInput.focus();
+                passwordInput.focus();
                 return;
             }
 
@@ -355,7 +376,6 @@
                 return;
             }
 
-            // Vérifications de sécurité avancées
             const commonPasswords = [
                 'password', '123456', '12345678', 'qwerty', 'abc123',
                 'password123', 'admin', 'letmein', 'welcome', 'monkey'
@@ -363,13 +383,13 @@
 
             if (commonPasswords.includes(password.toLowerCase())) {
                 notyf.error('Ce mot de passe est trop commun. Choisissez quelque chose de plus unique.');
-                newPasswordInput.focus();
+                passwordInput.focus();
                 return;
             }
 
-            // Si tout est valide, afficher la modale de confirmation
             showModal(confirmModal);
         });
+
         // Animation au focus des champs
         const inputs = document.querySelectorAll('.form-input');
         inputs.forEach(input => {
@@ -383,9 +403,9 @@
                 e.target.style.boxShadow = '';
             });
         });
+
         // Gestion des raccourcis clavier
         document.addEventListener('keydown', (e) => {
-            // ESC pour fermer les modales
             if (e.key === 'Escape') {
                 if (confirmModal.classList.contains('show')) {
                     hideModal(confirmModal);
@@ -395,7 +415,6 @@
                 }
             }
 
-            // Enter pour confirmer dans les modales
             if (e.key === 'Enter') {
                 if (confirmModal.classList.contains('show')) {
                     confirmBtn.click();
@@ -405,7 +424,8 @@
                 }
             }
         });
-        // Effet de particules sur le succès (optionnel)
+
+        // Effet de particules sur le succès
         function createSuccessParticles() {
             const colors = ['#10B981', '#34D399', '#6EE7B7', '#A7F3D0'];
 
@@ -436,10 +456,7 @@
                 }, 2050);
             }
         }
-        // Déclencher les particules lors du succès
-        document.addEventListener('DOMContentLoaded', () => {
-            okBtn.addEventListener('click', createSuccessParticles);
-        });
+
         // Fonction utilitaire pour la validation en temps réel
         function debounce(func, wait) {
             let timeout;
@@ -452,22 +469,13 @@
                 timeout = setTimeout(later, wait);
             };
         }
+
         // Optimisation des validations avec debounce
         const debouncedPasswordCheck = debounce((password) => {
             checkPasswordStrength(password);
         }, 300);
+
         const debouncedMatchCheck = debounce(() => {
             checkPasswordMatch();
         }, 300);
-        // Application du debounce
-        newPasswordInput.addEventListener('input', (e) => {
-            debouncedPasswordCheck(e.target.value);
-            if (confirmPasswordInput.value) {
-                debouncedMatchCheck();
-            }
-        });
-        confirmPasswordInput.addEventListener('input', () => {
-            debouncedMatchCheck();
-        });
-
-        
+   
