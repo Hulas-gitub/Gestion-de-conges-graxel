@@ -192,6 +192,7 @@
                     <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Liste des Congés - Tous les Départements</h3>
                     <p class="text-sm text-gray-500 dark:text-gray-400">Vue d'ensemble des congés de l'entreprise</p>
                 </div>
+                
                 <div class="flex flex-wrap gap-2">
                     <button id="gridViewBtn" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-200 text-sm font-medium">
                         <i class="fas fa-th mr-2"></i>Grille
@@ -200,9 +201,47 @@
                         <i class="fas fa-list mr-2"></i>Liste
                     </button>
                 </div>
+                
             </div>
+            
+                <div class="flex space-x-2 overflow-x-auto pb-2">
+                    <div class="flex items-center space-x-4">
+                        <button class="tab-button active bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg px-6 py-3 font-medium rounded-xl transition-all duration-300 hover-lift click-scale" data-tab="profile">
+                            <i class="fas fa-list mr-2"></i>
+                            Tous
+                        </button>
+
+                        <!-- Bouton En attentes -->
+                        <button class="tab-button bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-6 py-3 font-medium rounded-xl transition-all duration-300 hover-lift click-scale" data-tab="en-attente">
+                            <i class="fas fa-hourglass-half mr-2"></i>
+                            En attentes
+                        </button>
+
+                        <!-- Bouton Approuvées -->
+                        <button class="tab-button bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-6 py-3 font-medium rounded-xl transition-all duration-300 hover-lift click-scale" data-tab="approuvees">
+                            <i class="fas fa-check-circle mr-2"></i>
+                            Approuvées
+                        </button>
+
+                        <!-- Bouton Réfusées -->
+                        <button class="tab-button bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-6 py-3 font-medium rounded-xl transition-all duration-300 hover-lift click-scale" data-tab="refusees">
+                            <i class="fas fa-times-circle mr-2"></i>
+                            Réfusées
+                        </button>
+                    </div>
+                    <select class="px-3 py-1 text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+                        <option>Tous les départements</option>
+                        <option>Finance</option>
+                        <option>Marketing</option>
+                        <option>Vente</option>
+                        <option>Technique & Innovation</option>
+                        <option>Communication</option>
+                        <option>RH</option>
+                    </select>
+                </div>
         </div>
         <div class="p-6">
+            
             <!-- Filtres de la Liste -->
             <div class="flex flex-col md:flex-row gap-4 mb-6">
                 <select id="departmentCalendarFilter" class="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500">

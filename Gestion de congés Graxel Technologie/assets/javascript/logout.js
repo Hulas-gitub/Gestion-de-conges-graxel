@@ -125,3 +125,11 @@ function switchTab(tabName) {
         activePane.classList.add('active');
     }
 }
+
+
+
+
+
+
+
+
