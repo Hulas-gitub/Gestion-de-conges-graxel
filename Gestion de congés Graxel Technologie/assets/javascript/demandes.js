@@ -1,82 +1,6 @@
 // =============================================
 // DONNÉES SIMULÉES
 // =============================================
-const employeesData = [
-    {
-        id: 'jean-dupont',
-        name: 'Jean Dupont',
-        email: 'j.dupont@email.com',
-        phone: '+241 07 45 23 12',
-        position: 'developer',
-        positionLabel: 'Développeur',
-        remainingLeave: 25,
-        status: 'available',
-        blocked: false,
-        photo: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face'
-    },
-    {
-        id: 'marie-martin',
-        name: 'Marie Martin',
-        email: 'm.martin@email.com',
-        phone: '+241 06 78 91 45',
-        position: 'designer',
-        positionLabel: 'Designer',
-        remainingLeave: 18,
-        status: 'on-leave',
-        blocked: false,
-        photo: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=40&h=40&fit=crop&crop=face'
-    },
-    {
-        id: 'paul-bernard',
-        name: 'Paul Bernard',
-        email: 'p.bernard@email.com',
-        phone: '+241 05 23 67 89',
-        position: 'manager',
-        positionLabel: 'Manager',
-        remainingLeave: 30,
-        status: 'available',
-        blocked: true,
-        photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=40&h=40&fit=crop&crop=face'
-    },
-    {
-        id: 'sophie-durand',
-        name: 'Sophie Durand',
-        email: 's.durand@email.com',
-        phone: '+241 07 12 34 56',
-        position: 'developer',
-        positionLabel: 'Développeur',
-        remainingLeave: 22,
-        status: 'available',
-        blocked: false,
-        photo: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=40&h=40&fit=crop&crop=face'
-    },
-    {
-        id: 'marc-petit',
-        name: 'Marc Petit',
-        email: 'm.petit@email.com',
-        phone: '+241 06 89 45 23',
-        position: 'designer',
-        positionLabel: 'Designer',
-        remainingLeave: 15,
-        status: 'on-leave',
-        blocked: false,
-        photo: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=40&h=40&fit=crop&crop=face'
-    },
-    {
-        id: 'claire-moreau',
-        name: 'Claire Moreau',
-        email: 'c.moreau@email.com',
-        phone: '+241 05 67 89 12',
-        position: 'manager',
-        positionLabel: 'Manager',
-        remainingLeave: 28,
-        status: 'available',
-        blocked: false,
-        photo: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=40&h=40&fit=crop&crop=face'
-    }
-];
-
-// Données des demandes avec statuts
 const requestsData = [
     {
         id: 1,
@@ -167,170 +91,213 @@ const requestsData = [
 // =============================================
 // VARIABLES GLOBALES
 // =============================================
-let currentFilter = 'profile';
-let currentEmployeeFilter = '';
+let currentFilter = 'all';
 let selectedRequests = new Set();
 let currentRequestId = 0;
 let currentAction = '';
-let bulkAction = '';
 let currentViewModeApproved = 'grid';
 let currentViewModeRejected = 'grid';
-let currentLeavesPage = 1;
-const leavesPerPage = 10;
 
 // =============================================
-// SYSTÈME DE TOAST NOTIFICATIONS
+// SYSTÈME DE FILTRAGE PRINCIPAL
 // =============================================
-function showToast(message, type = 'success') {
-    let toastContainer = document.getElementById('toastContainer');
-    if (!toastContainer) {
-        toastContainer = document.createElement('div');
-        toastContainer.id = 'toastContainer';
-        toastContainer.className = 'fixed top-4 right-4 z-50 space-y-2';
-        document.body.appendChild(toastContainer);
-    }
-
-    const colors = {
-        success: 'bg-green-500',
-        error: 'bg-red-500',
-        warning: 'bg-yellow-500',
-        info: 'bg-blue-500'
-    };
-
-    const icons = {
-        success: 'fa-check-circle',
-        error: 'fa-times-circle',
-        warning: 'fa-exclamation-triangle',
-        info: 'fa-info-circle'
-    };
-
-    const toast = document.createElement('div');
-    const toastId = 'toast-' + Date.now();
-    toast.id = toastId;
-    toast.className = `${colors[type] || colors.success} text-white px-6 py-4 rounded-lg shadow-2xl flex items-center space-x-3 min-w-[320px] transform transition-all duration-300 ease-in-out translate-x-[400px]`;
+function setupFilterButtons() {
+    const filterButtons = document.querySelectorAll('.filter-button');
     
-    toast.innerHTML = `
-        <i class="fas ${icons[type] || icons.success} text-xl"></i>
-        <span class="flex-1 font-medium">${message}</span>
-        <button onclick="closeToast('${toastId}')" class="text-white hover:text-gray-200 transition-colors">
-            <i class="fas fa-times"></i>
-        </button>
-    `;
-
-    toastContainer.appendChild(toast);
-
-    setTimeout(() => {
-        toast.style.transform = 'translateX(0)';
-    }, 10);
-
-    setTimeout(() => {
-        closeToast(toastId);
-    }, 4000);
-}
-
-function closeToast(toastId) {
-    const toast = document.getElementById(toastId);
-    if (toast) {
-        toast.style.transform = 'translateX(400px)';
-        toast.style.opacity = '0';
-        setTimeout(() => {
-            toast.remove();
-        }, 300);
-    }
-}
-
-// =============================================
-// GESTION DES FILTRES ET TABS
-// =============================================
-function setupTabButtons() {
-    const tabButtons = document.querySelectorAll('.tab-button');
-    
-    tabButtons.forEach(button => {
+    filterButtons.forEach(button => {
         button.addEventListener('click', function() {
-            const tab = this.getAttribute('data-tab');
-            switchTab(tab);
+            const filter = this.getAttribute('data-filter');
+            applyFilter(filter);
         });
     });
 }
 
-function switchTab(tab) {
-    currentFilter = tab;
+function applyFilter(filter) {
+    currentFilter = filter;
     
-    // Mettre à jour les boutons
-    const tabButtons = document.querySelectorAll('.tab-button');
-    tabButtons.forEach(button => {
-        if (button.getAttribute('data-tab') === tab) {
-            button.className = 'tab-button active bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg px-6 py-3 font-medium rounded-xl transition-all duration-300 hover-lift click-scale';
+    // Mettre à jour l'apparence des boutons
+    const filterButtons = document.querySelectorAll('.filter-button');
+    filterButtons.forEach(button => {
+        if (button.getAttribute('data-filter') === filter) {
+            button.className = 'filter-button active bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg px-6 py-3 font-medium rounded-xl transition-all duration-300 hover-lift click-scale';
         } else {
-            button.className = 'tab-button bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-6 py-3 font-medium rounded-xl transition-all duration-300 hover-lift click-scale';
+            button.className = 'filter-button bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-6 py-3 font-medium rounded-xl transition-all duration-300 hover-lift click-scale';
         }
     });
     
-    // Gérer l'affichage des sections
-    const pendingSection = document.getElementById('pendingSection');
-    const approvedSection = document.getElementById('approvedSection');
-    const rejectedSection = document.getElementById('rejectedSection');
-    
-    if (tab === 'profile') {
-        // Afficher toutes les sections
-        if (pendingSection) pendingSection.style.display = 'block';
-        if (approvedSection) approvedSection.style.display = 'block';
-        if (rejectedSection) rejectedSection.style.display = 'block';
-        
-        renderPendingRequests();
-        renderApprovedLeaves();
-        renderRejectedLeaves();
-    } else if (tab === 'en-attente') {
-        // Afficher uniquement les demandes en attente
-        if (pendingSection) pendingSection.style.display = 'block';
-        if (approvedSection) approvedSection.style.display = 'none';
-        if (rejectedSection) rejectedSection.style.display = 'none';
-        
-        renderPendingRequests();
-    } else if (tab === 'approuvees') {
-        // Afficher uniquement les congés approuvés
-        if (pendingSection) pendingSection.style.display = 'none';
-        if (approvedSection) approvedSection.style.display = 'block';
-        if (rejectedSection) rejectedSection.style.display = 'none';
-        
-        renderApprovedLeaves();
-    } else if (tab === 'refusees') {
-        // Afficher uniquement les congés refusés
-        if (pendingSection) pendingSection.style.display = 'none';
-        if (approvedSection) approvedSection.style.display = 'none';
-        if (rejectedSection) rejectedSection.style.display = 'block';
-        
-        renderRejectedLeaves();
-    }
+    // Afficher le contenu selon le filtre
+    renderFilteredContent();
 }
 
-// =============================================
-// RENDER PENDING REQUESTS (EN ATTENTE)
-// =============================================
-function renderPendingRequests() {
-    const pendingRequests = requestsData.filter(req => req.status === 'pending');
-    const container = document.getElementById('pendingRequestsContainer');
-    
+function renderFilteredContent() {
+    const container = document.getElementById('dynamicContent');
     if (!container) return;
-    
-    if (pendingRequests.length === 0) {
-        container.innerHTML = `
-            <div class="text-center py-12">
-                <i class="fas fa-calendar-check text-6xl text-gray-300 dark:text-gray-600 mb-4"></i>
-                <p class="text-gray-500 dark:text-gray-400">Aucune demande en attente</p>
-            </div>
-        `;
-        return;
+
+    let filteredRequests = [];
+    let title = '';
+    let subtitle = '';
+
+    switch (currentFilter) {
+        case 'all':
+            filteredRequests = requestsData;
+            title = 'Liste de toutes les demandes de congés';
+            subtitle = 'Toutes les demandes (en attente, approuvées et refusées)';
+            container.innerHTML = createPendingRequestsContent(filteredRequests, title, subtitle);
+            break;
+        case 'pending':
+            filteredRequests = requestsData.filter(req => req.status === 'pending');
+            title = 'Liste des congés en attente de traitement';
+            subtitle = 'Dernières demandes de congés en attente';
+            container.innerHTML = createPendingRequestsContent(filteredRequests, title, subtitle);
+            break;
+        case 'approved':
+            filteredRequests = requestsData.filter(req => req.status === 'approved');
+            title = 'Liste des Congés Approuvés';
+            subtitle = 'Vue d\'ensemble des congés approuvés';
+            container.innerHTML = createApprovedContent(filteredRequests, title, subtitle);
+            break;
+        case 'rejected':
+            filteredRequests = requestsData.filter(req => req.status === 'rejected');
+            title = 'Liste des Congés Refusés';
+            subtitle = 'Vue d\'ensemble des congés refusés';
+            container.innerHTML = createRejectedContent(filteredRequests, title, subtitle);
+            break;
     }
-    
-    container.innerHTML = pendingRequests.map(request => createPendingRequestCard(request)).join('');
-    
+
     // Réinitialiser la sélection
     selectedRequests.clear();
-    updateSelection();
+
+    // Réinitialiser les écouteurs d'événements
+    setTimeout(() => {
+        setupViewButtons();
+        setupLeaveClickEvents();
+    }, 100);
 }
 
-function createPendingRequestCard(request) {
+// =============================================
+// CONTENU POUR DEMANDES EN ATTENTE ET TOUTES
+// =============================================
+function createPendingRequestsContent(requests, title, subtitle) {
+    return `
+        <div class="flex items-center justify-between mb-4">
+            <div>
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">${title}</h3>
+                <p class="text-sm text-gray-500 dark:text-gray-400">${subtitle}</p>
+            </div>
+        </div>
+
+        <div id="requestsContainer" class="space-y-4">
+            ${requests.length === 0 ? `
+                <div class="text-center py-12">
+                    <i class="fas fa-calendar-check text-6xl text-gray-300 dark:text-gray-600 mb-4"></i>
+                    <p class="text-gray-500 dark:text-gray-400">Aucune demande trouvée</p>
+                </div>
+            ` : requests.map(request => createRequestCard(request)).join('')}
+        </div>
+    `;
+}
+
+// =============================================
+// CONTENU POUR CONGÉS APPROUVÉS
+// =============================================
+function createApprovedContent(requests, title, subtitle) {
+    return `
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+            <div>
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">${title}</h3>
+                <p class="text-sm text-gray-500 dark:text-gray-400">${subtitle}</p>
+            </div>
+            <div class="flex flex-wrap gap-2">
+                <button id="gridViewBtnApproved" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-200 text-sm font-medium">
+                    <i class="fas fa-th"></i> Grille
+                </button>
+                <button id="listViewBtnApproved" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600 transition-colors duration-200 text-sm font-medium">
+                    <i class="fas fa-list"></i> Liste
+                </button>
+            </div>
+        </div>
+
+        <div id="approvedLeavesContainer">
+            ${requests.length === 0 ? `
+                <div class="text-center py-12">
+                    <i class="fas fa-calendar-times text-6xl text-gray-300 dark:text-gray-600 mb-4"></i>
+                    <p class="text-gray-500 dark:text-gray-400">Aucun congé approuvé</p>
+                </div>
+            ` : renderApprovedLeavesView(requests)}
+        </div>
+    `;
+}
+
+// =============================================
+// CONTENU POUR CONGÉS REFUSÉS
+// =============================================
+function createRejectedContent(requests, title, subtitle) {
+    return `
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+            <div>
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">${title}</h3>
+                <p class="text-sm text-gray-500 dark:text-gray-400">${subtitle}</p>
+            </div>
+            <div class="flex flex-wrap gap-2">
+                <button id="gridViewBtnRejected" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-200 text-sm font-medium">
+                    <i class="fas fa-th"></i> Grille
+                </button>
+                <button id="listViewBtnRejected" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600 transition-colors duration-200 text-sm font-medium">
+                    <i class="fas fa-list"></i> Liste
+                </button>
+            </div>
+        </div>
+
+        <div id="rejectedLeavesContainer">
+            ${requests.length === 0 ? `
+                <div class="text-center py-12">
+                    <i class="fas fa-calendar-times text-6xl text-gray-300 dark:text-gray-600 mb-4"></i>
+                    <p class="text-gray-500 dark:text-gray-400">Aucun congé refusé</p>
+                </div>
+            ` : renderRejectedLeavesView(requests)}
+        </div>
+    `;
+}
+
+// =============================================
+// FONCTIONS DE RENDER POUR LES VUES GRID/LISTE
+// =============================================
+function renderApprovedLeavesView(requests) {
+    if (currentViewModeApproved === 'grid') {
+        return `
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                ${requests.map(leave => createApprovedLeaveCardGrid(leave)).join('')}
+            </div>
+        `;
+    } else {
+        return `
+            <div class="space-y-4">
+                ${requests.map(leave => createApprovedLeaveCardList(leave)).join('')}
+            </div>
+        `;
+    }
+}
+
+function renderRejectedLeavesView(requests) {
+    if (currentViewModeRejected === 'grid') {
+        return `
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                ${requests.map(leave => createRejectedLeaveCardGrid(leave)).join('')}
+            </div>
+        `;
+    } else {
+        return `
+            <div class="space-y-4">
+                ${requests.map(leave => createRejectedLeaveCardList(leave)).join('')}
+            </div>
+        `;
+    }
+}
+
+// =============================================
+// CARTES POUR LES DIFFÉRENTS TYPES
+// =============================================
+function createRequestCard(request) {
     const statusEmoji = request.status === 'pending' ? '🟡' : request.status === 'approved' ? '🟢' : '🔴';
     const statusClass = request.status === 'pending' ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300' : 
                         request.status === 'approved' ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300' :
@@ -338,11 +305,11 @@ function createPendingRequestCard(request) {
     const statusText = request.status === 'pending' ? 'En attente' : request.status === 'approved' ? 'Approuvée' : 'Refusée';
     
     const showActions = request.status === 'pending';
+    const showRevalidate = request.status === 'rejected';
     
     return `
         <div class="demand-item w-full flex flex-col md:flex-row items-start md:items-center justify-between bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4" data-id="${request.id}">
             <div class="flex items-center space-x-4 w-full md:w-auto">
-                ${showActions ? `<input type="checkbox" class="request-checkbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500" onchange="updateSelection()">` : ''}
                 <div class="w-12 h-12 bg-gradient-to-r ${request.avatar} rounded-xl flex items-center justify-center flex-shrink-0">
                     <i class="fas fa-user text-white"></i>
                 </div>
@@ -365,6 +332,11 @@ function createPendingRequestCard(request) {
                         <i class="fas fa-times"></i>
                     </button>
                 ` : ''}
+                ${showRevalidate ? `
+                    <button class="revalidate-btn px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors" onclick="revalidateRequest(${request.id})">
+                        <i class="fas fa-sync-alt mr-1"></i>Revalider
+                    </button>
+                ` : ''}
                 <button class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors" onclick="showDetailsModal(${request.id})">
                     <i class="fas fa-eye"></i>
                 </button>
@@ -373,46 +345,9 @@ function createPendingRequestCard(request) {
     `;
 }
 
-// =============================================
-// RENDER APPROVED LEAVES
-// =============================================
-function renderApprovedLeaves() {
-    const approvedRequests = requestsData.filter(req => req.status === 'approved');
-    const container = document.getElementById('approvedLeavesContainer');
-    
-    if (!container) return;
-    
-    if (approvedRequests.length === 0) {
-        container.innerHTML = `
-            <div class="text-center py-12">
-                <i class="fas fa-calendar-times text-6xl text-gray-300 dark:text-gray-600 mb-4"></i>
-                <p class="text-gray-500 dark:text-gray-400">Aucun congé approuvé</p>
-            </div>
-            
-        `;
-        return;
-    }
-    
-    if (currentViewModeApproved === 'grid') {
-        container.className = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4';
-        container.innerHTML = approvedRequests.map(leave => createApprovedLeaveCardGrid(leave)).join('');
-    } else {
-        container.className = 'space-y-4';
-        container.innerHTML = approvedRequests.map(leave => createApprovedLeaveCardList(leave)).join('');
-    }
-    
-    // Ajouter les écouteurs d'événements
-    approvedRequests.forEach(leave => {
-        const card = document.getElementById(`leave-approved-${leave.id}`);
-        if (card) {
-            card.addEventListener('click', () => showLeaveDetailsModal(leave));
-        }
-    });
-}
-
 function createApprovedLeaveCardGrid(leave) {
     return `
-        <div id="leave-approved-${leave.id}" class="bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer border-l-4 border-green-500">
+        <div id="leave-approved-${leave.id}" class="bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer border-l-4 border-green-500 leave-card" data-leave-id="${leave.id}">
             <div class="p-4">
                 <div class="flex items-center space-x-3 mb-3">
                     <div class="w-12 h-12 bg-gradient-to-r ${leave.avatar} rounded-full flex items-center justify-center">
@@ -450,7 +385,7 @@ function createApprovedLeaveCardGrid(leave) {
 
 function createApprovedLeaveCardList(leave) {
     return `
-        <div id="leave-approved-${leave.id}" class="bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer border-l-4 border-green-500">
+        <div id="leave-approved-${leave.id}" class="bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer border-l-4 border-green-500 leave-card" data-leave-id="${leave.id}">
             <div class="p-4">
                 <div class="flex items-center justify-between flex-wrap gap-4">
                     <div class="flex items-center space-x-4">
@@ -492,45 +427,9 @@ function createApprovedLeaveCardList(leave) {
     `;
 }
 
-// =============================================
-// RENDER REJECTED LEAVES
-// =============================================
-function renderRejectedLeaves() {
-    const rejectedRequests = requestsData.filter(req => req.status === 'rejected');
-    const container = document.getElementById('rejectedLeavesContainer');
-    
-    if (!container) return;
-    
-    if (rejectedRequests.length === 0) {
-        container.innerHTML = `
-            <div class="text-center py-12">
-                <i class="fas fa-calendar-times text-6xl text-gray-300 dark:text-gray-600 mb-4"></i>
-                <p class="text-gray-500 dark:text-gray-400">Aucun congé refusé</p>
-            </div>
-        `;
-        return;
-    }
-    
-    if (currentViewModeRejected === 'grid') {
-        container.className = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4';
-        container.innerHTML = rejectedRequests.map(leave => createRejectedLeaveCardGrid(leave)).join('');
-    } else {
-        container.className = 'space-y-4';
-        container.innerHTML = rejectedRequests.map(leave => createRejectedLeaveCardList(leave)).join('');
-    }
-    
-    // Ajouter les écouteurs d'événements
-    rejectedRequests.forEach(leave => {
-        const card = document.getElementById(`leave-rejected-${leave.id}`);
-        if (card) {
-            card.addEventListener('click', () => showLeaveDetailsModal(leave));
-        }
-    });
-}
-
 function createRejectedLeaveCardGrid(leave) {
     return `
-        <div id="leave-rejected-${leave.id}" class="bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer border-l-4 border-red-500">
+        <div id="leave-rejected-${leave.id}" class="bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer border-l-4 border-red-500 leave-card" data-leave-id="${leave.id}">
             <div class="p-4">
                 <div class="flex items-center space-x-3 mb-3">
                     <div class="w-12 h-12 bg-gradient-to-r ${leave.avatar} rounded-full flex items-center justify-center">
@@ -559,14 +458,11 @@ function createRejectedLeaveCardGrid(leave) {
                         <span class="px-2 py-1 text-xs rounded-full bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300">
                             Refusé
                         </span>
-                        
                     </div>
-                       <div class="flex items-center justify-between pt-2 border-t border-gray-200 dark:border-gray-700">
-          <button class="px-2 py-1 text-xs rounded-full bg-red-100 dark:bg-red-900/30 text-blue-800 dark:text-blue-300">
-                          <i class="fas fa-sync-alt"></i>
-valider la demande
+                    <div class="flex items-center justify-between pt-2">
+                        <button class="revalidate-btn px-3 py-1 text-xs bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors" onclick="event.stopPropagation(); revalidateRequest(${leave.id})">
+                            <i class="fas fa-sync-alt mr-1"></i>Revalider
                         </button>
-                               
                     </div>
                 </div>
             </div>
@@ -576,7 +472,7 @@ valider la demande
 
 function createRejectedLeaveCardList(leave) {
     return `
-        <div id="leave-rejected-${leave.id}" class="bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer border-l-4 border-red-500">
+        <div id="leave-rejected-${leave.id}" class="bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer border-l-4 border-red-500 leave-card" data-leave-id="${leave.id}">
             <div class="p-4">
                 <div class="flex items-center justify-between flex-wrap gap-4">
                     <div class="flex items-center space-x-4">
@@ -606,11 +502,15 @@ function createRejectedLeaveCardList(leave) {
                             <div class="text-gray-500 dark:text-gray-400 text-xs">Durée</div>
                             <div class="font-medium text-gray-900 dark:text-white">${leave.duration} jour(s)</div>
                         </div>
-                        <div class="text-center<span class="px-3 py-1 text-xs rounded-full bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300">
+                        <div class="text-center">
+                            <span class="px-3 py-1 text-xs rounded-full bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300">
                                 Refusé
                             </span>
                         </div>
                     </div>
+                    <button class="revalidate-btn px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors" onclick="event.stopPropagation(); revalidateRequest(${leave.id})">
+                        <i class="fas fa-sync-alt mr-1"></i>Revalider
+                    </button>
                 </div>
             </div>
         </div>
@@ -618,10 +518,138 @@ function createRejectedLeaveCardList(leave) {
 }
 
 // =============================================
+// GESTION DES BOUTONS DE VUE
+// =============================================
+function setupViewButtons() {
+    const gridBtnApproved = document.getElementById('gridViewBtnApproved');
+    const listBtnApproved = document.getElementById('listViewBtnApproved');
+    
+    if (gridBtnApproved && listBtnApproved) {
+        gridBtnApproved.onclick = function() {
+            currentViewModeApproved = 'grid';
+            updateViewButtons('gridApproved');
+            const filteredRequests = requestsData.filter(req => req.status === 'approved');
+            const container = document.getElementById('approvedLeavesContainer');
+            if (container) {
+                container.innerHTML = renderApprovedLeavesView(filteredRequests);
+                setupLeaveClickEvents();
+            }
+        };
+        
+        listBtnApproved.onclick = function() {
+            currentViewModeApproved = 'list';
+            updateViewButtons('listApproved');
+            const filteredRequests = requestsData.filter(req => req.status === 'approved');
+            const container = document.getElementById('approvedLeavesContainer');
+            if (container) {
+                container.innerHTML = renderApprovedLeavesView(filteredRequests);
+                setupLeaveClickEvents();
+            }
+        };
+        
+        updateViewButtons(currentViewModeApproved === 'grid' ? 'gridApproved' : 'listApproved');
+    }
+
+    const gridBtnRejected = document.getElementById('gridViewBtnRejected');
+    const listBtnRejected = document.getElementById('listViewBtnRejected');
+    
+    if (gridBtnRejected && listBtnRejected) {
+        gridBtnRejected.onclick = function() {
+            currentViewModeRejected = 'grid';
+            updateViewButtons('gridRejected');
+            const filteredRequests = requestsData.filter(req => req.status === 'rejected');
+            const container = document.getElementById('rejectedLeavesContainer');
+            if (container) {
+                container.innerHTML = renderRejectedLeavesView(filteredRequests);
+                setupLeaveClickEvents();
+            }
+        };
+        
+        listBtnRejected.onclick = function() {
+            currentViewModeRejected = 'list';
+            updateViewButtons('listRejected');
+            const filteredRequests = requestsData.filter(req => req.status === 'rejected');
+            const container = document.getElementById('rejectedLeavesContainer');
+            if (container) {
+                container.innerHTML = renderRejectedLeavesView(filteredRequests);
+                setupLeaveClickEvents();
+            }
+        };
+        
+        updateViewButtons(currentViewModeRejected === 'grid' ? 'gridRejected' : 'listRejected');
+    }
+}
+
+function updateViewButtons(activeView) {
+    const gridBtnApproved = document.getElementById('gridViewBtnApproved');
+    const listBtnApproved = document.getElementById('listViewBtnApproved');
+    const gridBtnRejected = document.getElementById('gridViewBtnRejected');
+    const listBtnRejected = document.getElementById('listViewBtnRejected');
+    
+    const activeClass = 'px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-200 text-sm font-medium';
+    const inactiveClass = 'px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600 transition-colors duration-200 text-sm font-medium';
+    
+    if (activeView === 'gridApproved') {
+        if (gridBtnApproved) gridBtnApproved.className = activeClass;
+        if (listBtnApproved) listBtnApproved.className = inactiveClass;
+    } else if (activeView === 'listApproved') {
+        if (gridBtnApproved) gridBtnApproved.className = inactiveClass;
+        if (listBtnApproved) listBtnApproved.className = activeClass;
+    } else if (activeView === 'gridRejected') {
+        if (gridBtnRejected) gridBtnRejected.className = activeClass;
+        if (listBtnRejected) listBtnRejected.className = inactiveClass;
+    } else if (activeView === 'listRejected') {
+        if (gridBtnRejected) gridBtnRejected.className = inactiveClass;
+        if (listBtnRejected) listBtnRejected.className = activeClass;
+    }
+}
+
+// =============================================
+// GESTION DES CLICS SUR LES CARTES
+// =============================================
+function setupLeaveClickEvents() {
+    const leaveCards = document.querySelectorAll('.leave-card');
+    
+    leaveCards.forEach(card => {
+        const newCard = card.cloneNode(true);
+        card.parentNode.replaceChild(newCard, card);
+        
+        newCard.addEventListener('click', function(e) {
+            if (e.target.closest('.revalidate-btn')) {
+                return;
+            }
+            
+            const leaveId = parseInt(newCard.getAttribute('data-leave-id'));
+            const request = requestsData.find(r => r.id === leaveId);
+            if (request) {
+                openLeaveDetailsModal(request);
+            }
+        });
+    });
+}
+
+// =============================================
+// FONCTION DE REVALIDATION
+// =============================================
+function revalidateRequest(requestId) {
+    const request = requestsData.find(r => r.id === requestId);
+    if (!request) return;
+
+    request.status = 'pending';
+    
+    showToast(
+        'Demande revalidée', 
+        `La demande de ${request.employeeName} a été remise en attente.`, 
+        'success'
+    );
+    
+    renderFilteredContent();
+}
+
+// =============================================
 // MODAL DÉTAILS POUR CONGÉS APPROUVÉS/REFUSÉS
 // =============================================
-function showLeaveDetailsModal(leave) {
-    // Utiliser le nouveau modal avec le design sombre
+function openLeaveDetailsModal(leave) {
     const modal = document.getElementById('leaveDetailsModal');
     
     if (!modal) {
@@ -629,22 +657,18 @@ function showLeaveDetailsModal(leave) {
         return;
     }
     
-    // Remplir les informations
     document.getElementById('leaveDetailsName').textContent = leave.employeeName;
     document.getElementById('leaveDetailsType').textContent = leave.leaveType;
     document.getElementById('leaveDetailsStartDate').textContent = formatDate(leave.startDate);
     document.getElementById('leaveDetailsEndDate').textContent = formatDate(leave.endDate);
     document.getElementById('leaveDetailsDuration').textContent = leave.duration + ' jour(s)';
     
-    // Calculer le solde restant
     const balanceRemaining = leave.remainingBalance || Math.max(0, 30 - leave.duration);
     document.getElementById('leaveDetailsBalance').textContent = balanceRemaining + ' jours';
     
-    // Avatar
     const avatarDiv = document.getElementById('leaveDetailsAvatar');
     avatarDiv.className = `w-16 h-16 bg-gradient-to-r ${leave.avatar} rounded-full flex items-center justify-center flex-shrink-0`;
     
-    // Type de congé avec badge coloré
     const typeBadge = document.getElementById('leaveDetailsTypeBadge');
     let badgeColor = 'bg-blue-500';
     
@@ -665,10 +689,8 @@ function showLeaveDetailsModal(leave) {
     typeBadge.className = `px-3 py-1 text-xs font-semibold rounded-full ${badgeColor} text-white`;
     typeBadge.textContent = leave.leaveType;
     
-    // Motif
     document.getElementById('leaveDetailsReason').textContent = leave.reason;
     
-    // Statut avec badge coloré
     const statusBadge = document.getElementById('leaveDetailsStatusBadge');
     if (leave.status === 'approved') {
         statusBadge.className = 'px-4 py-2 text-sm font-semibold rounded-lg bg-green-500 text-white';
@@ -681,8 +703,99 @@ function showLeaveDetailsModal(leave) {
         statusBadge.innerHTML = '<i class="fas fa-clock mr-1"></i>En attente';
     }
     
-    // Afficher le modal
     showModal('leaveDetailsModal');
+}
+
+// =============================================
+// SYSTÈME DE TOAST NOTIFICATIONS - VERSION COMPATIBLE
+// =============================================
+function showToast(param1, param2, param3) {
+    let title, message, type;
+    
+    // Détection automatique de la signature
+    if (param3 !== undefined) {
+        // Nouvelle signature: showToast(title, message, type)
+        title = param1;
+        message = param2;
+        type = param3 || 'success';
+    } else {
+        // Ancienne signature: showToast(message, type)
+        title = param2 === 'success' ? 'Succès' : 
+                param2 === 'error' ? 'Erreur' : 
+                param2 === 'warning' ? 'Attention' : 
+                param2 === 'info' ? 'Information' : 'Notification';
+        message = param1;
+        type = param2 || 'success';
+    }
+
+    // Créer un conteneur de toast dynamique si nécessaire
+    let toastContainer = document.getElementById('dynamic-toast-container');
+    if (!toastContainer) {
+        toastContainer = document.createElement('div');
+        toastContainer.id = 'dynamic-toast-container';
+        toastContainer.style.cssText = 'position: fixed; top: 20px; right: 20px; z-index: 9999;';
+        document.body.appendChild(toastContainer);
+    }
+
+    const colors = {
+        success: { bg: '#10B981', icon: 'fa-check-circle' },
+        error: { bg: '#EF4444', icon: 'fa-times-circle' },
+        warning: { bg: '#F59E0B', icon: 'fa-exclamation-triangle' },
+        info: { bg: '#3B82F6', icon: 'fa-info-circle' }
+    };
+
+    const config = colors[type] || colors.success;
+    const toastId = 'toast-' + Date.now();
+
+    const toast = document.createElement('div');
+    toast.id = toastId;
+    toast.style.cssText = `
+        background: white;
+        border-left: 4px solid ${config.bg};
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        padding: 16px;
+        margin-bottom: 10px;
+        min-width: 320px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        transform: translateX(400px);
+        transition: transform 0.3s ease;
+    `;
+    
+    toast.innerHTML = `
+        <div style="width: 32px; height: 32px; background: ${config.bg}20; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+            <i class="fas ${config.icon}" style="color: ${config.bg};"></i>
+        </div>
+        <div style="flex: 1;">
+            <div style="font-weight: 600; color: #111; margin-bottom: 4px;">${title}</div>
+            <div style="font-size: 14px; color: #666;">${message}</div>
+        </div>
+        <button onclick="closeToast('${toastId}')" style="background: none; border: none; color: #999; cursor: pointer; font-size: 18px; padding: 0; width: 24px; height: 24px;">
+            <i class="fas fa-times"></i>
+        </button>
+    `;
+
+    toastContainer.appendChild(toast);
+
+    setTimeout(() => {
+        toast.style.transform = 'translateX(0)';
+    }, 10);
+
+    setTimeout(() => {
+        closeToast(toastId);
+    }, 4000);
+}
+
+function closeToast(toastId) {
+    const toast = document.getElementById(toastId);
+    if (toast) {
+        toast.style.transform = 'translateX(400px)';
+        setTimeout(() => {
+            toast.remove();
+        }, 300);
+    }
 }
 
 // =============================================
@@ -735,14 +848,12 @@ function executeAction() {
         request.status = isApprove ? 'approved' : 'rejected';
         
         showToast(
-            isApprove ? `Demande de ${request.employeeName} approuvée` : `Demande de ${request.employeeName} refusée`,
+            isApprove ? 'Demande approuvée' : 'Demande refusée',
+            `La demande de ${request.employeeName} a été ${isApprove ? 'approuvée' : 'refusée'} avec succès.`,
             isApprove ? 'success' : 'error'
         );
         
-        // Rafraîchir toutes les vues
-        renderPendingRequests();
-        renderApprovedLeaves();
-        renderRejectedLeaves();
+        renderFilteredContent();
     }, 500);
 }
 
@@ -758,7 +869,6 @@ function showDetailsModal(requestId) {
     document.getElementById('detailsEndDate').textContent = formatDate(request.endDate);
     document.getElementById('detailsDuration').textContent = request.duration + ' jours';
     document.getElementById('detailsReason').textContent = request.reason;
-    document.getElementById('pdfName').textContent = request.pdfName;
     document.getElementById('detailsAvatar').className = `w-16 h-16 bg-gradient-to-r ${request.avatar} rounded-xl flex items-center justify-center`;
     
     const statusElement = document.getElementById('detailsStatus');
@@ -774,127 +884,6 @@ function showDetailsModal(requestId) {
     }
     
     showModal('detailsModal');
-}
-
-// =============================================
-// SÉLECTION MULTIPLE
-// =============================================
-function toggleSelectAll() {
-    const checkboxes = document.querySelectorAll('.request-checkbox');
-    const visibleCheckboxes = Array.from(checkboxes).filter(cb => {
-        const item = cb.closest('.demand-item');
-        return item && item.style.display !== 'none';
-    });
-    
-    const areAllSelected = visibleCheckboxes.every(cb => cb.checked);
-    
-    visibleCheckboxes.forEach(checkbox => {
-        checkbox.checked = !areAllSelected;
-    });
-    
-    updateSelection();
-}
-
-function updateSelection() {
-    const checkboxes = document.querySelectorAll('.request-checkbox');
-    const bulkActions = document.getElementById('bulkActions');
-    const selectedCount = document.getElementById('selectedCount');
-    const selectAllBtn = document.getElementById('selectAllBtn');
-    
-    selectedRequests.clear();
-    let checkedCount = 0;
-    
-    checkboxes.forEach(checkbox => {
-        if (checkbox.checked) {
-            const demandItem = checkbox.closest('.demand-item');
-            if (demandItem) {
-                const requestId = parseInt(demandItem.getAttribute('data-id'));
-                selectedRequests.add(requestId);
-                checkedCount++;
-            }
-        }
-    });
-    
-    if (checkedCount > 0) {
-        bulkActions.classList.remove('hidden');
-        bulkActions.classList.add('flex');
-        selectedCount.classList.remove('hidden');
-        selectedCount.textContent = `${checkedCount} sélectionnée${checkedCount > 1 ? 's' : ''}`;
-        selectAllBtn.innerHTML = '<i class="fas fa-square mr-2"></i>Désélectionner tout';
-    } else {
-        bulkActions.classList.add('hidden');
-        bulkActions.classList.remove('flex');
-        selectedCount.classList.add('hidden');
-        selectAllBtn.innerHTML = '<i class="fas fa-check-square mr-2"></i>Tout sélectionner';
-    }
-}
-
-function bulkApprove() {
-    if (selectedRequests.size === 0) return;
-    bulkAction = 'approve';
-    showBulkConfirmModal('approve', selectedRequests.size);
-}
-
-function bulkReject() {
-    if (selectedRequests.size === 0) return;
-    bulkAction = 'reject';
-    showBulkConfirmModal('reject', selectedRequests.size);
-}
-
-function showBulkConfirmModal(action, count) {
-    const isApprove = action === 'approve';
-    const icon = document.getElementById('bulkConfirmIcon');
-    const title = document.getElementById('bulkConfirmTitle');
-    const message = document.getElementById('bulkConfirmMessage');
-    const actionBtn = document.getElementById('bulkConfirmActionBtn');
-    const countDisplay = document.getElementById('bulkConfirmCount');
-    
-    if (isApprove) {
-        icon.className = 'w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center';
-        icon.innerHTML = '<i class="fas fa-check text-green-500"></i>';
-        title.textContent = 'Approuver les demandes';
-        message.textContent = 'Êtes-vous sûr de vouloir approuver toutes les demandes sélectionnées ?';
-        actionBtn.className = 'flex-1 px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors';
-        actionBtn.innerHTML = '<i class="fas fa-check mr-2"></i>Approuver';
-    } else {
-        icon.className = 'w-12 h-12 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center';
-        icon.innerHTML = '<i class="fas fa-times text-red-500"></i>';
-        title.textContent = 'Refuser les demandes';
-        message.textContent = 'Êtes-vous sûr de vouloir refuser toutes les demandes sélectionnées ?';
-        actionBtn.className = 'flex-1 px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors';
-        actionBtn.innerHTML = '<i class="fas fa-times mr-2"></i>Refuser';
-    }
-    
-    countDisplay.textContent = `${count} demande${count > 1 ? 's' : ''} sélectionnée${count > 1 ? 's' : ''}`;
-    showModal('bulkConfirmModal');
-}
-
-function executeBulkAction() {
-    const isApprove = bulkAction === 'approve';
-    const count = selectedRequests.size;
-    
-    closeModal('bulkConfirmModal');
-    
-    setTimeout(() => {
-        selectedRequests.forEach(requestId => {
-            const request = requestsData.find(r => r.id === requestId);
-            if (request) {
-                request.status = isApprove ? 'approved' : 'rejected';
-            }
-        });
-        
-        selectedRequests.clear();
-        
-        showToast(
-            `${count} demande${count > 1 ? 's' : ''} ${isApprove ? 'approuvée' : 'refusée'}${count > 1 ? 's' : ''}`,
-            isApprove ? 'success' : 'error'
-        );
-        
-        // Rafraîchir toutes les vues
-        renderPendingRequests();
-        renderApprovedLeaves();
-        renderRejectedLeaves();
-    }, 500);
 }
 
 // =============================================
@@ -930,10 +919,9 @@ function closeModal(modalId) {
     }, 300);
 }
 
-// Fermer les modals en cliquant à l'extérieur
 document.addEventListener('click', function(e) {
     if (e.target.classList.contains('backdrop')) {
-        const modals = ['confirmModal', 'bulkConfirmModal', 'detailsModal', 'leaveModal', 'leaveDetailsModal'];
+        const modals = ['confirmModal', 'detailsModal', 'leaveDetailsModal'];
         modals.forEach(modalId => {
             const modal = document.getElementById(modalId);
             if (modal && !modal.classList.contains('hidden')) {
@@ -943,10 +931,9 @@ document.addEventListener('click', function(e) {
     }
 });
 
-// Fermer les modals avec la touche Escape
 document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
-        const modals = ['confirmModal', 'bulkConfirmModal', 'detailsModal', 'leaveModal', 'leaveDetailsModal'];
+        const modals = ['confirmModal', 'detailsModal', 'leaveDetailsModal'];
         modals.forEach(modalId => {
             const modal = document.getElementById(modalId);
             if (modal && !modal.classList.contains('hidden')) {
@@ -955,75 +942,6 @@ document.addEventListener('keydown', function(e) {
         });
     }
 });
-
-// =============================================
-// GESTION DES VUES (LISTE/GRILLE)
-// =============================================
-function setupViewButtons() {
-    // Boutons pour les congés approuvés
-    const gridBtnApproved = document.getElementById('gridViewBtnApproved');
-    const listBtnApproved = document.getElementById('listViewBtnApproved');
-    
-    if (gridBtnApproved) {
-        gridBtnApproved.addEventListener('click', () => {
-            currentViewModeApproved = 'grid';
-            updateViewButtons('gridApproved');
-            renderApprovedLeaves();
-        });
-    }
-    
-    if (listBtnApproved) {
-        listBtnApproved.addEventListener('click', () => {
-            currentViewModeApproved = 'list';
-            updateViewButtons('listApproved');
-            renderApprovedLeaves();
-        });
-    }
-    
-    // Boutons pour les congés refusés
-    const gridBtnRejected = document.getElementById('gridViewBtnRejected');
-    const listBtnRejected = document.getElementById('listViewBtnRejected');
-    
-    if (gridBtnRejected) {
-        gridBtnRejected.addEventListener('click', () => {
-            currentViewModeRejected = 'grid';
-            updateViewButtons('gridRejected');
-            renderRejectedLeaves();
-        });
-    }
-    
-    if (listBtnRejected) {
-        listBtnRejected.addEventListener('click', () => {
-            currentViewModeRejected = 'list';
-            updateViewButtons('listRejected');
-            renderRejectedLeaves();
-        });
-    }
-}
-
-function updateViewButtons(activeView) {
-    const gridBtnApproved = document.getElementById('gridViewBtnApproved');
-    const listBtnApproved = document.getElementById('listViewBtnApproved');
-    const gridBtnRejected = document.getElementById('gridViewBtnRejected');
-    const listBtnRejected = document.getElementById('listViewBtnRejected');
-    
-    const activeClass = 'px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-200 text-sm font-medium';
-    const inactiveClass = 'px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600 transition-colors duration-200 text-sm font-medium';
-    
-    if (activeView === 'gridApproved') {
-        if (gridBtnApproved) gridBtnApproved.className = activeClass;
-        if (listBtnApproved) listBtnApproved.className = inactiveClass;
-    } else if (activeView === 'listApproved') {
-        if (gridBtnApproved) gridBtnApproved.className = inactiveClass;
-        if (listBtnApproved) listBtnApproved.className = activeClass;
-    } else if (activeView === 'gridRejected') {
-        if (gridBtnRejected) gridBtnRejected.className = activeClass;
-        if (listBtnRejected) listBtnRejected.className = inactiveClass;
-    } else if (activeView === 'listRejected') {
-        if (gridBtnRejected) gridBtnRejected.className = inactiveClass;
-        if (listBtnRejected) listBtnRejected.className = activeClass;
-    }
-}
 
 // =============================================
 // FONCTIONS UTILITAIRES
@@ -1037,250 +955,60 @@ function formatDate(dateString) {
     });
 }
 
-function setupEmployeeFilter() {
-    const filterSelect = document.getElementById('employeePendingFilter');
-    if (!filterSelect) return;
-    
-    filterSelect.addEventListener('change', function() {
-        currentEmployeeFilter = this.value;
-        renderPendingRequests();
-    });
-}
+// =============================================
+// GESTION DE LA SIDEBAR MOBILE
+// =============================================
+function setupSidebar() {
+    const toggleBtn = document.getElementById('toggle-sidebar');
+    const closeBtn = document.getElementById('close-sidebar');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebar-overlay');
 
-// =============================================
-// MODAL DE FERMETURE LEAVE
-// =============================================
-function setupLeaveModalClose() {
-    // Modal leaveModal (ancien)
-    const leaveModal = document.getElementById('leaveModal');
-    const closeBtn = document.getElementById('closeModal');
-    
+    if (toggleBtn) {
+        toggleBtn.addEventListener('click', function() {
+            if (sidebar) sidebar.classList.add('show');
+            if (overlay) overlay.classList.add('show');
+        });
+    }
+
     if (closeBtn) {
-        closeBtn.addEventListener('click', () => {
-            closeModal('leaveModal');
+        closeBtn.addEventListener('click', function() {
+            if (sidebar) sidebar.classList.remove('show');
+            if (overlay) overlay.classList.remove('show');
         });
     }
-    
-    if (leaveModal) {
-        leaveModal.addEventListener('click', function(e) {
-            if (e.target === leaveModal) {
-                closeModal('leaveModal');
-            }
-        });
-    }
-    
-    // Modal leaveDetailsModal (nouveau)
-    const leaveDetailsModal = document.getElementById('leaveDetailsModal');
-    if (leaveDetailsModal) {
-        leaveDetailsModal.addEventListener('click', function(e) {
-            if (e.target === leaveDetailsModal) {
-                closeModal('leaveDetailsModal');
-            }
+
+    if (overlay) {
+        overlay.addEventListener('click', function() {
+            if (sidebar) sidebar.classList.remove('show');
+            overlay.classList.remove('show');
         });
     }
 }
 
 // =============================================
-// INITIALISATION DES GRAPHIQUES
+// NE PAS INITIALISER LE THÈME ET LES NOTIFICATIONS
+// (config.js s'en occupe déjà)
 // =============================================
-function initCharts() {
-    // Graphique évolution des demandes
-    const ctxDemandes = document.getElementById('demandesChart');
-    if (ctxDemandes) {
-        new Chart(ctxDemandes.getContext('2d'), {
-            type: 'line',
-            data: {
-                labels: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Jun', 'Jul', 'Aoû', 'Sep'],
-                datasets: [{
-                    label: 'Demandes',
-                    data: [12, 19, 15, 25, 22, 18, 28, 24, 20],
-                    borderColor: 'rgb(59, 130, 246)',
-                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                    tension: 0.4,
-                    fill: true
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: false
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        grid: {
-                            color: 'rgba(156, 163, 175, 0.2)'
-                        }
-                    },
-                    x: {
-                        grid: {
-                            color: 'rgba(156, 163, 175, 0.2)'
-                        }
-                    }
-                }
-            }
-        });
-    }
-
-    // Graphique types de congés
-    const ctxTypes = document.getElementById('typesChart');
-    if (ctxTypes) {
-        new Chart(ctxTypes.getContext('2d'), {
-            type: 'doughnut',
-            data: {
-                labels: ['Congés payés', 'RTT', 'Maladie', 'Formation', 'Autres'],
-                datasets: [{
-                    data: [45, 25, 15, 10, 5],
-                    backgroundColor: [
-                        'rgb(59, 130, 246)',
-                        'rgb(34, 197, 94)',
-                        'rgb(239, 68, 68)',
-                        'rgb(139, 92, 246)',
-                        'rgb(236, 72, 153)'
-                    ]
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'bottom'
-                    }
-                }
-            }
-        });
-    }
-
-    // Graphique taux d'approbation
-    const ctxApproval = document.getElementById('approvalChart');
-    if (ctxApproval) {
-        new Chart(ctxApproval.getContext('2d'), {
-            type: 'bar',
-            data: {
-                labels: ['Avr', 'Mai', 'Jun', 'Jul', 'Aoû', 'Sep'],
-                datasets: [{
-                    label: 'Taux d\'approbation',
-                    data: [85, 88, 82, 90, 87, 87],
-                    backgroundColor: 'rgba(139, 92, 246, 0.8)',
-                    borderColor: 'rgb(139, 92, 246)',
-                    borderWidth: 1,
-                    borderRadius: 8
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: false
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        max: 100,
-                        grid: {
-                            color: 'rgba(156, 163, 175, 0.2)'
-                        },
-                        ticks: {
-                            callback: function(value) {
-                                return value + '%';
-                            }
-                        }
-                    },
-                    x: {
-                        grid: {
-                            display: false
-                        }
-                    }
-                }
-            }
-        });
-    }
-}
+// Ces fonctions ne sont PLUS appelées pour éviter les conflits
 
 // =============================================
-// GESTION DE LA DÉCONNEXION
+// AFFICHER LA DATE ACTUELLE
 // =============================================
-function openLogoutModal() {
-    const modal = document.getElementById('logoutConfirmModal');
-    if (modal) {
-        modal.classList.remove('hidden');
-        setTimeout(() => {
-            const modalContent = modal.querySelector('.modal');
-            if (modalContent) {
-                modalContent.style.opacity = '1';
-                modalContent.style.transform = 'scale(1)';
-            }
-        }, 10);
+function displayCurrentDate() {
+    const dateElement = document.getElementById('current-date');
+    if (dateElement) {
+        const today = new Date();
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        dateElement.textContent = today.toLocaleDateString('fr-FR', options);
     }
-}
-
-function closeLogoutModal() {
-    const modal = document.getElementById('logoutConfirmModal');
-    if (modal) {
-        const modalContent = modal.querySelector('.modal');
-        if (modalContent) {
-            modalContent.style.opacity = '0';
-            modalContent.style.transform = 'scale(0.95)';
-        }
-        setTimeout(() => {
-            modal.classList.add('hidden');
-        }, 200);
-    }
-}
-
-function showLogoutToast() {
-    const toast = document.getElementById('logoutToast');
-    if (toast) {
-        toast.classList.remove('translate-x-full');
-        toast.classList.add('translate-x-0');
-        
-        setTimeout(() => {
-            toast.classList.remove('translate-x-0');
-            toast.classList.add('translate-x-full');
-        }, 3000);
-    }
-}
-
-function executeLogout() {
-    closeLogoutModal();
-    
-    setTimeout(() => {
-        showLogoutToast();
-    }, 300);
-    
-    setTimeout(() => {
-        window.location.href = '../index.html';
-    }, 2000);
-}
-
-function setupLogoutButton() {
-    const logoutBtn = document.getElementById('logoutBtn');
-    if (logoutBtn) {
-        logoutBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            openLogoutModal();
-        });
-    }
-}
-
-// =============================================
-// FONCTION POUR OUVRIR PDF (PLACEHOLDER)
-// =============================================
-function viewPDF() {
-    showToast('Fonctionnalité d\'ouverture de PDF à implémenter', 'info');
 }
 
 // =============================================
 // INITIALISATION PRINCIPALE
 // =============================================
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('Initialisation du Dashboard Chef...');
+    console.log('🚀 Initialisation du Dashboard Demandes...');
     
     // Animation d'entrée
     const elements = document.querySelectorAll('.animate-slide-up');
@@ -1292,33 +1020,19 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Initialiser tous les composants
-    setupTabButtons();
-    setupViewButtons();
-    setupEmployeeFilter();
-    setupLeaveModalClose();
-    setupLogoutButton();
+    setupFilterButtons();
+    setupSidebar();
+    displayCurrentDate();
     
-    // Initialiser les graphiques si Chart.js est disponible
-    if (typeof Chart !== 'undefined') {
-        initCharts();
-    }
+    // NE PAS initialiser le thème et les notifications
+    // config.js s'en charge déjà !
+    console.log('⚠️ Thème et notifications gérés par config.js');
     
-    // Initialiser le filtre par défaut (Tous) - ceci va afficher toutes les sections
-    switchTab('profile');
+    // Afficher le contenu initial
+    applyFilter('all');
     
-    // Initialiser les styles du modal de déconnexion
-    const logoutModal = document.getElementById('logoutConfirmModal');
-    if (logoutModal) {
-        const modalContent = logoutModal.querySelector('.modal');
-        if (modalContent) {
-            modalContent.style.opacity = '0';
-            modalContent.style.transform = 'scale(0.95)';
-            modalContent.style.transition = 'all 0.2s ease-out';
-        }
-    }
-    
-    console.log('Dashboard Chef initialisé avec succès');
-    console.log('Données chargées:', {
+    console.log('✅ Dashboard Demandes initialisé avec succès');
+    console.log('📊 Données chargées:', {
         total: requestsData.length,
         pending: requestsData.filter(r => r.status === 'pending').length,
         approved: requestsData.filter(r => r.status === 'approved').length,

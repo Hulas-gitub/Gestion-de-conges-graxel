@@ -1,198 +1,310 @@
-// Variables globales
+// =============================================
+// VARIABLES GLOBALES
+// =============================================
 let currentDeleteId = null;
 let currentDeleteType = null;
 let currentEditId = null;
 let employeCounter = 4; // Compteur pour générer les matricules employés (commence à 4)
 let chefCounter = 2; // Compteur pour générer les matricules chefs (commence à 2)
 
-// Initialisation au chargement de la page
+// =============================================
+// INITIALISATION AU CHARGEMENT DE LA PAGE
+// =============================================
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('🚀 Initialisation de la page Administration...');
+
     // Mettre à jour la date actuelle
     updateCurrentDate();
+    
+    // Initialiser le thème
+    initTheme();
+    
+    // Initialiser la gestion des onglets
+    initTabs();
     
     // Initialiser les écouteurs d'événements
     initEventListeners();
     
-    // Initialiser le thème
-    initTheme();
+    // Initialiser tous les boutons d'action des tableaux
+    setupViewButtons();
+    setupBlockButtons();
+    setupDeleteButtons();
+
+    console.log('✅ Page Administration initialisée avec succès');
 });
 
-// Mettre à jour la date actuelle
-function updateCurrentDate() {
-    const now = new Date();
-    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-    document.getElementById('current-date').textContent = now.toLocaleDateString('fr-FR', options);
+// =============================================
+// GESTION DES ONGLETS
+// =============================================
+function initTabs() {
+    // Fonction pour afficher un onglet
+    function showTab(tabName) {
+        // Cacher tous les onglets
+        const allTabs = document.querySelectorAll('.tab-pane');
+        allTabs.forEach(tab => {
+            tab.classList.add('hidden');
+            tab.classList.remove('active');
+        });
+
+        // Retirer la classe active de tous les boutons
+        const allButtons = document.querySelectorAll('.tab-button');
+        allButtons.forEach(button => {
+            button.classList.remove('active');
+            button.classList.remove('bg-gradient-to-r', 'from-blue-500', 'to-purple-500', 'text-white');
+            button.classList.add('bg-gray-200', 'dark:bg-gray-700', 'text-gray-700', 'dark:text-gray-300');
+        });
+
+        // Afficher l'onglet sélectionné
+        const targetTab = document.getElementById(tabName + '-tab');
+        if (targetTab) {
+            targetTab.classList.remove('hidden');
+            targetTab.classList.add('active');
+        }
+
+        // Activer le bouton correspondant
+        const activeButton = document.querySelector(`[data-tab="${tabName}"]`);
+        if (activeButton) {
+            activeButton.classList.add('active', 'bg-gradient-to-r', 'from-blue-500', 'to-purple-500', 'text-white');
+            activeButton.classList.remove('bg-gray-200', 'dark:bg-gray-700', 'text-gray-700', 'dark:text-gray-300');
+        }
+
+        console.log(`📄 Onglet affiché: ${tabName}`);
+    }
+
+    // Attacher les événements aux boutons d'onglets
+    const tabButtons = document.querySelectorAll('.tab-button');
+    tabButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const tabName = this.getAttribute('data-tab');
+            showTab(tabName);
+        });
+    });
+
+    // Afficher l'onglet "employes" par défaut au chargement
+    setTimeout(() => {
+        showTab('employes');
+    }, 0);
 }
 
-// Initialiser les écouteurs d'événements
+// =============================================
+// INITIALISATION DES ÉCOUTEURS D'ÉVÉNEMENTS
+// =============================================
 function initEventListeners() {
     // Navigation de la sidebar
-    document.getElementById('toggle-sidebar').addEventListener('click', toggleSidebar);
-    document.getElementById('close-sidebar').addEventListener('click', toggleSidebar);
-    document.getElementById('sidebar-overlay').addEventListener('click', toggleSidebar);
+    const toggleSidebar = document.getElementById('toggle-sidebar');
+    const closeSidebar = document.getElementById('close-sidebar');
+    const sidebarOverlay = document.getElementById('sidebar-overlay');
+    
+    if (toggleSidebar) toggleSidebar.addEventListener('click', toggleSidebarMenu);
+    if (closeSidebar) closeSidebar.addEventListener('click', toggleSidebarMenu);
+    if (sidebarOverlay) sidebarOverlay.addEventListener('click', toggleSidebarMenu);
     
     // Bouton de thème
-    document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
-    
-    // Navigation par onglets
-    document.querySelectorAll('.tab-button').forEach(button => {
-        button.addEventListener('click', function() {
-            switchTab(this.dataset.tab);
-        });
-    });
+    const themeToggle = document.getElementById('theme-toggle');
+    if (themeToggle) themeToggle.addEventListener('click', toggleTheme);
     
     // Boutons d'ajout
-    document.getElementById('add-employe-btn').addEventListener('click', () => openAddModal('employe'));
-    document.getElementById('add-chef-btn').addEventListener('click', () => openAddModal('chef'));
-    document.getElementById('add-departement-btn').addEventListener('click', () => openAddModal('departement'));
+    const addEmployeBtn = document.getElementById('add-employe-btn');
+    const addChefBtn = document.getElementById('add-chef-btn');
+    const addDepartementBtn = document.getElementById('add-departement-btn');
     
-    // Boutons d'édition
-    document.querySelectorAll('.edit-employe').forEach(button => {
-        button.addEventListener('click', function() {
-            openEditModal('employe', this.dataset.id);
-        });
-    });
+    if (addEmployeBtn) {
+        addEmployeBtn.addEventListener('click', () => openAddModal('employe'));
+    }
     
-    document.querySelectorAll('.edit-chef').forEach(button => {
-        button.addEventListener('click', function() {
-            openEditModal('chef', this.dataset.id);
-        });
-    });
+    if (addChefBtn) {
+        addChefBtn.addEventListener('click', () => openAddModal('chef'));
+    }
     
-    document.querySelectorAll('.edit-departement').forEach(button => {
-        button.addEventListener('click', function() {
-            openEditModal('departement', this.dataset.id);
-        });
-    });
-    
-    // Boutons de suppression
-    document.querySelectorAll('.delete-employe').forEach(button => {
-        button.addEventListener('click', function() {
-            openDeleteModal('employe', this.dataset.id);
-        });
-    });
-    
-    document.querySelectorAll('.delete-chef').forEach(button => {
-        button.addEventListener('click', function() {
-            openDeleteModal('chef', this.dataset.id);
-        });
-    });
-    
-    document.querySelectorAll('.delete-departement').forEach(button => {
-        button.addEventListener('click', function() {
-            openDeleteModal('departement', this.dataset.id);
-        });
-    });
-    
-    // Boutons pour les demandes de congé
-    document.querySelectorAll('.approve-demande').forEach(button => {
-        button.addEventListener('click', function() {
-            approveDemande(this.dataset.id);
-        });
-    });
-    
-    document.querySelectorAll('.reject-demande').forEach(button => {
-        button.addEventListener('click', function() {
-            rejectDemande(this.dataset.id);
-        });
-    });
+    if (addDepartementBtn) {
+        addDepartementBtn.addEventListener('click', () => openAddModal('departement'));
+    }
     
     // Formulaires
-    document.getElementById('employe-form').addEventListener('submit', handleEmployeSubmit);
-    document.getElementById('chef-form').addEventListener('submit', handleChefSubmit);
-    document.getElementById('departement-form').addEventListener('submit', handleDepartementSubmit);
+    const employeForm = document.getElementById('employe-form');
+    const chefForm = document.getElementById('chef-form');
+    const departementForm = document.getElementById('departement-form');
+    
+    if (employeForm) employeForm.addEventListener('submit', handleEmployeSubmit);
+    if (chefForm) chefForm.addEventListener('submit', handleChefSubmit);
+    if (departementForm) departementForm.addEventListener('submit', handleDepartementSubmit);
+    
+    // Bouton de confirmation de suppression
+    const confirmDeleteBtn = document.getElementById('confirm-delete-btn');
+    if (confirmDeleteBtn) {
+        confirmDeleteBtn.addEventListener('click', function() {
+            if (currentDeleteId && currentDeleteType) {
+                // Simuler la suppression
+                showToast(`${getTypeLabel(currentDeleteType)} supprimé`, `L'élément a été supprimé avec succès`, 'success');
+                
+                // Fermer le modal
+                closeModal('delete-confirm-modal');
+            }
+        });
+    }
     
     // Écouteur pour le champ contact employé - mettre à jour le mot de passe par défaut
-    document.getElementById('employe-contact').addEventListener('input', function() {
-        // Si le champ mot de passe est vide ou contient la valeur par défaut, le mettre à jour
-        if (!passwordField.value || !currentEditId) {
-            passwordField.value = this.value;
-        }
-    });
+    const employeContact = document.getElementById('employe-contact');
+    if (employeContact) {
+        employeContact.addEventListener('input', function() {
+            const passwordField = document.getElementById('employe-password');
+            if (passwordField && (!passwordField.value || !currentEditId)) {
+                passwordField.value = this.value;
+            }
+        });
+    }
 
     // Écouteur pour le champ contact chef - mettre à jour le mot de passe par défaut
-    document.getElementById('chef-contact').addEventListener('input', function() {
-        // Si le champ mot de passe est vide ou contient la valeur par défaut, le mettre à jour
-        if (!passwordField.value || !currentEditId) {
-            passwordField.value = this.value;
-        }
-    });
+    const chefContact = document.getElementById('chef-contact');
+    if (chefContact) {
+        chefContact.addEventListener('input', function() {
+            const passwordField = document.getElementById('chef-password');
+            if (passwordField && (!passwordField.value || !currentEditId)) {
+                passwordField.value = this.value;
+            }
+        });
+    }
 }
 
-// Gestion de la sidebar (mobile)
-function toggleSidebar() {
+// =============================================
+// GESTION DE LA SIDEBAR (MOBILE)
+// =============================================
+function toggleSidebarMenu() {
     const sidebar = document.getElementById('sidebar');
     const overlay = document.getElementById('sidebar-overlay');
     
-    sidebar.classList.toggle('open');
-    overlay.classList.toggle('open');
+    if (sidebar) sidebar.classList.toggle('open');
+    if (overlay) overlay.classList.toggle('open');
 }
 
-// Navigation par onglets
-function switchTab(tabName) {
-    // Désactiver tous les onglets
-    document.querySelectorAll('.tab-button').forEach(button => {
-        button.classList.remove('active');
-    });
-    
-    document.querySelectorAll('.tab-pane').forEach(pane => {
-        pane.classList.add('hidden');
-        pane.classList.remove('active');
-    });
-    
-    // Activer l'onglet sélectionné
-    document.querySelector(`.tab-button[data-tab="${tabName}"]`).classList.add('active');
-    document.getElementById(`${tabName}-tab`).classList.remove('hidden');
-    document.getElementById(`${tabName}-tab`).classList.add('active');
+// =============================================
+// GESTION DU THÈME
+// =============================================
+function initTheme() {
+    // Récupérer le thème sauvegardé ou utiliser le thème par défaut
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    if (savedTheme === 'dark') {
+        document.documentElement.classList.add('dark');
+    }
 }
 
-// Générer un matricule employé
+function toggleTheme() {
+    document.documentElement.classList.toggle('dark');
+    const isDark = document.documentElement.classList.contains('dark');
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+}
+
+// =============================================
+// GESTION DE LA DATE
+// =============================================
+function updateCurrentDate() {
+    const currentDateElement = document.getElementById('current-date');
+    if (currentDateElement) {
+        const now = new Date();
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        currentDateElement.textContent = now.toLocaleDateString('fr-FR', options);
+    }
+}
+
+// =============================================
+// GESTION DES ACTIONS SUR LES LIGNES
+// =============================================
+function setupViewButtons() {
+    const viewButtons = document.querySelectorAll('button[title="Voir détails"]');
+    viewButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            showToast('Voir détails', 'Affichage des détails de l\'élément', 'info');
+        });
+    });
+}
+
+function setupBlockButtons() {
+    const blockButtons = document.querySelectorAll('button[title="Bloquer"]');
+    blockButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const row = this.closest('tr');
+            const name = row.querySelector('td:nth-child(2)').textContent;
+            
+            if (confirm(`Êtes-vous sûr de vouloir bloquer ${name} ?`)) {
+                showToast('Utilisateur bloqué', `${name} a été bloqué avec succès`, 'warning');
+            }
+        });
+    });
+}
+
+function setupDeleteButtons() {
+    const deleteButtons = document.querySelectorAll('button[title="Supprimer"]');
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const row = this.closest('tr');
+            const name = row.querySelector('td:nth-child(2)').textContent;
+            
+            if (confirm(`⚠️ Êtes-vous sûr de vouloir supprimer ${name} ?\n\nCette action est irréversible !`)) {
+                row.remove();
+                showToast('Utilisateur supprimé', `${name} a été supprimé avec succès`, 'success');
+            }
+        });
+    });
+}
+
+// =============================================
+// GÉNÉRATION DE MATRICULES
+// =============================================
 function generateMatriculeEmploye() {
     employeCounter++;
     return `EMP${String(employeCounter).padStart(4, '0')}`;
 }
 
-// Générer un matricule chef
 function generateMatriculeChef() {
     chefCounter++;
     return `CHF${String(chefCounter).padStart(4, '0')}`;
 }
 
-
-// Gestion des modals
+// =============================================
+// GESTION DES MODALS
+// =============================================
 function openAddModal(type) {
     const modal = document.getElementById(`${type}-modal`);
     const title = document.getElementById(`${type}-modal-title`);
     
+    if (!modal || !title) return;
+    
     title.textContent = `Ajouter un${type === 'employe' ? ' ' : type === 'chef' ? ' chef de ' : ' '}${getTypeLabel(type)}`;
     
     // Réinitialiser le formulaire
-    document.getElementById(`${type}-form`).reset();
+    const form = document.getElementById(`${type}-form`);
+    if (form) form.reset();
     
     // Pour les employés, générer un nouveau matricule et définir le rôle par défaut
     if (type === 'employe') {
-        const newMatricule = generateMatriculeEmploye();
-        document.getElementById('employe-matricule').value = newMatricule;
-        document.getElementById('employe-role').value = 'Employé'; // Définir le rôle par défaut
-  
+        const matriculeField = document.getElementById('employe-matricule');
+        const roleField = document.getElementById('employe-role');
+        
+        if (matriculeField) matriculeField.value = generateMatriculeEmploye();
+        if (roleField) roleField.value = 'Employé';
     }
     
     // Pour les chefs, générer un nouveau matricule et définir le rôle
     if (type === 'chef') {
-        const newMatricule = generateMatriculeChef();
-        document.getElementById('chef-matricule').value = newMatricule;
-        document.getElementById('chef-role').value = 'Chef de Département'; // Définir le rôle fixe
-
+        const matriculeField = document.getElementById('chef-matricule');
+        const roleField = document.getElementById('chef-role');
+        const dateNominationField = document.getElementById('chef-date-nomination');
+        
+        if (matriculeField) matriculeField.value = generateMatriculeChef();
+        if (roleField) roleField.value = 'Chef de Département';
         
         // Définir la date de nomination à aujourd'hui par défaut
-        const today = new Date().toISOString().split('T')[0];
-        document.getElementById('chef-date-nomination').value = today;
+        if (dateNominationField) {
+            const today = new Date().toISOString().split('T')[0];
+            dateNominationField.value = today;
+        }
     }
     
     // Afficher le modal
     modal.classList.remove('hidden');
     setTimeout(() => {
-        modal.querySelector('.modal').classList.add('open');
+        const modalContent = modal.querySelector('.modal');
+        if (modalContent) modalContent.classList.add('open');
     }, 10);
 }
 
@@ -200,40 +312,63 @@ function openEditModal(type, id) {
     const modal = document.getElementById(`${type}-modal`);
     const title = document.getElementById(`${type}-modal-title`);
     
+    if (!modal || !title) return;
+    
     title.textContent = `Modifier ${getTypeLabel(type)}`;
     currentEditId = id;
     
     // Remplir le formulaire avec les données existantes (simulées)
-    // Dans une application réelle, vous récupéreriez ces données depuis une API
     if (type === 'employe') {
-        document.getElementById('employe-matricule').value = 'EMP0001';
-        document.getElementById('employe-nom').value = 'Martin';
-        document.getElementById('employe-prenom').value = 'Jean';
-        document.getElementById('employe-contact').value = '+241 01 23 45 67';
-        document.getElementById('employe-email').value = 'jean.martin@graxeltech.com';
-        document.getElementById('employe-role').value = 'Employé';
-        document.getElementById('employe-poste').value = 'Analyste financier';
-        document.getElementById('employe-departement').value = 'Finance';
+        const fields = {
+            'employe-matricule': 'EMP0001',
+            'employe-nom': 'Martin',
+            'employe-prenom': 'Jean',
+            'employe-contact': '+241 01 23 45 67',
+            'employe-email': 'jean.martin@graxeltech.com',
+            'employe-role': 'Employé',
+            'employe-poste': 'Analyste financier',
+            'employe-departement': 'Finance'
+        };
+        
+        Object.keys(fields).forEach(key => {
+            const field = document.getElementById(key);
+            if (field) field.value = fields[key];
+        });
     } else if (type === 'chef') {
-        document.getElementById('chef-matricule').value = 'CHF0001';
-        document.getElementById('chef-nom').value = 'Dubois';
-        document.getElementById('chef-prenom').value = 'Marie';
-        document.getElementById('chef-contact').value = '+241 02 34 56 78';
-        document.getElementById('chef-email').value = 'marie.dubois@graxeltech.com';
-        document.getElementById('chef-role').value = 'Chef de Département';
-        document.getElementById('chef-poste').value = 'Directrice des Ressources Humaines';
-        document.getElementById('chef-departement').value = 'Ressources Humaines';
-        document.getElementById('chef-date-nomination').value = '2023-03-15';
+        const fields = {
+            'chef-matricule': 'CHF0001',
+            'chef-nom': 'Dubois',
+            'chef-prenom': 'Marie',
+            'chef-contact': '+241 02 34 56 78',
+            'chef-email': 'marie.dubois@graxeltech.com',
+            'chef-role': 'Chef de Département',
+            'chef-poste': 'Directrice des Ressources Humaines',
+            'chef-departement': 'Ressources Humaines',
+            'chef-date-nomination': '2023-03-15'
+        };
+        
+        Object.keys(fields).forEach(key => {
+            const field = document.getElementById(key);
+            if (field) field.value = fields[key];
+        });
     } else if (type === 'departement') {
-        document.getElementById('departement-nom').value = 'Finance';
-        document.getElementById('departement-description').value = 'Gestion financière et comptable';
-        document.getElementById('departement-chef').value = 'Jean Martin';
+        const fields = {
+            'departement-nom': 'Finance',
+            'departement-description': 'Gestion financière et comptable',
+            'departement-chef': 'Jean Martin'
+        };
+        
+        Object.keys(fields).forEach(key => {
+            const field = document.getElementById(key);
+            if (field) field.value = fields[key];
+        });
     }
     
     // Afficher le modal
     modal.classList.remove('hidden');
     setTimeout(() => {
-        modal.querySelector('.modal').classList.add('open');
+        const modalContent = modal.querySelector('.modal');
+        if (modalContent) modalContent.classList.add('open');
     }, 10);
 }
 
@@ -241,6 +376,8 @@ function openDeleteModal(type, id) {
     const modal = document.getElementById('delete-confirm-modal');
     const title = document.getElementById('delete-confirm-title');
     const message = document.getElementById('delete-confirm-message');
+    
+    if (!modal || !title || !message) return;
     
     currentDeleteId = id;
     currentDeleteType = type;
@@ -251,13 +388,17 @@ function openDeleteModal(type, id) {
     // Afficher le modal
     modal.classList.remove('hidden');
     setTimeout(() => {
-        modal.querySelector('.modal').classList.add('open');
+        const modalContent = modal.querySelector('.modal');
+        if (modalContent) modalContent.classList.add('open');
     }, 10);
 }
 
 function closeModal(modalId) {
     const modal = document.getElementById(modalId);
-    modal.querySelector('.modal').classList.remove('open');
+    if (!modal) return;
+    
+    const modalContent = modal.querySelector('.modal');
+    if (modalContent) modalContent.classList.remove('open');
     
     setTimeout(() => {
         modal.classList.add('hidden');
@@ -274,19 +415,22 @@ function closeModal(modalId) {
     }
 }
 
-// Gestion des formulaires
+// =============================================
+// GESTION DES FORMULAIRES
+// =============================================
 function handleEmployeSubmit(e) {
     e.preventDefault();
     
     // Récupérer les données du formulaire
-    const matricule = document.getElementById('employe-matricule').value;
-    const nom = document.getElementById('employe-nom').value;
-    const prenom = document.getElementById('employe-prenom').value;
-    const contact = document.getElementById('employe-contact').value;
-    const email = document.getElementById('employe-email').value;
-    const role = document.getElementById('employe-role').value;
-    const poste = document.getElementById('employe-poste').value;
-    const departement = document.getElementById('employe-departement').value;
+    const matricule = document.getElementById('employe-matricule')?.value;
+    const nom = document.getElementById('employe-nom')?.value;
+    const prenom = document.getElementById('employe-prenom')?.value;
+    const contact = document.getElementById('employe-contact')?.value;
+    const email = document.getElementById('employe-email')?.value;
+    const password = document.getElementById('employe-password')?.value;
+    const role = document.getElementById('employe-role')?.value;
+    const poste = document.getElementById('employe-poste')?.value;
+    const departement = document.getElementById('employe-departement')?.value;
     
     // Validation
     if (!matricule || !nom || !prenom || !contact || !email || !password || !role || !poste || !departement) {
@@ -296,10 +440,8 @@ function handleEmployeSubmit(e) {
     
     // Simuler l'enregistrement
     if (currentEditId) {
-        // Mode édition
         showToast('Employé modifié', `${prenom} ${nom} (${matricule}) a été modifié avec succès`, 'success');
     } else {
-        // Mode ajout
         showToast('Employé ajouté', `${prenom} ${nom} (${matricule}) a été ajouté avec succès`, 'success');
     }
     
@@ -311,15 +453,16 @@ function handleChefSubmit(e) {
     e.preventDefault();
     
     // Récupérer les données du formulaire
-    const matricule = document.getElementById('chef-matricule').value;
-    const nom = document.getElementById('chef-nom').value;
-    const prenom = document.getElementById('chef-prenom').value;
-    const contact = document.getElementById('chef-contact').value;
-    const email = document.getElementById('chef-email').value;
-    const role = document.getElementById('chef-role').value;
-    const poste = document.getElementById('chef-poste').value;
-    const departement = document.getElementById('chef-departement').value;
-    const dateNomination = document.getElementById('chef-date-nomination').value;
+    const matricule = document.getElementById('chef-matricule')?.value;
+    const nom = document.getElementById('chef-nom')?.value;
+    const prenom = document.getElementById('chef-prenom')?.value;
+    const contact = document.getElementById('chef-contact')?.value;
+    const email = document.getElementById('chef-email')?.value;
+    const password = document.getElementById('chef-password')?.value;
+    const role = document.getElementById('chef-role')?.value;
+    const poste = document.getElementById('chef-poste')?.value;
+    const departement = document.getElementById('chef-departement')?.value;
+    const dateNomination = document.getElementById('chef-date-nomination')?.value;
     
     // Validation
     if (!matricule || !nom || !prenom || !contact || !email || !password || !role || !poste || !departement || !dateNomination) {
@@ -329,10 +472,8 @@ function handleChefSubmit(e) {
     
     // Simuler l'enregistrement
     if (currentEditId) {
-        // Mode édition
         showToast('Chef modifié', `${prenom} ${nom} (${matricule}) a été modifié avec succès`, 'success');
     } else {
-        // Mode ajout
         showToast('Chef ajouté', `${prenom} ${nom} (${matricule}) a été ajouté avec succès`, 'success');
     }
     
@@ -344,16 +485,20 @@ function handleDepartementSubmit(e) {
     e.preventDefault();
     
     // Récupérer les données du formulaire
-    const nom = document.getElementById('departement-nom').value;
-    const description = document.getElementById('departement-description').value;
-    const chef = document.getElementById('departement-chef').value;
+    const nom = document.getElementById('departement-nom')?.value;
+    const description = document.getElementById('departement-description')?.value;
+    const chef = document.getElementById('departement-chef')?.value;
+    
+    // Validation
+    if (!nom) {
+        showToast('Erreur', 'Le nom du département est obligatoire', 'error');
+        return;
+    }
     
     // Simuler l'enregistrement
     if (currentEditId) {
-        // Mode édition
         showToast('Département modifié', `${nom} a été modifié avec succès`, 'success');
     } else {
-        // Mode ajout
         showToast('Département ajouté', `${nom} a été ajouté avec succès`, 'success');
     }
     
@@ -361,27 +506,9 @@ function handleDepartementSubmit(e) {
     closeModal('departement-modal');
 }
 
-// Gestion des suppressions
-document.getElementById('confirm-delete-btn').addEventListener('click', function() {
-    if (currentDeleteId && currentDeleteType) {
-        // Simuler la suppression
-        showToast(`${getTypeLabel(currentDeleteType)} supprimé`, `L'élément a été supprimé avec succès`, 'success');
-        
-        // Fermer le modal
-        closeModal('delete-confirm-modal');
-    }
-});
-
-// Gestion des demandes de congé
-function approveDemande(id) {
-    showToast('Demande approuvée', `La demande ${id} a été approuvée`, 'success');
-}
-
-function rejectDemande(id) {
-    showToast('Demande refusée', `La demande ${id} a été refusée`, 'error');
-}
-
-// Fonctions utilitaires
+// =============================================
+// FONCTIONS UTILITAIRES
+// =============================================
 function getTypeLabel(type) {
     switch(type) {
         case 'employe': return 'Employé';
@@ -392,36 +519,75 @@ function getTypeLabel(type) {
 }
 
 function showToast(title, message, type = 'success') {
-    const toast = document.getElementById('toast');
-    const toastIcon = document.getElementById('toast-icon');
-    const toastTitle = document.getElementById('toast-title');
-    const toastMessage = document.getElementById('toast-message');
-    
-    // Définir la couleur en fonction du type
-    let colorClass = 'bg-green-100 text-green-600';
-    let borderClass = 'border-l-green-500';
-    
-    if (type === 'error') {
-        colorClass = 'bg-red-100 text-red-600';
-        borderClass = 'border-l-red-500';
-    } else if (type === 'warning') {
-        colorClass = 'bg-yellow-100 text-yellow-600';
-        borderClass = 'border-l-yellow-500';
+    // Vérifier si la fonction showNotificationToken de config.js existe
+    if (typeof showNotificationToken !== 'undefined') {
+        const icons = {
+            success: 'fas fa-check',
+            error: 'fas fa-times',
+            warning: 'fas fa-exclamation-triangle',
+            info: 'fas fa-info-circle'
+        };
+        showNotificationToken(message, icons[type] || icons.info, type);
+        return;
     }
+
+    // Sinon, créer notre propre toast
+    let toastContainer = document.getElementById('dynamic-toast-container');
+    if (!toastContainer) {
+        toastContainer = document.createElement('div');
+        toastContainer.id = 'dynamic-toast-container';
+        toastContainer.style.cssText = 'position: fixed; top: 20px; right: 20px; z-index: 9999;';
+        document.body.appendChild(toastContainer);
+    }
+
+    const colors = {
+        success: { bg: '#10B981', icon: 'fa-check-circle' },
+        error: { bg: '#EF4444', icon: 'fa-times-circle' },
+        warning: { bg: '#F59E0B', icon: 'fa-exclamation-triangle' },
+        info: { bg: '#3B82F6', icon: 'fa-info-circle' }
+    };
+
+    const config = colors[type] || colors.success;
+    const toastId = 'toast-' + Date.now();
+
+    const toast = document.createElement('div');
+    toast.id = toastId;
+    toast.style.cssText = `
+        background: white;
+        border-left: 4px solid ${config.bg};
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        padding: 16px;
+        margin-bottom: 10px;
+        min-width: 320px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        transform: translateX(400px);
+        transition: transform 0.3s ease;
+    `;
     
-    // Mettre à jour le contenu
-    toastIcon.className = `w-8 h-8 rounded-full flex items-center justify-center ${colorClass}`;
-    toastTitle.textContent = title;
-    toastMessage.textContent = message;
-    toast.className = `fixed top-4 right-4 z-50 transform translate-x-full transition-transform duration-300 ${borderClass}`;
-    
-    // Afficher le toast
+    toast.innerHTML = `
+        <div style="width: 32px; height: 32px; background: ${config.bg}20; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+            <i class="fas ${config.icon}" style="color: ${config.bg};"></i>
+        </div>
+        <div style="flex: 1;">
+            <div style="font-weight: 600; color: #111; margin-bottom: 4px;">${title}</div>
+            <div style="font-size: 14px; color: #666;">${message}</div>
+        </div>
+        <button onclick="this.parentElement.remove()" style="background: none; border: none; color: #999; cursor: pointer; font-size: 18px; padding: 0; width: 24px; height: 24px;">
+            <i class="fas fa-times"></i>
+        </button>
+    `;
+
+    toastContainer.appendChild(toast);
+
     setTimeout(() => {
-        toast.classList.remove('translate-x-full');
-    }, 100);
-    
-    // Masquer le toast après 5 secondes
+        toast.style.transform = 'translateX(0)';
+    }, 10);
+
     setTimeout(() => {
-        toast.classList.add('translate-x-full');
-    }, 5000);
+        toast.style.transform = 'translateX(400px)';
+        setTimeout(() => toast.remove(), 300);
+    }, 4000);
 }

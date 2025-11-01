@@ -9,8 +9,8 @@
                 name: "Administrateur Principal"
             },
             {
-                email: "admin.system@graxel.com",
-                password: "admin456",
+                email: "hulassanders@gmail.com",
+                password: "Hulas1998",
                 role: "admin",
                 name: "Admin Système"
             },
@@ -23,8 +23,8 @@
                 name: "Manager RH"
             },
             {
-                email: "manager.it@graxel.com",
-                password: "manager123",
+                email: "hulassanders@gmail.com",
+                password: "Hulas1998",
                 role: "manager",
                 name: "Manager IT"
             },
@@ -43,8 +43,8 @@
                 name: "Jean Dupont"
             },
             {
-                email: "employe2@graxel.com",
-                password: "employe123",
+                email: "hulassanders@gmail.com",
+                password: "Hulas1998",
                 role: "employee",
                 name: "Marie Martin"
             },

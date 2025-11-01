@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="fr" class="h-full">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Graxel Tech - Démandes de congé chef de departement</title>
+    <title>Graxel Tech - Demandes de congé chef de departement</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
     <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
@@ -19,10 +18,6 @@
     <script src="assets/javascript/animate.js"></script>
     <link rel="stylesheet" href="assets/css/style.css">
      <link rel="stylesheet" href="assets/css/demandes.css">
-    <!-- Nouveaux scripts pour les graphiques -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/luxon@3.0.1"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1.2.0"></script>
     <link rel="icon" type="image/png" href="assets/images/logo.png">
 </head>
 <body class="h-full bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 font-poppins transition-all duration-500">
@@ -104,7 +99,7 @@
                             <i class="fas fa-bars text-gray-600 dark:text-gray-400"></i>
                         </button>
                         <div>
-                            <h1 class="text-2xl md:text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Tableau de bord</h1>
+                            <h1 class="text-2xl md:text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Tableau de bord de congés </h1>
                             <p class="text-gray-600 dark:text-gray-400 mt-1">
                                 <i class="fas fa-users mr-2"></i>
                                 <span id="current-date"></span>
@@ -188,536 +183,216 @@
                 </div>
             </div>
     <!-- Dashboard Content (à fleur) -->
-    <div class="p-0 md:p-0 space-y-6 w-full">
-  <!-- Section "Demandes d'équipe" avec sélection multiple -->
-<div id="pendingSection" class="grid grid-cols-1 gap-0 w-full mb-6">
-    <div class="w-full">
-        <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-none shadow-xl border border-gray-200/50 dark:border-gray-700/50 animate-slide-up overflow-hidden w-full">
-            <div class="p-6 border-b border-gray-200/50 dark:border-gray-700/50 bg-gradient-to-r from-blue-500/5 to-purple-500/5">
-                
-                <div class="flex space-x-2 overflow-x-auto pb-2">
-                    <div class="flex items-center space-x-4">
-                        <button class="tab-button active bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg px-6 py-3 font-medium rounded-xl transition-all duration-300 hover-lift click-scale" data-tab="profile">
-                            <i class="fas fa-list mr-2"></i>
-                            Tous
-                        </button>
+    <div class="p-0 md:p-0 space-y-6 w-full">  <!-- Section principale avec filtres -->
+                <div id="mainSection" class="grid grid-cols-1 gap-0 w-full mb-6">
+                    <div class="w-full">
+                        <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-none shadow-xl border border-gray-200/50 dark:border-gray-700/50 animate-slide-up overflow-hidden w-full">
+                            <div class="p-6 border-b border-gray-200/50 dark:border-gray-700/50 bg-gradient-to-r from-blue-500/5 to-purple-500/5">
+                                
+                                <!-- Boutons de filtre -->
+                                <div class="flex space-x-2 overflow-x-auto pb-4">
+                                    <div class="flex items-center space-x-4">
+                                        <button class="filter-button active bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg px-6 py-3 font-medium rounded-xl transition-all duration-300 hover-lift click-scale" data-filter="all">
+                                            <i class="fas fa-list mr-2"></i>
+                                            Tous
+                                        </button>
 
-                        <!-- Bouton En attentes -->
-                        <button class="tab-button bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-6 py-3 font-medium rounded-xl transition-all duration-300 hover-lift click-scale" data-tab="en-attente">
-                            <i class="fas fa-hourglass-half mr-2"></i>
-                            En attentes
-                        </button>
+                                        <button class="filter-button bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-6 py-3 font-medium rounded-xl transition-all duration-300 hover-lift click-scale" data-filter="pending">
+                                            <i class="fas fa-hourglass-half mr-2"></i>
+                                            En attentes
+                                        </button>
 
-                        <!-- Bouton Approuvées -->
-                        <button class="tab-button bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-6 py-3 font-medium rounded-xl transition-all duration-300 hover-lift click-scale" data-tab="approuvees">
-                            <i class="fas fa-check-circle mr-2"></i>
-                            Approuvées
-                        </button>
+                                        <button class="filter-button bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-6 py-3 font-medium rounded-xl transition-all duration-300 hover-lift click-scale" data-filter="approved">
+                                            <i class="fas fa-check-circle mr-2"></i>
+                                            Approuvées
+                                        </button>
 
-                        <!-- Bouton Réfusées -->
-                        <button class="tab-button bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-6 py-3 font-medium rounded-xl transition-all duration-300 hover-lift click-scale" data-tab="refusees">
-                            <i class="fas fa-times-circle mr-2"></i>
-                            Réfusées
-                        </button>
-                    </div>
-                    <select class="px-3 py-1 text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
-                        <option>Tous les employés</option>
-                        <option>Jean Martin</option>
-                        <option>Sophie Dubois</option>
-                        <option>Marie Dupont</option>
-                        <option>Pierre Leroux</option>
-                        <option>Antoine Moreau</option>
-                        <option>Lucie Bernard</option>
-                    </select>
-                </div>
-                <div class="flex items-center justify-between mb-4">
-                    <div>
-                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Liste des congés en attente de traitement</h3>
-                        <p class="text-sm text-gray-500 dark:text-gray-400">Dernières demandes de congés</p>
-                    </div>
-                    <div class="flex items-center space-x-3">
-                        <span id="selectedCount" class="text-sm text-gray-500 dark:text-gray-400 hidden">0 sélectionnée(s)</span>
-                        <button id="selectAllBtn" onclick="toggleSelectAll()" class="px-3 py-2 text-sm bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-300 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-900/50 transition-colors">
-                            <i class="fas fa-check-square mr-2"></i>Tout sélectionner
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- Actions groupées -->
-                <div id="bulkActions" class="hidden flex items-center justify-between bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 mb-4">
-                    <span class="text-sm font-medium text-blue-700 dark:text-blue-300">Actions pour les demandes sélectionnées :</span>
-                    <div class="flex space-x-2">
-                        <button onclick="bulkApprove()" class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors text-sm">
-                            <i class="fas fa-check mr-2"></i>Approuver toutes
-                        </button>
-                        <button onclick="bulkReject()" class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors text-sm">
-                            <i class="fas fa-times mr-2"></i>Refuser toutes
-                        </button>
-                    </div>
-                </div>
+                                        <button class="filter-button bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-6 py-3 font-medium rounded-xl transition-all duration-300 hover-lift click-scale" data-filter="rejected">
+                                            <i class="fas fa-times-circle mr-2"></i>
+                                            Réfusées
+                                        </button>
+                                    </div>
+                                </div>
 
-            </div>
-            <div class="p-6 space-y-4">
-                <!-- Demande 1 - Jean Martin -->
-                <div class="demand-item w-full flex flex-col md:flex-row items-start md:items-center justify-between bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4" data-id="1">
-                    <div class="flex items-center space-x-4 w-full md:w-auto">
-                        <input type="checkbox" class="request-checkbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500" onchange="updateSelection()">
-                        <div class="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl flex items-center justify-center flex-shrink-0">
-                            <i class="fas fa-user text-white"></i>
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <div class="flex items-center space-x-2">
-                                <h4 class="font-semibold text-gray-900 dark:text-white truncate">Jean Martin - Congés payés</h4>
-                                <span class="text-yellow-500">🟡</span>
+                                <!-- Contenu dynamique selon le filtre -->
+                                <div id="dynamicContent">
+                                    <!-- Le contenu change selon le filtre sélectionné -->
+                                </div>
+
                             </div>
-                            <p class="text-sm text-gray-500 dark:text-gray-400 truncate">15/09/2025 - 20/09/2025 (5 jours)</p>
-                            <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Demande soumise il y a 2h</p>
                         </div>
-                    </div>
-                    <div class="flex items-center space-x-2 mt-4 md:mt-0">
-                        <span class="status-badge px-4 py-2 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300 text-xs font-semibold rounded-full">En attente</span>
-                        <button class="approve-btn px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors" onclick="showConfirmModal('approve', 1)">
-                            <i class="fas fa-check"></i>
-                        </button>
-                        <button class="reject-btn px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors" onclick="showConfirmModal('reject', 1)">
-                            <i class="fas fa-times"></i>
-                        </button>
-                        <button class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors" onclick="showDetailsModal(1)">
-                            <i class="fas fa-eye"></i>
-                        </button>
                     </div>
                 </div>
 
-                <!-- Demande 2 - Sophie Dubois -->
-                <div class="demand-item w-full flex flex-col md:flex-row items-start md:items-center justify-between bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4" data-id="2">
-                    <div class="flex items-center space-x-4 w-full md:w-auto">
-                        <input type="checkbox" class="request-checkbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500" onchange="updateSelection()">
-                        <div class="w-12 h-12 bg-gradient-to-r from-green-500 to-teal-500 rounded-xl flex items-center justify-center flex-shrink-0">
-                            <i class="fas fa-user text-white"></i>
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <div class="flex items-center space-x-2">
-                                <h4 class="font-semibold text-gray-900 dark:text-white truncate">Sophie Dubois - Congé maladie</h4>
-                                <span class="text-yellow-500">🟡</span>
+                <!-- Modal de visualisation des congés approuvés/refusés -->
+                <div id="leaveDetailsModal" class="fixed inset-0 z-50 hidden">
+                    <div class="backdrop absolute inset-0 bg-black bg-opacity-50" onclick="closeModal('leaveDetailsModal')"></div>
+                    <div class="modal relative z-10 flex items-center justify-center min-h-screen p-4">
+                        <div class="bg-gray-900 dark:bg-gray-800 rounded-2xl shadow-xl max-w-md w-full overflow-hidden">
+                            <!-- Header avec bouton fermer -->
+                            <div class="flex items-center justify-between p-4 border-b border-gray-700">
+                                <h3 class="text-lg font-semibold text-white">Détails du congé</h3>
+                                <button class="text-gray-400 hover:text-white transition-colors" onclick="closeModal('leaveDetailsModal')">
+                                    <i class="fas fa-times text-xl"></i>
+                                </button>
                             </div>
-                            <p class="text-sm text-gray-500 dark:text-gray-400 truncate">16/09/2025 - 18/09/2025 (3 jours)</p>
-                            <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Demande soumise il y a 1h</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center space-x-2 mt-4 md:mt-0">
-                        <span class="status-badge px-4 py-2 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300 text-xs font-semibold rounded-full">En attente</span>
-                        <button class="approve-btn px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors" onclick="showConfirmModal('approve', 2)">
-                            <i class="fas fa-check"></i>
-                        </button>
-                        <button class="reject-btn px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors" onclick="showConfirmModal('reject', 2)">
-                            <i class="fas fa-times"></i>
-                        </button>
-                        <button class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors" onclick="showDetailsModal(2)">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Demande 3 - Marie Dupont -->
-                <div class="demand-item w-full flex flex-col md:flex-row items-start md:items-center justify-between bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4" data-id="3">
-                    <div class="flex items-center space-x-4 w-full md:w-auto">
-                        <input type="checkbox" class="request-checkbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500" onchange="updateSelection()">
-                        <div class="w-12 h-12 bg-gradient-to-r from-pink-500 to-rose-500 rounded-xl flex items-center justify-center flex-shrink-0">
-                            <i class="fas fa-user text-white"></i>
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <div class="flex items-center space-x-2">
-                                <h4 class="font-semibold text-gray-900 dark:text-white truncate">Marie Dupont - Congé maternité</h4>
-                                <span class="text-yellow-500">🟡</span>
+                            
+                            <!-- Content -->
+                            <div class="p-6 space-y-4">
+                                <!-- Avatar et nom -->
+                                <div class="flex items-center space-x-4 mb-6">
+                                    <div id="leaveDetailsAvatar" class="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center flex-shrink-0">
+                                        <i class="fas fa-user text-white text-xl"></i>
+                                    </div>
+                                    <div>
+                                        <h4 id="leaveDetailsName" class="text-xl font-bold text-white">Marc Petit</h4>
+                                        <p id="leaveDetailsType" class="text-sm text-gray-400">Maternité</p>
+                                    </div>
+                                </div>
+                                
+                                <!-- Informations -->
+                                <div class="space-y-3">
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-gray-400 text-sm">Date de début:</span>
+                                        <span id="leaveDetailsStartDate" class="text-white font-semibold">05/10/2025</span>
+                                    </div>
+                                    
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-gray-400 text-sm">Date de fin:</span>
+                                        <span id="leaveDetailsEndDate" class="text-white font-semibold">12/10/2025</span>
+                                    </div>
+                                    
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-gray-400 text-sm">Durée:</span>
+                                        <span id="leaveDetailsDuration" class="text-white font-semibold">7 jour(s)</span>
+                                    </div>
+                                    
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-gray-400 text-sm">Solde restant:</span>
+                                        <span id="leaveDetailsBalance" class="text-white font-semibold">6 jours</span>
+                                    </div>
+                                    
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-gray-400 text-sm">Type de congé:</span>
+                                        <span id="leaveDetailsTypeBadge" class="px-3 py-1 text-xs font-semibold rounded-full bg-pink-500 text-white">
+                                            Maternité
+                                        </span>
+                                    </div>
+                                </div>
+                                
+                                <!-- Motif -->
+                                <div class="space-y-2 pt-4 border-t border-gray-700">
+                                    <label class="text-gray-400 text-sm">Motif:</label>
+                                    <p id="leaveDetailsReason" class="text-white text-sm bg-gray-800 p-3 rounded-lg">
+                                        Congé maternité pour la naissance de mon second enfant.
+                                    </p>
+                                </div>
+                                
+                                <!-- Statut -->
+                                <div class="flex items-center justify-between pt-4 border-t border-gray-700">
+                                    <span class="text-gray-400 text-sm">Statut:</span>
+                                    <span id="leaveDetailsStatusBadge" class="px-4 py-2 text-sm font-semibold rounded-lg bg-green-500 text-white">
+                                        <i class="fas fa-check-circle mr-1"></i>Approuvé
+                                    </span>
+                                </div>
                             </div>
-                            <p class="text-sm text-gray-500 dark:text-gray-400 truncate">01/10/2025 - 15/01/2026 (106 jours)</p>
-                            <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Demande soumise il y a 3h</p>
                         </div>
-                    </div>
-                    <div class="flex items-center space-x-2 mt-4 md:mt-0">
-                        <span class="status-badge px-4 py-2 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300 text-xs font-semibold rounded-full">En attente</span>
-                        <button class="approve-btn px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors" onclick="showConfirmModal('approve', 3)">
-                            <i class="fas fa-check"></i>
-                        </button>
-                        <button class="reject-btn px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors" onclick="showConfirmModal('reject', 3)">
-                            <i class="fas fa-times"></i>
-                        </button>
-                        <button class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors" onclick="showDetailsModal(3)">
-                            <i class="fas fa-eye"></i>
-                        </button>
                     </div>
                 </div>
 
-                <!-- Demande 4 - Pierre Leroux -->
-                <div class="demand-item w-full flex flex-col md:flex-row items-start md:items-center justify-between bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4" data-id="4">
-                    <div class="flex items-center space-x-4 w-full md:w-auto">
-                        <input type="checkbox" class="request-checkbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500" onchange="updateSelection()">
-                        <div class="w-12 h-12 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-xl flex items-center justify-center flex-shrink-0">
-                            <i class="fas fa-user text-white"></i>
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <div class="flex items-center space-x-2">
-                                <h4 class="font-semibold text-gray-900 dark:text-white truncate">Pierre Leroux - Paternité</h4>
-                                <span class="text-yellow-500">🟡</span>
+                <!-- Modal de confirmation simple -->
+                <div id="confirmModal" class="fixed inset-0 z-50 hidden">
+                    <div class="backdrop absolute inset-0 bg-black bg-opacity-50"></div>
+                    <div class="modal relative z-10 flex items-center justify-center min-h-screen p-4">
+                        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl max-w-md w-full p-6">
+                            <div class="flex flex-col items-center text-center space-y-4">
+                                <div id="confirmIcon" class="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-check text-green-500"></i>
+                                </div>
+                                <h3 id="confirmTitle" class="text-xl font-semibold text-gray-900 dark:text-white">Approuver la demande</h3>
+                                <p id="confirmMessage" class="text-gray-600 dark:text-gray-400">Êtes-vous sûr de vouloir approuver cette demande de congés ?</p>
+                                <div class="w-full space-y-2 text-left bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                                    <p id="confirmDetails" class="text-sm font-medium text-gray-900 dark:text-white">Jean Martin - Congés payés</p>
+                                    <p id="confirmDates" class="text-xs text-gray-600 dark:text-gray-400">15/09/2025 - 20/09/2025 (5 jours)</p>
+                                </div>
+                                <div class="flex items-center space-x-3 w-full">
+                                    <button class="flex-1 px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors" onclick="closeModal('confirmModal')">
+                                        Annuler
+                                    </button>
+                                    <button id="confirmActionBtn" class="flex-1 px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors" onclick="executeAction()">
+                                        <i class="fas fa-check mr-2"></i>Approuver
+                                    </button>
+                                </div>
                             </div>
-                            <p class="text-sm text-gray-500 dark:text-gray-400 truncate">22/09/2025 (1 jour)</p>
-                            <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Demande soumise il y a 4h</p>
                         </div>
-                    </div>
-                    <div class="flex items-center space-x-2 mt-4 md:mt-0">
-                        <span class="status-badge px-4 py-2 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300 text-xs font-semibold rounded-full">En attente</span>
-                        <button class="approve-btn px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors" onclick="showConfirmModal('approve', 4)">
-                            <i class="fas fa-check"></i>
-                        </button>
-                        <button class="reject-btn px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors" onclick="showConfirmModal('reject', 4)">
-                            <i class="fas fa-times"></i>
-                        </button>
-                        <button class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors" onclick="showDetailsModal(4)">
-                            <i class="fas fa-eye"></i>
-                        </button>
                     </div>
                 </div>
 
-                <!-- Demande 5 - Antoine Moreau -->
-                <div class="demand-item w-full flex flex-col md:flex-row items-start md:items-center justify-between bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4" data-id="5">
-                    <div class="flex items-center space-x-4 w-full md:w-auto">
-                        <input type="checkbox" class="request-checkbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500" onchange="updateSelection()">
-                        <div class="w-12 h-12 bg-gradient-to-r from-orange-500 to-red-500 rounded-xl flex items-center justify-center flex-shrink-0">
-                            <i class="fas fa-user text-white"></i>
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <div class="flex items-center space-x-2">
-                                <h4 class="font-semibold text-gray-900 dark:text-white truncate">Antoine Moreau - Congé sans solde</h4>
-                                <span class="text-yellow-500">🟡</span>
+                <!-- Modal de détails de la demande -->
+                <div id="detailsModal" class="fixed inset-0 z-50 hidden">
+                    <div class="backdrop absolute inset-0 bg-black bg-opacity-50" onclick="closeModal('detailsModal')"></div>
+                    <div class="modal relative z-10 flex items-center justify-center min-h-screen p-4">
+                        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl max-w-2xl w-full max-h-screen overflow-hidden">
+                            <!-- Header -->
+                            <div class="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
+                                <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Détails de la demande</h3>
+                                <button class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300" onclick="closeModal('detailsModal')">
+                                    <i class="fas fa-times"></i>
+                                </button>
                             </div>
-                            <p class="text-sm text-gray-500 dark:text-gray-400 truncate">05/10/2025 - 05/11/2025 (31 jours)</p>
-                            <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Demande soumise il y a 6h</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center space-x-2 mt-4 md:mt-0">
-                        <span class="status-badge px-4 py-2 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300 text-xs font-semibold rounded-full">En attente</span>
-                        <button class="approve-btn px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors" onclick="showConfirmModal('approve', 5)">
-                            <i class="fas fa-check"></i>
-                        </button>
-                        <button class="reject-btn px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors" onclick="showConfirmModal('reject', 5)">
-                            <i class="fas fa-times"></i>
-                        </button>
-                        <button class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors" onclick="showDetailsModal(5)">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Demande 6 - Lucie Bernard -->
-                <div class="demand-item w-full flex flex-col md:flex-row items-start md:items-center justify-between bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4" data-id="6">
-                    <div class="flex items-center space-x-4 w-full md:w-auto">
-                        <input type="checkbox" class="request-checkbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500" onchange="updateSelection()">
-                        <div class="w-12 h-12 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-xl flex items-center justify-center flex-shrink-0">
-                            <i class="fas fa-user text-white"></i>
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <div class="flex items-center space-x-2">
-                                <h4 class="font-semibold text-gray-900 dark:text-white truncate">Lucie Bernard - Formation</h4>
-                                <span class="text-yellow-500">🟡</span>
+                            
+                            <!-- Content -->
+                            <div class="p-6 space-y-6 max-h-96 overflow-y-auto">
+                                <div class="flex items-center space-x-4">
+                                    <div id="detailsAvatar" class="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl flex items-center justify-center">
+                                        <i class="fas fa-user text-white text-xl"></i>
+                                    </div>
+                                    <div>
+                                        <h4 id="detailsName" class="text-lg font-semibold text-gray-900 dark:text-white">Jean Martin</h4>
+                                        <p id="detailsType" class="text-sm text-gray-500 dark:text-gray-400">Congés payés</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div class="space-y-2">
+                                        <label class="text-sm font-medium text-gray-600 dark:text-gray-400">Date de début</label>
+                                        <p id="detailsStartDate" class="text-gray-900 dark:text-white">2025-09-15</p>
+                                    </div>
+                                    <div class="space-y-2">
+                                        <label class="text-sm font-medium text-gray-600 dark:text-gray-400">Date de fin</label>
+                                        <p id="detailsEndDate" class="text-gray-900 dark:text-white">2025-09-20</p>
+                                    </div>
+                                    <div class="space-y-2">
+                                        <label class="text-sm font-medium text-gray-600 dark:text-gray-400">Durée</label>
+                                        <p id="detailsDuration" class="text-gray-900 dark:text-white">5 jours</p>
+                                    </div>
+                                    <div class="space-y-2">
+                                        <label class="text-sm font-medium text-gray-600 dark:text-gray-400">Statut</label>
+                                        <p id="detailsStatus" class="text-yellow-600 dark:text-yellow-400">En attente</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="space-y-2">
+                                    <label class="text-sm font-medium text-gray-600 dark:text-gray-400">Motif</label>
+                                    <p id="detailsReason" class="text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">Congés pour vacances en famille. Voyage prévu depuis plusieurs mois.</p>
+                                </div>
                             </div>
-                            <p class="text-sm text-gray-500 dark:text-gray-400 truncate">25/09/2025 - 27/09/2025 (3 jours)</p>
-                            <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Demande soumise il y a 1 jour</p>
+                            
+                            <!-- Actions -->
+                            <div class="flex items-center justify-end space-x-3 p-6 border-t border-gray-200 dark:border-gray-700">
+                                <button class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors" onclick="closeModal('detailsModal')">
+                                    Fermer
+                                </button>
+                                <button class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors" onclick="closeModal('detailsModal'); showConfirmModal('reject', currentRequestId)">
+                                    <i class="fas fa-times mr-2"></i>Refuser
+                                </button>
+                                <button class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors" onclick="closeModal('detailsModal'); showConfirmModal('approve', currentRequestId)">
+                                    <i class="fas fa-check mr-2"></i>Approuver
+                                </button>
+                            </div>
                         </div>
                     </div>
-                    <div class="flex items-center space-x-2 mt-4 md:mt-0">
-                        <span class="status-badge px-4 py-2 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300 text-xs font-semibold rounded-full">En attente</span>
-                        <button class="approve-btn px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors" onclick="showConfirmModal('approve', 6)">
-                            <i class="fas fa-check"></i>
-                        </button>
-                        <button class="reject-btn px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors" onclick="showConfirmModal('reject', 6)">
-                            <i class="fas fa-times"></i>
-                        </button>
-                        <button class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors" onclick="showDetailsModal(6)">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                    </div>
                 </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Section Congés Approuvés - Liste avec Toggle Grid/Liste -->
-<div id="approvedSection" class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-none shadow-xl border border-gray-200/50 dark:border-gray-700/50 animate-slide-up overflow-hidden w-full mb-6" style="animation-delay: 0.8s;">
-    <div class="p-6 border-b border-gray-200/50 dark:border-gray-700/50 bg-gradient-to-r from-green-500/5 to-emerald-500/5">
-        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-            <div>
-                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Liste des Congés Approuvés</h3>
-                <p class="text-sm text-gray-500 dark:text-gray-400">Vue d'ensemble des congés approuvés</p>
-            </div>
-            <div class="flex flex-wrap gap-2">
-                <button id="gridViewBtnApproved" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-200 text-sm font-medium">
-                    <i class="fas fa-th"></i> Grille
-                </button>
-                <button id="listViewBtnApproved" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600 transition-colors duration-200 text-sm font-medium">
-                    <i class="fas fa-list"></i> Liste
-                </button>
-            </div>
-        </div>
-    </div>
-    <div class="p-6">
-        <!-- Filtres -->
-        <div class="flex flex-col md:flex-row gap-4 mb-6">
-            <select id="employeeApprovedFilter" class="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500">
-                <option value="">Tous les employés</option>
-            </select>
-            <select id="leaveTypeApprovedFilter" class="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500">
-                <option value="">Tous les types de congé</option>
-                <option value="vacation">Congés payés</option>
-                <option value="sick">Maladie</option>
-                <option value="training">Paternité</option>
-                <option value="maternity">Maternité</option>
-                <option value="other">Autre</option>
-            </select>
-        </div>
-
-        <!-- Légende des Couleurs -->
-        <div class="mb-6 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-            <h4 class="text-sm font-semibold text-gray-900 dark:text-white mb-3">Légende des types de congé</h4>
-            <div class="flex flex-wrap gap-4">
-                <div class="flex items-center space-x-2">
-                    <div class="w-4 h-4 rounded" style="background-color: #10b981;"></div>
-                    <span class="text-sm text-gray-700 dark:text-gray-300">Congés payés</span>
-                </div>
-                <div class="flex items-center space-x-2">
-                    <div class="w-4 h-4 rounded" style="background-color: #ef4444;"></div>
-                    <span class="text-sm text-gray-700 dark:text-gray-300">Maladie</span>
-                </div>
-                <div class="flex items-center space-x-2">
-                    <div class="w-4 h-4 rounded" style="background-color: #3b82f6;"></div>
-                    <span class="text-sm text-gray-700 dark:text-gray-300">Paternité</span>
-                </div>
-                <div class="flex items-center space-x-2">
-                    <div class="w-4 h-4 rounded" style="background-color: #ec4899;"></div>
-                    <span class="text-sm text-gray-700 dark:text-gray-300">Maternité</span>
-                </div>
-                <div class="flex items-center space-x-2">
-                    <div class="w-4 h-4 rounded" style="background-color: #eab308;"></div>
-                    <span class="text-sm text-gray-700 dark:text-gray-300">Autre</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Conteneur Liste des Congés Approuvés -->
-        <div id="approvedLeavesContainer"></div>
-
-        <!-- Pagination -->
-        <div class="mt-6 flex flex-col md:flex-row justify-between items-center gap-4">
-            <div class="text-sm text-gray-700 dark:text-gray-300" id="approvedPaginationInfo"></div>
-            <div class="flex flex-wrap gap-2" id="approvedPaginationControls"></div>
-        </div>
-    </div>
-</div>
-
-<!-- Section Congés Refusés - Liste avec Toggle Grid/Liste -->
-<div id="rejectedSection" class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-none shadow-xl border border-gray-200/50 dark:border-gray-700/50 animate-slide-up overflow-hidden w-full mb-6" style="animation-delay: 0.9s;">
-    <div class="p-6 border-b border-gray-200/50 dark:border-gray-700/50 bg-gradient-to-r from-red-500/5 to-rose-500/5">
-        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-            <div>
-                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Liste des Congés Refusés</h3>
-                <p class="text-sm text-gray-500 dark:text-gray-400">Vue d'ensemble des congés refusés</p>
-            </div>
-            <div class="flex flex-wrap gap-2">
-                <button id="gridViewBtnRejected" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-200 text-sm font-medium">
-                    <i class="fas fa-th"></i> Grille
-                </button>
-                <button id="listViewBtnRejected" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600 transition-colors duration-200 text-sm font-medium">
-                    <i class="fas fa-list"></i> Liste
-                </button>
-            </div>
-        </div>
-    </div>
-    <div class="p-6">
-        <!-- Filtres -->
-        <div class="flex flex-col md:flex-row gap-4 mb-6">
-            <select id="employeeRejectedFilter" class="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500">
-                <option value="">Tous les employés</option>
-            </select>
-            <select id="leaveTypeRejectedFilter" class="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500">
-                <option value="">Tous les types de congé</option>
-                <option value="vacation">Congés payés</option>
-                <option value="sick">Maladie</option>
-                <option value="training">Paternité</option>
-                <option value="maternity">Maternité</option>
-                <option value="other">Autre</option>
-            </select>
-        </div>
-
-        <!-- Légende des Couleurs -->
-        <div class="mb-6 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-            <h4 class="text-sm font-semibold text-gray-900 dark:text-white mb-3">Légende des types de congé</h4>
-            <div class="flex flex-wrap gap-4">
-                <div class="flex items-center space-x-2">
-                    <div class="w-4 h-4 rounded" style="background-color: #10b981;"></div>
-                    <span class="text-sm text-gray-700 dark:text-gray-300">Congés payés</span>
-                </div>
-                <div class="flex items-center space-x-2">
-                    <div class="w-4 h-4 rounded" style="background-color: #ef4444;"></div>
-                    <span class="text-sm text-gray-700 dark:text-gray-300">Maladie</span>
-                </div>
-                <div class="flex items-center space-x-2">
-                    <div class="w-4 h-4 rounded" style="background-color: #3b82f6;"></div>
-                    <span class="text-sm text-gray-700 dark:text-gray-300">Paternité</span>
-                </div>
-                <div class="flex items-center space-x-2">
-                    <div class="w-4 h-4 rounded" style="background-color: #ec4899;"></div>
-                    <span class="text-sm text-gray-700 dark:text-gray-300">Maternité</span>
-                </div>
-                <div class="flex items-center space-x-2">
-                    <div class="w-4 h-4 rounded" style="background-color: #eab308;"></div>
-                    <span class="text-sm text-gray-700 dark:text-gray-300">Autre</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Conteneur Liste des Congés Refusés -->
-        <div id="rejectedLeavesContainer"></div>
-
-        <!-- Pagination -->
-        <div class="mt-6 flex flex-col md:flex-row justify-between items-center gap-4">
-            <div class="text-sm text-gray-700 dark:text-gray-300" id="rejectedPaginationInfo"></div>
-            <div class="flex flex-wrap gap-2" id="rejectedPaginationControls"></div>
-        </div>
-    </div>
-</div>
-
-<!-- Modal de visualisation des congés approuvés/refusés -->
-<div id="leaveDetailsModal" class="fixed inset-0 z-50 hidden">
-    <div class="backdrop absolute inset-0 bg-black bg-opacity-50" onclick="closeModal('leaveDetailsModal')"></div>
-    <div class="modal relative z-10 flex items-center justify-center min-h-screen p-4">
-        <div class="bg-gray-900 dark:bg-gray-800 rounded-2xl shadow-xl max-w-md w-full overflow-hidden">
-            <!-- Header avec bouton fermer -->
-            <div class="flex items-center justify-between p-4 border-b border-gray-700">
-                <h3 class="text-lg font-semibold text-white">Détails du congé</h3>
-                <button class="text-gray-400 hover:text-white transition-colors" onclick="closeModal('leaveDetailsModal')">
-                    <i class="fas fa-times text-xl"></i>
-                </button>
-            </div>
-            
-            <!-- Content -->
-            <div class="p-6 space-y-4">
-                <!-- Avatar et nom -->
-                <div class="flex items-center space-x-4 mb-6">
-                    <div id="leaveDetailsAvatar" class="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center flex-shrink-0">
-                        <i class="fas fa-user text-white text-xl"></i>
-                    </div>
-                    <div>
-                        <h4 id="leaveDetailsName" class="text-xl font-bold text-white">Marc Petit</h4>
-                        <p id="leaveDetailsType" class="text-sm text-gray-400">Maternité</p>
-                    </div>
-                </div>
-                
-                <!-- Informations -->
-                <div class="space-y-3">
-                    <div class="flex items-center justify-between">
-                        <span class="text-gray-400 text-sm">Date de début:</span>
-                        <span id="leaveDetailsStartDate" class="text-white font-semibold">05/10/2025</span>
-                    </div>
-                    
-                    <div class="flex items-center justify-between">
-                        <span class="text-gray-400 text-sm">Date de fin:</span>
-                        <span id="leaveDetailsEndDate" class="text-white font-semibold">12/10/2025</span>
-                    </div>
-                    
-                    <div class="flex items-center justify-between">
-                        <span class="text-gray-400 text-sm">Durée:</span>
-                        <span id="leaveDetailsDuration" class="text-white font-semibold">7 jour(s)</span>
-                    </div>
-                    
-                    <div class="flex items-center justify-between">
-                        <span class="text-gray-400 text-sm">Solde restant:</span>
-                        <span id="leaveDetailsBalance" class="text-white font-semibold">6 jours</span>
-                    </div>
-                    
-                    <div class="flex items-center justify-between">
-                        <span class="text-gray-400 text-sm">Type de congé:</span>
-                        <span id="leaveDetailsTypeBadge" class="px-3 py-1 text-xs font-semibold rounded-full bg-pink-500 text-white">
-                            Maternité
-                        </span>
-                    </div>
-                </div>
-                
-                <!-- Motif -->
-                <div class="space-y-2 pt-4 border-t border-gray-700">
-                    <label class="text-gray-400 text-sm">Motif:</label>
-                    <p id="leaveDetailsReason" class="text-white text-sm bg-gray-800 p-3 rounded-lg">
-                        Congé maternité pour la naissance de mon second enfant.
-                    </p>
-                </div>
-                
-                <!-- Statut -->
-                <div class="flex items-center justify-between pt-4 border-t border-gray-700">
-                    <span class="text-gray-400 text-sm">Statut:</span>
-                    <span id="leaveDetailsStatusBadge" class="px-4 py-2 text-sm font-semibold rounded-lg bg-green-500 text-white">
-                        <i class="fas fa-check-circle mr-1"></i>Approuvé
-                    </span>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- MODALS NÉCESSAIRES (Ajoutez-les si vous ne les avez pas déjà) -->
-
-<!-- Modal de confirmation simple -->
-<div id="confirmModal" class="fixed inset-0 z-50 hidden">
-    <div class="backdrop absolute inset-0 bg-black bg-opacity-50"></div>
-    <div class="modal relative z-10 flex items-center justify-center min-h-screen p-4">
-        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl max-w-md w-full p-6">
-            <div class="flex flex-col items-center text-center space-y-4">
-                <div id="confirmIcon" class="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center">
-                    <i class="fas fa-check text-green-500"></i>
-                </div>
-                <h3 id="confirmTitle" class="text-xl font-semibold text-gray-900 dark:text-white">Approuver la demande</h3>
-                <p id="confirmMessage" class="text-gray-600 dark:text-gray-400">Êtes-vous sûr de vouloir approuver cette demande de congés ?</p>
-                <div class="w-full space-y-2 text-left bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
-                    <p id="confirmDetails" class="text-sm font-medium text-gray-900 dark:text-white">Jean Martin - Congés payés</p>
-                    <p id="confirmDates" class="text-xs text-gray-600 dark:text-gray-400">15/09/2025 - 20/09/2025 (5 jours)</p>
-                </div>
-                <div class="flex items-center space-x-3 w-full">
-                    <button class="flex-1 px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors" onclick="closeModal('confirmModal')">
-                        Annuler
-                    </button>
-                    <button id="confirmActionBtn" class="flex-1 px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors" onclick="executeAction()">
-                        <i class="fas fa-check mr-2"></i>Approuver
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Modal de confirmation groupée -->
-<div id="bulkConfirmModal" class="fixed inset-0 z-50 hidden">
-    <div class="backdrop absolute inset-0 bg-black bg-opacity-50"></div>
-    <div class="modal relative z-10 flex items-center justify-center min-h-screen p-4">
-        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl max-w-md w-full p-6">
-            <div class="flex flex-col items-center text-center space-y-4">
-                <div id="bulkConfirmIcon" class="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center">
-                    <i class="fas fa-check text-green-500"></i>
-                </div>
-                <h3 id="bulkConfirmTitle" class="text-xl font-semibold text-gray-900 dark:text-white">Approuver les demandes</h3>
-                <p id="bulkConfirmMessage" class="text-gray-600 dark:text-gray-400">Êtes-vous sûr de vouloir approuver toutes les demandes sélectionnées ?</p>
-                <div class="w-full bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
-                    <p id="bulkConfirmCount" class="text-sm font-medium text-gray-900 dark:text-white">3 demandes sélectionnées</p>
-                </div>
-                <div class="flex items-center space-x-3 w-full">
-                    <button class="flex-1 px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors" onclick="closeModal('bulkConfirmModal')">
-                        Annuler
-                    </button>
-                    <button id="bulkConfirmActionBtn" class="flex-1 px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors" onclick="executeBulkAction()">
-                        <i class="fas fa-check mr-2"></i>Approuver
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 <!-- Toast de notification -->
 <div id="toast" class="fixed top-4 right-4 bg-white dark:bg-gray-800 border-l-4 border-green-500 rounded-lg shadow-lg p-4 transform translate-x-full transition-transform duration-300 z-50 min-w-80">
@@ -798,156 +473,9 @@
             </div>
         </div>
     </div>
-  
-    <!-- Modal de confirmation de déconnexion -->
-    <div id="logoutConfirmModal" class="fixed inset-0 z-50 hidden">
-        <div class="backdrop absolute inset-0 bg-black bg-opacity-50" onclick="closeLogoutModal()"></div>
-        <div class="modal relative z-10 flex items-center justify-center min-h-screen p-4">
-            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl max-w-md w-full">
-                <!-- Header -->
-                <div class="p-6 border-b border-gray-200 dark:border-gray-700">
-                    <div class="flex items-center space-x-3">
-                        <div class="w-12 h-12 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
-                            <i class="fas fa-sign-out-alt text-xl text-red-600 dark:text-red-400"></i>
-                        </div>
-                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Confirmation de déconnexion</h3>
-                    </div>
-                </div>
-                
-                <!-- Content -->
-                <div class="p-6">
-                    <p class="text-gray-600 dark:text-gray-400 mb-4">Êtes-vous sûr de vouloir vous déconnecter ?</p>
-                    <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-8 h-8 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full flex items-center justify-center text-white font-bold text-sm">
-                                JM
-                            </div>
-                            <div>
-                                <p class="text-sm font-medium text-gray-900 dark:text-white">Jean Martin</p>
-                                <p class="text-sm text-gray-500 dark:text-gray-400">Chef de Département Finance</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Actions -->
-                <div class="flex items-center justify-end space-x-3 p-6 border-t border-gray-200 dark:border-gray-700">
-                    <button class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors" onclick="closeLogoutModal()">
-                        Annuler
-                    </button>
-                    <button class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors" onclick="executeLogout()">
-                        Se déconnecter
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Toast notification de déconnexion -->
-    <div id="logoutToast" class="fixed top-4 right-4 z-50 transform translate-x-full transition-transform duration-300">
-        <div class="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-4 border-l-4 border-l-green-500 max-w-sm">
-            <div class="flex items-center space-x-3">
-                <div class="w-8 h-8 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
-                    <i class="fas fa-check text-green-600 dark:text-green-400"></i>
-                </div>
-                <div>
-                    <p class="font-semibold text-gray-900 dark:text-white">Déconnexion réussie</p>
-                    <p class="text-sm text-gray-600 dark:text-gray-400">Vous allez être redirigé...</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-  <!-- Modal de détails de la demande -->
-    <div id="detailsModal" class="fixed inset-0 z-50 hidden">
-        <div class="backdrop absolute inset-0 bg-black bg-opacity-50" onclick="closeModal('detailsModal')"></div>
-        <div class="modal relative z-10 flex items-center justify-center min-h-screen p-4">
-            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl max-w-2xl w-full max-h-screen overflow-hidden">
-                <!-- Header -->
-                <div class="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
-                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Détails de la demande</h3>
-                    <button class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300" onclick="closeModal('detailsModal')">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-                
-                <!-- Content -->
-                <div class="p-6 space-y-6 max-h-96 overflow-y-auto">
-                    <div class="flex items-center space-x-4">
-                        <div id="detailsAvatar" class="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl flex items-center justify-center">
-                            <i class="fas fa-user text-white text-xl"></i>
-                        </div>
-                        <div>
-                            <h4 id="detailsName" class="text-lg font-semibold text-gray-900 dark:text-white">Jean Martin</h4>
-                            <p id="detailsType" class="text-sm text-gray-500 dark:text-gray-400">Congés payés</p>
-                        </div>
-                    </div>
-                    
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="space-y-2">
-                            <label class="text-sm font-medium text-gray-600 dark:text-gray-400">Date de début</label>
-                            <p id="detailsStartDate" class="text-gray-900 dark:text-white">2025-09-15</p>
-                        </div>
-                        <div class="space-y-2">
-                            <label class="text-sm font-medium text-gray-600 dark:text-gray-400">Date de fin</label>
-                            <p id="detailsEndDate" class="text-gray-900 dark:text-white">2025-09-20</p>
-                        </div>
-                        <div class="space-y-2">
-                            <label class="text-sm font-medium text-gray-600 dark:text-gray-400">Durée</label>
-                            <p id="detailsDuration" class="text-gray-900 dark:text-white">5 jours</p>
-                        </div>
-                        <div class="space-y-2">
-                            <label class="text-sm font-medium text-gray-600 dark:text-gray-400">Statut</label>
-                            <p id="detailsStatus" class="text-yellow-600 dark:text-yellow-400">En attente</p>
-                        </div>
-                    </div>
-                    
-                    <div class="space-y-2">
-                        <label class="text-sm font-medium text-gray-600 dark:text-gray-400">Motif</label>
-                        <p id="detailsReason" class="text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">Congés pour vacances en famille. Voyage prévu depuis plusieurs mois.</p>
-                    </div>
-                    
-                    <div class="space-y-2">
-                        <label class="text-sm font-medium text-gray-600 dark:text-gray-400">Justificatif (PDF)</label>
-                        <div class="pdf-viewer bg-gray-50 dark:bg-gray-700 p-4 rounded-lg border">
-                            <div class="flex items-center space-x-3 mb-3">
-                                <i class="fas fa-file-pdf text-red-500 text-xl"></i>
-                                <span id="pdfName" class="text-gray-900 dark:text-white font-medium">justificatif_conges.pdf</span>
-                                <button class="text-blue-500 hover:text-blue-700 text-sm" onclick="viewPDF()">
-                                    <i class="fas fa-external-link-alt mr-1"></i>Ouvrir
-                                </button>
-                            </div>
-                            <div class="text-sm text-gray-600 dark:text-gray-400 space-y-2">
-                                <p><strong>Contenu du document:</strong></p>
-                                <p>• Réservation d'hôtel confirmée</p>
-                                <p>• Billets d'avion</p>
-                                <p>• Planning de congés équipe</p>
-                                <p>• Accord du chef d'équipe</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Actions -->
-                <div class="flex items-center justify-end space-x-3 p-6 border-t border-gray-200 dark:border-gray-700">
-                    <button class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors" onclick="closeModal('detailsModal')">
-                        Fermer
-                    </button>
-                    <button class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors" onclick="closeModal('detailsModal'); showConfirmModal('reject', currentRequestId)">
-                        <i class="fas fa-times mr-2"></i>Refuser
-                    </button>
-                    <button class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors" onclick="closeModal('detailsModal'); showConfirmModal('approve', currentRequestId)">
-                        <i class="fas fa-check mr-2"></i>Approuver
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-    <script src="assets/javascript/config.js"></script>
-    <script src="assets/javascript/demandes.js"></script>
- 
+   <script src="assets/javascript/config.js"></script> 
+<script src="assets/javascript/demandes.js"></script>
 <script src="assets/javascript/logout.js"></script>
+
 </body>
 </html>
